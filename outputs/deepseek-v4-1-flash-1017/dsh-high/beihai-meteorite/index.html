@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#050607" />
+    <title>陨石子弹 · Meteor Bullets</title>
+  </head>
+  <body>
+    <main id="app">
+      <div id="stage" aria-label="程序化三维电影画面"></div>
+      <div id="vignette"></div>
+      <div id="grain"></div>
+      <div id="letterbox">
+        <div class="bar top"></div>
+        <div class="bar bottom"></div>
+      </div>
+      <div id="titleLayer" aria-live="off"></div>
+      <div id="scopeOverlay" aria-hidden="true">
+        <div class="scope-mask"></div>
+        <div class="scope-reticle">
+          <i class="h"></i><i class="v"></i><b></b><em></em>
+        </div>
+        <div class="scope-readout"><span>RANGE</span><strong>5.0 km</strong></div>
+        <div class="scope-corner tl"></div><div class="scope-corner tr"></div>
+        <div class="scope-corner bl"></div><div class="scope-corner br"></div>
+      </div>
+      <div id="startGate">
+        <button id="startButton" type="button">
+          <span class="start-icon">▶</span>
+          <span class="start-label">开始放映</span>
+        </button>
+        <p>建议佩戴耳机 · 全片 5 分 30 秒</p>
+      </div>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

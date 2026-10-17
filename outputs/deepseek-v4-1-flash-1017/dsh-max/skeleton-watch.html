@@ -1,0 +1,3724 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="theme-color" content="#050504" />
+<meta name="color-scheme" content="dark" />
+<meta name="description" content="AURELIS Calibre A–01 — 手工镂空机械腕表，可旋转、爆炸视图、零件识别与夜光模式的交互式 3D 产品展示。" />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='32' fill='%23070605'/%3E%3Ccircle cx='32' cy='32' r='28' fill='none' stroke='%23c7a15f' stroke-width='1.2'/%3E%3Ctext x='32' y='45' font-family='Georgia,serif' font-style='italic' font-size='38' fill='%23efd39e' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E" />
+<title>AURELIS · Calibre A–01 — 镂空机械腕表</title>
+<style>
+  :root{
+    --bg:#050505;
+    --ink:#efe8da;
+    --ink-soft:#c7bfb1;
+    --muted:#8f887c;
+    --dim:#625e57;
+    --gold:#c7a15f;
+    --gold-l:#ecd39e;
+    --gold-d:#7e6033;
+    --line:rgba(220,196,151,.17);
+    --line-soft:rgba(220,196,151,.08);
+    --glass:rgba(10,10,9,.62);
+    --serif:"Didot","Bodoni MT","Iowan Old Style","Palatino Linotype","Times New Roman","Songti SC","STSong","Noto Serif CJK SC",serif;
+    --sans:"Helvetica Neue","Helvetica","Arial","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0}
+  body{
+    background:
+      radial-gradient(ellipse 58% 48% at 44% 38%, #17140f 0%, #090807 48%, #040404 100%);
+    color:var(--ink);
+    font-family:var(--sans);
+    overflow:hidden;
+    -webkit-font-smoothing:antialiased;
+    overscroll-behavior:none;
+  }
+  ::selection{background:rgba(199,161,95,.28);color:#fff3da}
+  button{font-family:inherit}
+  #stage{position:fixed;inset:0;z-index:1;touch-action:none}
+  #stage canvas{display:block;width:100%;height:100%;outline:none;cursor:grab}
+  body.is-dragging #stage canvas{cursor:grabbing!important}
+  .fx-vignette{
+    position:fixed;inset:0;z-index:2;pointer-events:none;
+    background:
+      radial-gradient(ellipse at 44% 42%, transparent 20%, rgba(2,2,2,.07) 54%, rgba(0,0,0,.52) 100%),
+      linear-gradient(180deg, rgba(0,0,0,.27) 0%, transparent 18%, transparent 77%, rgba(0,0,0,.52) 100%);
+  }
+  .fx-grain{
+    position:fixed;inset:-50%;z-index:3;pointer-events:none;opacity:.055;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.86' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.9'/%3E%3C/svg%3E");
+    background-size:190px 190px;
+    animation:grainShift 9s steps(8) infinite;
+  }
+  @keyframes grainShift{
+    0%{transform:translate3d(0,0,0)} 25%{transform:translate3d(-1.5%,1%,0)}
+    50%{transform:translate3d(1%,-1.2%,0)} 75%{transform:translate3d(1.4%,1.4%,0)} 100%{transform:translate3d(0,0,0)}
+  }
+  .ui{position:fixed;inset:0;z-index:4;pointer-events:none}
+  .ui button,.ui a,.info-panel,.component-row,.part-label{pointer-events:auto}
+
+  /* ── Top identity ─────────────────────────────── */
+  .topbar{
+    position:absolute;top:30px;left:38px;right:38px;display:flex;align-items:flex-start;justify-content:space-between;
+    opacity:0;transform:translateY(-8px);transition:opacity 1.1s ease .25s, transform 1.1s cubic-bezier(.2,.7,.2,1) .25s;
+  }
+  .loaded .topbar{opacity:1;transform:none}
+  .brand{display:flex;align-items:center;gap:15px}
+  .brand-mark{
+    position:relative;width:43px;height:43px;border-radius:50%;
+    border:1px solid rgba(222,193,139,.48);
+    display:grid;place-items:center;color:var(--gold-l);
+    font-family:var(--serif);font-size:20px;font-weight:400;letter-spacing:.02em;
+    background:radial-gradient(circle at 35% 27%,rgba(238,213,166,.12),rgba(0,0,0,.16) 65%);
+    box-shadow:inset 0 0 18px rgba(217,184,122,.06),0 0 30px rgba(0,0,0,.25);
+  }
+  .brand-mark::before{content:"";position:absolute;inset:4px;border:1px solid rgba(222,193,139,.16);border-radius:50%}
+  .brand-mark span{transform:translateY(-1px);font-style:italic;padding-right:1px}
+  .brand-word{display:flex;flex-direction:column;gap:4px}
+  .brand-name{font-family:var(--serif);font-size:23px;letter-spacing:.36em;color:#f2ecdf;line-height:1;font-weight:400;padding-left:1px}
+  .brand-tag{font-size:8px;letter-spacing:.29em;color:var(--muted);line-height:1.2}
+  .edition{
+    text-align:right;display:flex;flex-direction:column;gap:7px;align-items:flex-end;
+    padding-top:2px;
+  }
+  .edition-main{font-family:var(--serif);font-size:12.5px;letter-spacing:.22em;color:var(--ink-soft)}
+  .edition-sub{font-size:8px;letter-spacing:.24em;color:var(--dim)}
+  .edition-line{width:27px;height:1px;background:linear-gradient(90deg,transparent,var(--gold));margin-top:2px;opacity:.8}
+
+  /* ── Side annotations ─────────────────────────── */
+  .edge-note{
+    position:absolute;top:50%;font-size:7px;letter-spacing:.32em;color:rgba(191,174,145,.36);
+    writing-mode:vertical-rl;text-transform:uppercase;user-select:none;
+    opacity:0;transition:opacity 1.6s ease 1.1s;
+  }
+  .loaded .edge-note{opacity:1}
+  .edge-left{left:22px;transform:translateY(-50%) rotate(180deg)}
+  .edge-right{right:22px;transform:translateY(-50%)}
+  .edge-note::before{content:"—";display:inline-block;margin-bottom:14px;color:rgba(199,161,95,.6)}
+
+  /* ── Information panel ─────────────────────────── */
+  .info-panel{
+    position:absolute;top:108px;right:38px;width:346px;max-height:calc(100vh - 205px);
+    padding:21px 22px 16px;overflow-y:auto;overflow-x:hidden;
+    background:
+      linear-gradient(150deg,rgba(28,26,22,.72) 0%,rgba(9,9,8,.72) 31%,rgba(6,6,6,.82) 100%);
+    border:1px solid var(--line);border-radius:3px;
+    box-shadow:0 22px 65px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,244,220,.045);
+    backdrop-filter:blur(21px) saturate(115%);-webkit-backdrop-filter:blur(21px) saturate(115%);
+    scrollbar-width:thin;scrollbar-color:rgba(199,161,95,.26) transparent;
+    overscroll-behavior:contain;
+    opacity:0;transform:translate3d(15px,8px,0);
+    transition:opacity 1.1s ease .6s, transform 1.2s cubic-bezier(.16,.7,.18,1) .6s;
+    scrollbar-width:none;
+  }
+  .info-panel::-webkit-scrollbar{width:3px}
+  .info-panel::-webkit-scrollbar-track{background:transparent}
+  .info-panel::-webkit-scrollbar-thumb{background:rgba(199,161,95,.24);border-radius:2px}
+  .loaded .info-panel{opacity:1;transform:none}
+  .info-panel::before,.info-panel::after{
+    content:"";position:absolute;pointer-events:none;width:18px;height:18px;opacity:.8;
+  }
+  .info-panel::before{left:-1px;top:-1px;border-left:1px solid rgba(217,187,132,.52);border-top:1px solid rgba(217,187,132,.52)}
+  .info-panel::after{right:-1px;bottom:-1px;border-right:1px solid rgba(217,187,132,.3);border-bottom:1px solid rgba(217,187,132,.3)}
+  .panel-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:17px}
+  .eyebrow{font-size:8px;letter-spacing:.26em;color:var(--gold);text-transform:uppercase}
+  .status{display:flex;align-items:center;gap:7px;font-size:7.5px;letter-spacing:.18em;color:#a6a093;text-transform:uppercase}
+  .status-dot{
+    width:5px;height:5px;border-radius:50%;background:#b9d8a0;
+    box-shadow:0 0 8px rgba(182,228,149,.7);animation:statusPulse 2.7s ease-in-out infinite;
+  }
+  @keyframes statusPulse{0%,100%{opacity:.36;transform:scale(.8)}50%{opacity:1;transform:scale(1)}}
+  .calibre{
+    font-family:var(--serif);font-size:32px;line-height:1.02;letter-spacing:.055em;color:#f2ecdf;font-weight:400;
+    white-space:nowrap;
+  }
+  .calibre em{font-style:italic;color:var(--gold-l);letter-spacing:.03em}
+  .calibre-sub{font-size:8.6px;line-height:1.6;letter-spacing:.15em;color:#827b6f;margin-top:8px;text-transform:uppercase}
+  .rule{height:1px;background:linear-gradient(90deg,var(--line),var(--line-soft) 65%,transparent);margin:18px 0 15px}
+  .detail-tag{display:flex;align-items:flex-start;gap:12px}
+  .detail-index{
+    font-family:var(--serif);font-size:13px;color:var(--gold);line-height:1.3;letter-spacing:.06em;
+    border-top:1px solid rgba(199,161,95,.42);padding-top:3px;min-width:23px;font-style:italic;
+  }
+  .detail-info{min-width:0}
+  .detail-info h2{
+    margin:0;font-family:var(--serif);font-size:22px;line-height:1.12;font-weight:400;letter-spacing:.075em;color:#eee6d6;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
+  .detail-info p{margin:4px 0 0;font-size:8px;letter-spacing:.18em;color:#8b8377;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .detail-desc{
+    font-size:12.2px;line-height:1.8;letter-spacing:.015em;color:#b0a89a;margin:13px 0 0;min-height:44px;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+  }
+  .detail-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:11px;min-height:20px}
+  .chip{
+    display:inline-flex;align-items:center;gap:5px;border:1px solid rgba(209,181,128,.16);border-radius:2px;
+    padding:4px 7px;font-size:7.5px;letter-spacing:.13em;color:#b5a68d;text-transform:uppercase;background:rgba(255,255,255,.018);
+  }
+  .chip i{width:2px;height:2px;border-radius:50%;background:var(--gold);opacity:.8;font-style:normal}
+  .fixed-specs{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;margin-top:16px;background:var(--line-soft);border:1px solid var(--line-soft)}
+  .fixed-spec{background:rgba(8,8,8,.56);padding:8px 8px 7px;min-width:0}
+  .fixed-spec span{display:block;font-size:6.4px;letter-spacing:.12em;color:#70695e;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .fixed-spec strong{display:block;font-family:var(--serif);font-size:16px;font-weight:400;color:#ddd3c0;letter-spacing:.025em;margin-top:3px;line-height:1.05;white-space:nowrap}
+  .fixed-spec strong em{font-family:var(--sans);font-style:normal;font-size:5.9px;letter-spacing:.04em;color:#796f5f;margin-left:2px}
+  .fixed-spec + .fixed-spec{border-left:1px solid var(--line-soft)}
+  .component-index{margin-top:17px}
+  .index-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
+  .index-head span:first-child{font-size:7.7px;letter-spacing:.18em;color:#8c8375;text-transform:uppercase}
+  .index-head span:last-child{font-size:6.5px;letter-spacing:.16em;color:#4f4b45}
+  .component-list{display:flex;flex-direction:column}
+  .component-row{
+    appearance:none;border:0;border-top:1px solid rgba(255,255,255,.045);
+    background:transparent;color:#898173;display:grid;grid-template-columns:22px 1fr auto;align-items:center;
+    gap:7px;padding:7px 0;cursor:pointer;text-align:left;transition:color .35s ease,background .35s ease,padding .35s ease;
+  }
+  .component-row:hover,.component-row.preview,.component-row.selected{color:#e9ddc8;background:linear-gradient(90deg,rgba(199,161,95,.06),transparent 70%);padding-left:4px}
+  .component-row .num{font-family:var(--serif);font-size:9.5px;color:#796a50;font-style:italic;letter-spacing:.02em}
+  .component-row .row-name{font-size:9.2px;letter-spacing:.11em;text-transform:uppercase;line-height:1.25}
+  .component-row .row-name em{display:block;font-family:var(--serif);font-size:8.4px;color:#5d584f;letter-spacing:.08em;font-style:normal;margin-top:1px}
+  .component-row .row-arrow{font-size:9px;color:#5c513f;transition:transform .35s ease,color .35s ease}
+  .component-row:hover .row-arrow,.component-row.selected .row-arrow{color:var(--gold);transform:translateX(2px)}
+  .panel-footer{
+    margin-top:14px;padding-top:10px;border-top:1px solid rgba(255,255,255,.045);
+    display:flex;align-items:center;justify-content:space-between;font-size:6.5px;letter-spacing:.22em;color:#4e4a44;text-transform:uppercase;
+  }
+  .panel-footer .fleur{color:rgba(199,161,95,.46);letter-spacing:.08em;font-size:9px}
+
+  /* ── Part label ────────────────────────────────── */
+  .part-label{
+    position:fixed;left:0;top:0;z-index:6;pointer-events:none;opacity:0;visibility:hidden;
+    will-change:transform;
+  }
+  .part-label.visible{opacity:1;visibility:visible}
+  .anchor-dot{
+    position:absolute;left:-4px;top:-4px;width:8px;height:8px;border-radius:50%;
+    border:1px solid rgba(237,211,156,.9);background:rgba(199,161,95,.3);
+    box-shadow:0 0 14px rgba(225,190,118,.65),0 0 0 1px rgba(0,0,0,.3);
+  }
+  .anchor-dot::before{
+    content:"";position:absolute;inset:-7px;border:1px solid rgba(222,189,125,.28);border-radius:50%;
+    animation:anchorPulse 2.3s ease-out infinite;
+  }
+  @keyframes anchorPulse{0%{transform:scale(.4);opacity:.75}70%{transform:scale(1.5);opacity:0}100%{opacity:0}}
+  .anchor-line{position:absolute;top:0;left:4px;height:1px;width:28px;background:linear-gradient(90deg,rgba(222,190,128,.8),rgba(222,190,128,.12))}
+  .label-card{
+    position:absolute;left:32px;top:0;transform:translateY(-50%);
+    min-width:180px;max-width:230px;padding:9px 12px 10px;
+    background:linear-gradient(145deg,rgba(24,22,19,.9),rgba(7,7,7,.84));
+    border:1px solid rgba(218,189,132,.24);border-left-color:rgba(218,189,132,.56);
+    box-shadow:0 13px 34px rgba(0,0,0,.5),inset 0 1px rgba(255,244,217,.03);
+    backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    opacity:0;transform:translate(8px,-50%);transition:transform .3s cubic-bezier(.2,.7,.2,1);
+  }
+  .part-label.visible .label-card{opacity:1;transform:translate(0,-50%)}
+  .part-label.flip .anchor-line{left:auto;right:4px;background:linear-gradient(270deg,rgba(222,190,128,.8),rgba(222,190,128,.12))}
+  .part-label.flip .label-card{
+    left:auto;right:32px;border-left-color:rgba(218,189,132,.24);border-right-color:rgba(218,189,132,.56);
+    transform:translate(-8px,-50%);
+  }
+  .part-label.flip.visible .label-card{transform:translate(0,-50%)}
+  .label-kicker{display:block;font-size:7px;line-height:1;letter-spacing:.22em;color:var(--gold);text-transform:uppercase;margin-bottom:5px}
+  .label-name{font-family:var(--serif);font-size:16px;line-height:1.15;letter-spacing:.08em;color:#f0e8d9;font-weight:400}
+  .label-sub{display:block;font-family:var(--sans);font-size:7px;line-height:1.4;letter-spacing:.17em;color:#81796b;text-transform:uppercase;margin-top:3px}
+  .label-hint{display:flex;align-items:center;gap:5px;font-size:6px;letter-spacing:.14em;color:#5f584c;text-transform:uppercase;margin-top:7px;padding-top:6px;border-top:1px solid rgba(255,255,255,.055)}
+  .label-hint::before{content:"";width:3px;height:3px;border:1px solid rgba(199,161,95,.6);transform:rotate(45deg)}
+
+  /* ── Controls ──────────────────────────────────── */
+  .controls{
+    position:absolute;left:50%;bottom:29px;transform:translate(-50%,10px);
+    display:flex;align-items:stretch;padding:6px;border-radius:4px;
+    background:linear-gradient(180deg,rgba(22,21,18,.76),rgba(6,6,6,.76));
+    border:1px solid rgba(220,195,148,.2);
+    box-shadow:0 15px 36px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,244,218,.035);
+    backdrop-filter:blur(17px) saturate(120%);-webkit-backdrop-filter:blur(17px) saturate(120%);
+    pointer-events:auto;opacity:0;transition:opacity 1s ease .8s,transform 1.1s cubic-bezier(.16,.7,.18,1) .8s;
+    z-index:7;
+  }
+  .loaded .controls{opacity:1;transform:translate(-50%,0)}
+  .ctl{
+    appearance:none;border:0;background:transparent;color:#9c9384;cursor:pointer;
+    min-height:39px;padding:0 15px;display:flex;align-items:center;justify-content:center;gap:8px;
+    font-size:9px;letter-spacing:.13em;text-transform:uppercase;position:relative;
+    transition:color .28s ease,background .28s ease;border-radius:2px;white-space:nowrap;
+  }
+  .ctl:hover{color:#f2e7d3;background:rgba(255,255,255,.032)}
+  .ctl.active{color:var(--gold-l);background:linear-gradient(180deg,rgba(199,161,95,.09),rgba(199,161,95,.035))}
+  .ctl.active::after{
+    content:"";position:absolute;left:12px;right:12px;bottom:3px;height:1px;
+    background:linear-gradient(90deg,transparent,rgba(226,191,120,.8),transparent);
+  }
+  .ctl svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:1.1;opacity:.8;transition:transform .45s cubic-bezier(.2,.7,.2,1),opacity .3s}
+  .ctl:hover svg{opacity:1}
+  .ctl.active svg{opacity:1}
+  .ctl[data-action="explode"].active svg{transform:rotate(0deg) translateY(-1px);opacity:1}
+  .ctl-sep{width:1px;align-self:center;height:18px;margin:0 3px;background:rgba(220,195,148,.13)}
+  .ctl-icon{padding:0 11px;width:39px}
+  .ctl-icon span{display:none}
+  .ctl .key{
+    position:absolute;top:3px;right:5px;font-size:5px;letter-spacing:0;color:#5c564c;opacity:0;transition:opacity .2s;
+  }
+  .ctl:hover .key{opacity:1}
+  .ctl-icon svg{width:14px;height:14px}
+
+  /* ── Misc HUD ──────────────────────────────────── */
+  .hint{
+    position:absolute;left:39px;bottom:34px;display:flex;flex-direction:column;gap:6px;
+    opacity:0;transform:translateY(6px);transition:opacity 1s ease 1s,transform 1s ease 1s;
+  }
+  .loaded .hint{opacity:1;transform:none}
+  .hint-main{display:flex;align-items:center;gap:7px;font-size:7.5px;letter-spacing:.18em;color:#7b7468;text-transform:uppercase}
+  .hint-main i{display:inline-block;width:12px;height:12px;border:1px solid rgba(202,171,112,.36);border-radius:50%;position:relative}
+  .hint-main i::after{content:"";position:absolute;inset:3px;border-radius:50%;background:rgba(202,171,112,.48)}
+  .hint-sub{font-size:7px;letter-spacing:.09em;color:#4f4a43;padding-left:19px}
+  .scale{
+    position:absolute;right:39px;bottom:37px;display:flex;align-items:center;gap:9px;
+    opacity:0;transition:opacity 1s ease 1.15s;
+  }
+  .loaded .scale{opacity:1}
+  .scale-bar{width:35px;height:4px;border-left:1px solid rgba(202,171,112,.4);border-right:1px solid rgba(202,171,112,.4);position:relative}
+  .scale-bar::after{content:"";position:absolute;left:0;right:0;top:1px;height:1px;background:rgba(202,171,112,.28)}
+  .scale span{font-family:var(--serif);font-size:7.5px;letter-spacing:.1em;color:#6f6759;font-style:italic}
+
+  /* ── Loader ────────────────────────────────────── */
+  .loader{
+    position:fixed;inset:0;z-index:20;background:#050504;display:grid;place-items:center;
+    transition:opacity 1.15s cubic-bezier(.4,0,.2,1),visibility 1.15s;
+  }
+  .loader.done{opacity:0;visibility:hidden;pointer-events:none}
+  .loader-inner{width:260px;display:flex;flex-direction:column;align-items:center;text-align:center}
+  .loader-emblem{
+    width:72px;height:72px;border-radius:50%;position:relative;display:grid;place-items:center;
+    border:1px solid rgba(208,175,111,.34);margin-bottom:27px;
+  }
+  .loader-emblem::before{content:"";position:absolute;inset:7px;border:1px solid rgba(208,175,111,.15);border-radius:50%}
+  .loader-emblem::after{
+    content:"";position:absolute;inset:-1px;border-radius:50%;border:1px solid transparent;
+    border-top-color:rgba(236,211,158,.8);border-right-color:rgba(236,211,158,.18);
+    animation:spin 2.4s linear infinite;
+  }
+  .loader-emblem span{font-family:var(--serif);font-size:33px;font-style:italic;color:var(--gold-l);transform:translateY(-1px)}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .loader-brand{font-family:var(--serif);font-size:24px;letter-spacing:.38em;padding-left:.38em;line-height:1;color:#e9e0cf;font-weight:400}
+  .loader-sub{font-size:6.5px;letter-spacing:.31em;color:#6f6860;margin-top:9px;text-transform:uppercase}
+  .loader-track{width:100%;height:1px;background:rgba(255,255,255,.07);margin-top:34px;overflow:hidden}
+  .loader-bar{display:block;height:100%;width:0%;background:linear-gradient(90deg,#725a33,var(--gold-l));transition:width .6s cubic-bezier(.2,.7,.2,1);box-shadow:0 0 12px rgba(224,193,137,.4)}
+  .loader-meta{width:100%;display:flex;justify-content:space-between;font-size:6.5px;letter-spacing:.19em;color:#5f594f;margin-top:11px;text-transform:uppercase}
+  .loader-meta span:last-child{font-family:var(--serif);font-size:8px;font-style:italic;color:#95876d}
+  .ui-reveal{opacity:0;transition:opacity 1.1s ease}
+  .loaded .ui-reveal{opacity:1}
+
+  @media (max-width:1100px){
+    .info-panel{width:316px;right:26px;top:98px;padding:19px 19px 14px;max-height:calc(100vh - 196px)}
+    .topbar{left:28px;right:28px;top:26px}
+    .hint{left:29px}.scale{right:29px}
+    .calibre{font-size:28px}
+  }
+  @media (max-width:860px){
+    .topbar{left:20px;right:20px;top:20px}
+    .brand-mark{width:37px;height:37px;font-size:17px}
+    .brand-name{font-size:18px;letter-spacing:.3em}
+    .brand-tag{font-size:6px;letter-spacing:.24em}
+    .edition{display:none}
+    .edge-note{display:none}
+    .info-panel{
+      top:auto;bottom:calc(91px + env(safe-area-inset-bottom,0px));left:14px;right:14px;width:auto;max-height:min(450px, 48vh);
+      padding:15px 16px 13px;border-radius:4px;
+      background:linear-gradient(155deg,rgba(20,19,16,.89),rgba(6,6,6,.9));
+      transition:opacity 1s ease .6s,transform 1s ease .6s;
+    }
+    .panel-top{margin-bottom:11px}
+    .calibre{font-size:24px}
+    .calibre-sub{margin-top:5px;font-size:7px}
+    .rule{margin:12px 0 11px}
+    .detail-info h2{font-size:18px}
+    .detail-desc{font-size:11px;line-height:1.65;margin-top:9px;min-height:34px;-webkit-line-clamp:2}
+    .detail-chips{margin-top:8px;gap:5px}
+    .chip{font-size:6.2px;padding:3px 6px}
+    .detail-tag{gap:9px}
+    .detail-index{font-size:11px;min-width:20px}
+    .fixed-specs{display:none}
+    .component-index{display:none}
+    .panel-footer{display:none}
+    .controls{bottom:calc(15px + env(safe-area-inset-bottom,0px));padding:5px;max-width:calc(100vw - 24px)}
+    .ctl{min-height:37px;padding:0 10px;gap:6px;font-size:8px;letter-spacing:.09em}
+    .ctl svg{width:12px;height:12px}
+    .ctl-icon{padding:0 9px;width:35px}
+    .hint{display:flex;left:20px;right:20px;bottom:auto;top:77px;gap:4px;opacity:0;transform:translateY(4px)}
+    .loaded .hint{opacity:1;transform:none}
+    .hint-main{font-size:6.6px;color:#696257;letter-spacing:.12em}
+    .hint-main i{width:9px;height:9px}
+    .hint-main i::after{inset:2px}
+    .hint-sub{display:block;font-size:6.3px;color:#565149;letter-spacing:.06em;padding-left:15px;margin-top:2px}
+    .scale{display:none}
+    .part-label{z-index:8}
+    .label-card{min-width:158px;max-width:192px;padding:7px 10px 8px}
+    .label-name{font-size:13px}
+    .label-kicker{font-size:5.7px}
+    .label-sub{font-size:5.7px}
+    .label-hint{display:none}
+    .loader-brand{font-size:22px}
+  }
+  @media (max-height:800px) and (min-width:861px){
+    .info-panel{max-height:calc(100vh - 176px)}
+    .panel-footer{display:none}
+    .component-row{padding:5.3px 0}
+    .component-index{margin-top:13px}
+    .detail-desc{margin-top:10px}
+  }
+  @media (max-width:400px){
+    .info-panel{max-height:42vh;bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+    .calibre-sub{display:none}
+    .detail-desc{-webkit-line-clamp:2;font-size:10.5px}
+    .ctl{padding:0 8px;gap:5px;font-size:7.4px;letter-spacing:.05em}
+    .ctl-icon{padding:0 9px}
+    .controls{gap:0}
+    .ctl svg{width:11px;height:11px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .fx-grain,.anchor-dot::before,.status-dot{animation:none!important}
+    *{scroll-behavior:auto!important}
+  }
+</style>
+</head>
+<body>
+  <noscript><div style="position:fixed;inset:0;z-index:99;display:grid;place-items:center;background:#050504;color:#c7a15f;font:14px Georgia,serif;letter-spacing:.08em">此作品需要启用 JavaScript 与 WebGL。</div></noscript>
+  <div class="loader" id="loader" aria-live="polite">
+    <div class="loader-inner">
+      <div class="loader-emblem"><span>A</span></div>
+      <div class="loader-brand">AURELIS</div>
+      <div class="loader-sub">Manufacture d'Horlogerie · Genève</div>
+      <div class="loader-track"><span class="loader-bar" id="loaderBar"></span></div>
+      <div class="loader-meta"><span id="loaderLabel">正在组装机芯</span><span id="loaderPct">00</span></div>
+    </div>
+  </div>
+
+  <div id="stage" aria-label="Interactive 3D skeleton mechanical watch"></div>
+  <div class="fx-vignette"></div>
+  <div class="fx-grain"></div>
+
+  <main class="ui" id="ui">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true"><span>A</span></div>
+        <div class="brand-word">
+          <div class="brand-name">AURELIS</div>
+          <div class="brand-tag">MANUFACTURE D'HORLOGERIE · GENÈVE</div>
+        </div>
+      </div>
+      <div class="edition">
+        <div class="edition-main">CALIBRE A–01 · PIÈCE UNIQUE</div>
+        <div class="edition-sub">HIGH HORLOGERIE · MMXXV</div>
+        <div class="edition-line"></div>
+      </div>
+    </header>
+
+    <div class="edge-note edge-left">Openworked Calibre · No. 001 / 001</div>
+    <div class="edge-note edge-right">Hand-finished in Geneva · 218 Components</div>
+
+    <aside class="info-panel" id="infoPanel" aria-label="Movement information">
+      <div class="panel-top">
+        <span class="eyebrow">Inside the movement</span>
+        <span class="status"><i class="status-dot"></i><span id="statusText">Running</span></span>
+      </div>
+      <div class="calibre">CALIBRE <em>A–01</em></div>
+      <div class="calibre-sub">镂空手动上链机芯 · 双面手工倒角 · 玫瑰金齿轮系</div>
+      <div class="rule"></div>
+      <div class="detail-tag">
+        <span class="detail-index" id="detailIndex">00</span>
+        <div class="detail-info">
+          <h2 id="detailTitle">整体机芯</h2>
+          <p id="detailEn">The openworked calibre</p>
+        </div>
+      </div>
+      <p class="detail-desc" id="detailDesc">悬浮于光影之间的机械宇宙。218 枚手工修饰的组件，以 72 小时动力储存与 4Hz 高振频，将时间的流动化为可见的精密艺术。</p>
+      <div class="detail-chips" id="detailChips">
+        <span class="chip"><i></i>218 Components</span>
+        <span class="chip"><i></i>Hand-finished</span>
+        <span class="chip"><i></i>72h Reserve</span>
+      </div>
+      <div class="fixed-specs">
+        <div class="fixed-spec"><span>振频</span><strong>28,800 <em>vph</em></strong></div>
+        <div class="fixed-spec"><span>动力</span><strong>72 <em>h</em></strong></div>
+        <div class="fixed-spec"><span>宝石</span><strong>29 <em>ruby</em></strong></div>
+        <div class="fixed-spec"><span>节拍</span><strong>4 <em>Hz</em></strong></div>
+      </div>
+      <div class="component-index">
+        <div class="index-head"><span>组件索引 · Components</span><span>Hover to locate</span></div>
+        <div class="component-list" id="componentList"></div>
+      </div>
+      <div class="panel-footer">
+        <span>Aurelis Atelier · Genève</span>
+        <span class="fleur">✦</span>
+        <span>No. 001 / 001</span>
+      </div>
+    </aside>
+
+    <div class="part-label" id="partLabel" role="status" aria-live="polite">
+      <span class="anchor-dot"></span>
+      <span class="anchor-line"></span>
+      <div class="label-card">
+        <span class="label-kicker" id="labelKicker">COMPONENT 01</span>
+        <div class="label-name" id="labelName">发条盒</div>
+        <span class="label-sub" id="labelSub">Mainspring Barrel</span>
+        <div class="label-hint">Click to inspect</div>
+      </div>
+    </div>
+
+    <div class="hint">
+      <div class="hint-main"><i></i>Drag to rotate · Scroll to explore</div>
+      <div class="hint-sub">悬停以识别零件 · 点击查看机芯细节</div>
+    </div>
+    <div class="scale">
+      <div class="scale-bar"></div><span>Exhibition · 1:1</span>
+    </div>
+
+    <nav class="controls" aria-label="Watch controls">
+      <button class="ctl" data-action="explode" aria-pressed="false" title="展开/收起爆炸视图">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5 5.5 6v8L12 17.5 18.5 14V6L12 2.5Z"/><path d="m12 7-3 1.7v3.6l3 1.7 3-1.7V8.7L12 7Z"/><path d="M12 17.5v4M7.5 20h9"/></svg>
+        <span>爆炸视图</span><span class="key">E</span>
+      </button>
+      <span class="ctl-sep"></span>
+      <button class="ctl" data-action="lume" aria-pressed="false" title="开启/关闭夜光模式">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.2 14.4A8.1 8.1 0 0 1 9.6 3.8 8.3 8.3 0 1 0 20.2 14.4Z"/><path d="M16.5 5.5v4M14.5 7.5h4M19.2 10.6v2M18.2 11.6h2"/></svg>
+        <span>夜光模式</span><span class="key">L</span>
+      </button>
+      <span class="ctl-sep"></span>
+      <button class="ctl active" data-action="rotate" aria-pressed="true" title="暂停/继续自动旋转">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11.5A8 8 0 1 1 17.3 5"/><path d="M20 3.5v5h-5"/></svg>
+        <span>自动旋转</span><span class="key">R</span>
+      </button>
+      <button class="ctl ctl-icon" data-action="reset" title="重置视角">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M4.7 4.7a9 9 0 1 1-1.3 9.4"/><circle cx="12" cy="12" r="2.7"/></svg>
+        <span>重置视角</span>
+      </button>
+    </nav>
+  </main>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+  <script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+import { OutlinePass } from 'three/addons/postprocessing/OutlinePass.js';
+import { Reflector } from 'three/addons/objects/Reflector.js';
+import { RectAreaLightUniformsLib } from 'three/addons/lights/RectAreaLightUniformsLib.js';
+
+/* ══════════════════════════════════════════════════════════════
+   AURELIS — Calibre A–01
+   An entirely procedural skeleton watch, built from geometry,
+   light and motion. No models. No image assets.
+   ══════════════════════════════════════════════════════════════ */
+
+const TAU = Math.PI * 2;
+const DEG = Math.PI / 180;
+const clamp = THREE.MathUtils.clamp;
+const lerp = THREE.MathUtils.lerp;
+const damp = THREE.MathUtils.damp;
+const isPortrait = () => window.innerHeight > window.innerWidth * 0.82;
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const $ = (s) => document.querySelector(s);
+const loader = $('#loader');
+const loaderBar = $('#loaderBar');
+const loaderPct = $('#loaderPct');
+const loaderLabel = $('#loaderLabel');
+
+let loaderProgress = 6;
+let loaderFinished = false;
+function setLoad(p, message) {
+  if (loaderFinished) return;
+  loaderProgress = Math.max(loaderProgress, p);
+  loaderBar.style.width = `${loaderProgress}%`;
+  loaderPct.textContent = String(Math.round(loaderProgress)).padStart(2, '0');
+  if (message) loaderLabel.textContent = message;
+}
+setLoad(11, '正在搭建机芯');
+const loadTimer = setInterval(() => {
+  if (loaderProgress < 82) setLoad(loaderProgress + Math.random() * 5.5);
+}, 340);
+
+/* ── Renderer ────────────────────────────────────────────────── */
+
+const stage = $('#stage');
+const renderer = new THREE.WebGLRenderer({
+  antialias: false,
+  alpha: false,
+  stencil: true,
+  powerPreference: 'high-performance',
+});
+const dpr = Math.min(window.devicePixelRatio || 1, window.matchMedia('(max-width: 800px)').matches ? 1.3 : 1.6);
+renderer.setPixelRatio(dpr);
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.09;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.setClearColor(0x050504, 1);
+RectAreaLightUniformsLib.init();
+stage.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+scene.fog = new THREE.FogExp2(0x050504, 0.0095);
+
+const camera = new THREE.PerspectiveCamera(31, window.innerWidth / window.innerHeight, 0.1, 150);
+camera.position.set(10.7, 17.8, 15.4);
+
+/* Compose for the editorial panel: keep the portrait centred, but ease the
+   entire stage slightly to the left in landscape. */
+function applyViewOffset() {
+  const w = window.innerWidth;
+  const h = window.innerHeight;
+  if (w <= 860) {
+    // Lift the stage clear of the mobile information panel.
+    const shiftY = h * (h >= w ? 0.095 : 0.055);
+    camera.setViewOffset(w, h, 0, shiftY, w, h);
+  } else {
+    // Centre the watch in the space remaining to the left of the inspector.
+    const shiftX = w > 1100 ? 192 : 171;
+    camera.setViewOffset(w, h, shiftX, 0, w, h);
+  }
+  camera.updateProjectionMatrix();
+}
+applyViewOffset();
+
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.target.set(0, 0.15, 0);
+controls.enableDamping = true;
+controls.dampingFactor = 0.048;
+controls.rotateSpeed = 0.62;
+controls.zoomSpeed = 0.72;
+controls.panSpeed = 0.5;
+controls.enablePan = false;
+controls.minDistance = isPortrait() ? 21 : 16.5;
+controls.maxDistance = isPortrait() ? 58 : 44;
+controls.minPolarAngle = 0.12;
+controls.maxPolarAngle = 1.41;
+controls.autoRotate = !reduceMotion;
+controls.autoRotateSpeed = 0.22;
+controls.enabled = false;
+
+/* ── Post processing ─────────────────────────────────────────── */
+
+const makeComposerTarget = () => new THREE.WebGLRenderTarget(
+  Math.max(1, Math.floor(window.innerWidth * dpr)),
+  Math.max(1, Math.floor(window.innerHeight * dpr)),
+  {
+    type: THREE.HalfFloatType,
+    samples: renderer.capabilities.isWebGL2 ? 2 : 0,
+    depthBuffer: true,
+    stencilBuffer: true,
+  }
+);
+const composer = new EffectComposer(renderer, makeComposerTarget());
+composer.setPixelRatio(dpr);
+
+const renderPass = new RenderPass(scene, camera);
+composer.addPass(renderPass);
+
+const outlinePass = new OutlinePass(new THREE.Vector2(window.innerWidth, window.innerHeight), scene, camera);
+outlinePass.edgeStrength = 3.1;
+outlinePass.edgeGlow = 0.38;
+outlinePass.edgeThickness = 1.15;
+outlinePass.pulsePeriod = 0;
+outlinePass.visibleEdgeColor.set('#efcd8b');
+outlinePass.hiddenEdgeColor.set('#5a4527');
+outlinePass.enabled = false;
+composer.addPass(outlinePass);
+
+const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 0.075, 0.34, 4.2);
+composer.addPass(bloomPass);
+
+const outputPass = new OutputPass();
+composer.addPass(outputPass);
+
+/* ── Studio environment ──────────────────────────────────────── */
+
+const pmrem = new THREE.PMREMGenerator(renderer);
+pmrem.compileEquirectangularShader();
+
+/* A purpose-built jewellery studio environment: deep, warm darkness broken
+   by precise rectangular softboxes. This is what paints the long specular
+   highlights across the bridges, lugs and domed sapphire. */
+function createStudioEnvironment() {
+  const s = new THREE.Scene();
+  s.background = new THREE.Color(0x050504);
+
+  const shell = new THREE.Mesh(
+    new THREE.SphereGeometry(34, 32, 18),
+    new THREE.MeshBasicMaterial({ color: 0x0a0907, side: THREE.BackSide, toneMapped: false })
+  );
+  s.add(shell);
+
+  const panel = (w, h, position, color, intensity, lookAt = new THREE.Vector3(0, 0, 0)) => {
+    const mat = new THREE.MeshBasicMaterial({
+      color: new THREE.Color(color).multiplyScalar(intensity),
+      side: THREE.DoubleSide,
+      toneMapped: false,
+    });
+    const mesh = new THREE.Mesh(new THREE.PlaneGeometry(w, h), mat);
+    mesh.position.copy(position);
+    mesh.lookAt(lookAt);
+    s.add(mesh);
+    return mesh;
+  };
+
+  // Large warm ceiling softbox — the principal highlight on all horizontal surfaces.
+  panel(22, 16, new THREE.Vector3(0.5, 11.5, 1.5), 0xffe3c4, 1.18);
+
+  // Narrow overhead strip for crisp, watch-photography specular lines.
+  panel(4.2, 12, new THREE.Vector3(4.2, 9.2, 3.5), 0xfff8ee, 3.8);
+  panel(1.3, 13, new THREE.Vector3(-5.8, 7.5, 4.2), 0xffc58e, 4.5);
+
+  // Sweeping side panels.
+  panel(2.6, 10, new THREE.Vector3(-8.5, 4.5, 5.2), 0xbfd7f2, 1.35);
+  panel(2.0, 8, new THREE.Vector3(8.6, 4.0, 1.8), 0xffcf9b, 1.55);
+  panel(1.0, 12, new THREE.Vector3(6.6, 3.4, -5.6), 0x9fc6ee, 1.30);
+
+  // Rear rim card and subtle frontal bounce.
+  panel(12, 2.4, new THREE.Vector3(-2.0, 4.8, -9.0), 0xffc58f, 2.1);
+  panel(10, 5.0, new THREE.Vector3(0, 2.2, 9.5), 0x8e9aa3, 0.22);
+
+  // A high jewellery ring light, visible as a soft halo in polished gold.
+  const ring = new THREE.Mesh(
+    new THREE.TorusGeometry(5.8, 0.15, 8, 96),
+    new THREE.MeshBasicMaterial({ color: new THREE.Color(0xffe9d2).multiplyScalar(2.2), toneMapped: false })
+  );
+  ring.rotation.x = Math.PI / 2;
+  ring.position.y = 8.4;
+  s.add(ring);
+
+  return s;
+}
+const studioEnv = createStudioEnvironment();
+const envRT = pmrem.fromScene(studioEnv, 0.025);
+scene.environment = envRT.texture;
+studioEnv.traverse((o) => {
+  if (o.isMesh) {
+    o.geometry.dispose();
+    if (Array.isArray(o.material)) o.material.forEach((m) => m.dispose());
+    else o.material.dispose();
+  }
+});
+pmrem.dispose();
+
+/* Background: an infinite, softly graduated studio darkness. */
+const bgMat = new THREE.ShaderMaterial({
+  side: THREE.BackSide,
+  depthWrite: false,
+  fog: false,
+  uniforms: {
+    uTop: { value: new THREE.Color(0x0a0907) },
+    uBottom: { value: new THREE.Color(0x020202) },
+    uWarm: { value: new THREE.Color(0x1d140b) },
+  },
+  vertexShader: /* glsl */`
+    varying vec3 vDir;
+    void main(){
+      vDir = normalize(position);
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    }
+  `,
+  fragmentShader: /* glsl */`
+    uniform vec3 uTop;
+    uniform vec3 uBottom;
+    uniform vec3 uWarm;
+    varying vec3 vDir;
+    void main(){
+      vec3 d = normalize(vDir);
+      float h = smoothstep(-0.65, 0.85, d.y);
+      vec3 col = mix(uBottom, uTop, h);
+      // Two very soft, distant pools of light give the void a sense of depth.
+      vec3 p1 = normalize(vec3(-0.48, 0.10, -0.87));
+      vec3 p2 = normalize(vec3(0.76, 0.04, -0.62));
+      float glow1 = pow(max(0.0, dot(d, p1)), 16.0);
+      float glow2 = pow(max(0.0, dot(d, p2)), 28.0);
+      col += uWarm * (glow1 * 0.55 + glow2 * 0.30);
+      // Subtle vignette at the horizon.
+      col *= 1.0 - smoothstep(0.36, 1.0, abs(d.y)) * 0.18;
+      gl_FragColor = vec4(col, 1.0);
+    }
+  `,
+});
+const bgSphere = new THREE.Mesh(new THREE.SphereGeometry(72, 64, 32), bgMat);
+scene.add(bgSphere);
+
+/* ── Reflecting display plinth ───────────────────────────────── */
+
+const FLOOR_Y = -0.96;
+const reflectorTexture = Math.min(isPortrait() ? 512 : 768, Math.floor(1200 * Math.min(dpr, 1.25)));
+const mirror = new Reflector(new THREE.CircleGeometry(26, 160), {
+  clipBias: 0.002,
+  textureWidth: reflectorTexture,
+  textureHeight: reflectorTexture,
+  color: 0x25211b,
+  multisample: renderer.capabilities.isWebGL2 ? 4 : 0,
+});
+mirror.rotation.x = -Math.PI / 2;
+mirror.position.y = FLOOR_Y;
+scene.add(mirror);
+
+/* A dark, anti-glare glass wash over the mirror keeps the reflection restrained. */
+function makeRadialTexture(size, stops, clearOutside = false) {
+  const c = document.createElement('canvas');
+  c.width = c.height = size;
+  const ctx = c.getContext('2d');
+  const g = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
+  stops.forEach(([p, color]) => g.addColorStop(p, color));
+  ctx.fillStyle = g;
+  if (!clearOutside) ctx.fillRect(0, 0, size, size);
+  const tex = new THREE.CanvasTexture(c);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  tex.anisotropy = Math.min(renderer.capabilities.getMaxAnisotropy(), 8);
+  return tex;
+}
+
+const floorWashTex = makeRadialTexture(512, [
+  [0.0, 'rgba(4,4,4,0.30)'],
+  [0.30, 'rgba(5,5,4,0.47)'],
+  [0.62, 'rgba(5,5,4,0.70)'],
+  [1.0, 'rgba(3,3,3,0.90)'],
+]);
+const floorWash = new THREE.Mesh(
+  new THREE.CircleGeometry(26, 128),
+  new THREE.MeshBasicMaterial({ map: floorWashTex, transparent: true, depthWrite: false, opacity: 0.82 })
+);
+floorWash.rotation.x = -Math.PI / 2;
+floorWash.position.y = FLOOR_Y + 0.002;
+floorWash.renderOrder = 1;
+scene.add(floorWash);
+
+const shadowTex = makeRadialTexture(512, [
+  [0.0, 'rgba(0,0,0,0.84)'],
+  [0.23, 'rgba(0,0,0,0.52)'],
+  [0.52, 'rgba(0,0,0,0.17)'],
+  [1.0, 'rgba(0,0,0,0)'],
+]);
+const contactShadow = new THREE.Mesh(
+  new THREE.PlaneGeometry(9.8, 8.2),
+  new THREE.MeshBasicMaterial({ map: shadowTex, transparent: true, opacity: 0.74, depthWrite: false })
+);
+contactShadow.rotation.x = -Math.PI / 2;
+contactShadow.position.set(-0.15, FLOOR_Y + 0.006, 0.18);
+contactShadow.renderOrder = 2;
+scene.add(contactShadow);
+
+/* Hairline exhibition rings on the floor. */
+const ringMat = new THREE.MeshBasicMaterial({ color: 0xd4b77d, transparent: true, opacity: 0.13, depthWrite: false });
+for (const [r, o] of [[6.25, 0.10], [7.0, 0.05], [9.4, 0.035]]) {
+  const ring = new THREE.Mesh(new THREE.RingGeometry(r, r + 0.012, 240), ringMat.clone());
+  ring.material.opacity = o;
+  ring.rotation.x = -Math.PI / 2;
+  ring.position.y = FLOOR_Y + 0.008;
+  ring.renderOrder = 3;
+  scene.add(ring);
+}
+
+/* ── Lights ──────────────────────────────────────────────────── */
+
+const ambient = new THREE.HemisphereLight(0x9ba3a8, 0x21150b, 0.38);
+scene.add(ambient);
+
+const softTop = new THREE.DirectionalLight(0xffedd3, 1.95);
+softTop.position.set(-3.5, 12, 7);
+scene.add(softTop);
+
+const key = new THREE.SpotLight(0xffdcb4, 1680, 34, 0.42, 0.88, 1.7);
+key.position.set(7.2, 15.5, 9.2);
+key.target.position.set(-0.6, 0, 0);
+key.castShadow = true;
+key.shadow.mapSize.set(2048, 2048);
+key.shadow.camera.near = 2;
+key.shadow.camera.far = 32;
+key.shadow.bias = -0.00022;
+key.shadow.normalBias = 0.022;
+key.shadow.radius = 4;
+scene.add(key, key.target);
+
+const fill = new THREE.SpotLight(0xa6bfdc, 430, 28, 0.62, 1.0, 1.9);
+fill.position.set(-10, 8.5, -4.5);
+fill.target.position.set(0.8, 1.2, 0);
+scene.add(fill, fill.target);
+
+/* A broad, shadowless fill from above keeps every bridge, wheel and jewel
+   legible inside the case without flattening the raking key light. */
+const interiorFill = new THREE.PointLight(0xffe8cc, 240, 15, 1.8);
+interiorFill.position.set(0.4, 4.8, 2.3);
+scene.add(interiorFill);
+
+const innerCool = new THREE.DirectionalLight(0xb5cbe3, 0.72);
+innerCool.position.set(-5, 7, 4);
+scene.add(innerCool);
+
+/* Two large studio softboxes dedicated to the movement. RectAreaLights
+   paint the broad, soft specular shapes that point lights cannot. */
+const movementSoftbox = new THREE.RectAreaLight(0xffe7cb, 8.6, 5.8, 5.2);
+movementSoftbox.position.set(0.7, 6.4, 2.6);
+movementSoftbox.lookAt(0, 0, 0);
+scene.add(movementSoftbox);
+
+const movementCoolbox = new THREE.RectAreaLight(0xc3dbff, 3.0, 3.4, 5.2);
+movementCoolbox.position.set(-4.6, 4.6, -1.0);
+movementCoolbox.lookAt(0, 0, 0);
+scene.add(movementCoolbox);
+
+const warmRim = new THREE.PointLight(0xffb35e, 74, 16, 2.0);
+warmRim.position.set(-2.2, 2.9, -7.8);
+scene.add(warmRim);
+
+const lowRim = new THREE.PointLight(0x8bbbd8, 46, 14, 2.0);
+lowRim.position.set(7.4, 1.8, -5.5);
+scene.add(lowRim);
+
+const dialGlow = new THREE.PointLight(0xc8ffc1, 0.0, 16, 2.0);
+dialGlow.position.set(0, 4.2, 0);
+scene.add(dialGlow);
+
+/* ── Fine dust in the air ────────────────────────────────────── */
+
+const dustCount = 68;
+const dustGeo = new THREE.BufferGeometry();
+const dustPositions = new Float32Array(dustCount * 3);
+const dustPhase = new Float32Array(dustCount);
+for (let i = 0; i < dustCount; i++) {
+  const a = Math.random() * TAU;
+  const r = 3.2 + Math.random() * 8.5;
+  dustPositions[i * 3 + 0] = Math.cos(a) * r;
+  dustPositions[i * 3 + 1] = 0.3 + Math.random() * 5.2;
+  dustPositions[i * 3 + 2] = Math.sin(a) * r;
+  dustPhase[i] = Math.random() * TAU;
+}
+dustGeo.setAttribute('position', new THREE.BufferAttribute(dustPositions, 3));
+const dustTex = makeRadialTexture(64, [
+  [0, 'rgba(255,242,211,1)'],
+  [0.22, 'rgba(255,230,180,0.6)'],
+  [1, 'rgba(255,220,160,0)'],
+]);
+const dust = new THREE.Points(dustGeo, new THREE.PointsMaterial({
+  map: dustTex,
+  color: 0xffdcae,
+  size: 0.055,
+  transparent: true,
+  opacity: 0.32,
+  depthWrite: false,
+  blending: THREE.AdditiveBlending,
+  sizeAttenuation: true,
+}));
+scene.add(dust);
+
+/* ── Texture helpers ─────────────────────────────────────────── */
+
+function canvasTexture(width, height, draw, opts = {}) {
+  const canvas = document.createElement('canvas');
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext('2d');
+  draw(ctx, width, height);
+  const tex = new THREE.CanvasTexture(canvas);
+  tex.colorSpace = opts.color ? THREE.SRGBColorSpace : THREE.NoColorSpace;
+  tex.wrapS = opts.clamp ? THREE.ClampToEdgeWrapping : THREE.RepeatWrapping;
+  tex.wrapT = opts.clamp ? THREE.ClampToEdgeWrapping : THREE.RepeatWrapping;
+  tex.anisotropy = Math.min(renderer.capabilities.getMaxAnisotropy(), 8);
+  tex.needsUpdate = true;
+  return tex;
+}
+
+const brushedBump = canvasTexture(512, 512, (ctx, w, h) => {
+  ctx.fillStyle = '#808080';
+  ctx.fillRect(0, 0, w, h);
+  for (let i = 0; i < 2100; i++) {
+    const y = Math.random() * h;
+    const a = 0.025 + Math.random() * 0.11;
+    ctx.strokeStyle = Math.random() > 0.5 ? `rgba(255,255,255,${a})` : `rgba(0,0,0,${a})`;
+    ctx.lineWidth = Math.random() < 0.8 ? 0.55 : 1.2;
+    ctx.beginPath();
+    const x = Math.random() * w;
+    ctx.moveTo(x, y);
+    ctx.lineTo(x + 18 + Math.random() * 110, y + (Math.random() - 0.5) * 0.7);
+    ctx.stroke();
+  }
+  for (let i = 0; i < 12; i++) {
+    const gx = Math.random() * w;
+    ctx.fillStyle = `rgba(255,255,255,${0.012 + Math.random() * 0.025})`;
+    ctx.fillRect(gx, 0, 1 + Math.random() * 1.4, h);
+  }
+});
+brushedBump.repeat.set(3.2, 3.2);
+
+const perlageBump = canvasTexture(512, 512, (ctx, w, h) => {
+  ctx.fillStyle = '#7d7d7d';
+  ctx.fillRect(0, 0, w, h);
+  const step = 40;
+  for (let gy = -step; gy < h + step; gy += step) {
+    for (let gx = -step; gx < w + step; gx += step) {
+      const ox = gx + (Math.floor(gy / step) % 2) * step * 0.5;
+      const r = 19;
+      const grad = ctx.createRadialGradient(ox, gy, 1, ox, gy, r);
+      grad.addColorStop(0, 'rgba(118,118,118,0.9)');
+      grad.addColorStop(0.45, 'rgba(146,146,146,0.8)');
+      grad.addColorStop(0.78, 'rgba(102,102,102,0.8)');
+      grad.addColorStop(1, 'rgba(93,93,93,0.4)');
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(ox, gy, r, 0, TAU);
+      ctx.fill();
+    }
+  }
+});
+perlageBump.repeat.set(0.29, 0.29);
+
+const genevaBump = canvasTexture(512, 512, (ctx, w, h) => {
+  ctx.fillStyle = '#7e7e7e';
+  ctx.fillRect(0, 0, w, h);
+  for (let i = -h; i < w + h; i += 7) {
+    const grad = ctx.createLinearGradient(i, 0, i + 22, 0);
+    grad.addColorStop(0, 'rgba(80,80,80,0.05)');
+    grad.addColorStop(0.38, 'rgba(166,166,166,0.60)');
+    grad.addColorStop(0.55, 'rgba(128,128,128,0.18)');
+    grad.addColorStop(1, 'rgba(74,74,74,0.05)');
+    ctx.fillStyle = grad;
+    ctx.save();
+    ctx.translate(i, 0);
+    ctx.rotate(-0.34);
+    ctx.fillRect(0, -h, 10, h * 3);
+    ctx.restore();
+  }
+  for (let i = 0; i < 30; i++) {
+    ctx.strokeStyle = `rgba(255,255,255,${0.02 + Math.random() * 0.03})`;
+    ctx.beginPath();
+    const y = Math.random() * h;
+    ctx.moveTo(0, y);
+    ctx.lineTo(w, y + 40);
+    ctx.stroke();
+  }
+});
+genevaBump.repeat.set(0.14, 0.14);
+const genevaRoughness = canvasTexture(512, 512, (ctx, w, h) => {
+  ctx.fillStyle = '#d0d0d0';
+  ctx.fillRect(0, 0, w, h);
+  for (let i = -h; i < w + h; i += 18) {
+    const grad = ctx.createLinearGradient(i, 0, i + 46, 0);
+    grad.addColorStop(0, 'rgba(255,255,255,0.0)');
+    grad.addColorStop(0.35, 'rgba(255,255,255,0.75)');
+    grad.addColorStop(0.62, 'rgba(80,80,80,0.82)');
+    grad.addColorStop(1, 'rgba(220,220,220,0.1)');
+    ctx.fillStyle = grad;
+    ctx.save();
+    ctx.translate(i, 0);
+    ctx.rotate(-0.34);
+    ctx.fillRect(0, -h, 30, h * 3);
+    ctx.restore();
+  }
+});
+genevaRoughness.repeat.set(0.14, 0.14);
+const genevaFace = canvasTexture(512, 512, (ctx, w, h) => {
+  ctx.fillStyle = '#485256';
+  ctx.fillRect(0, 0, w, h);
+  for (let i = -h; i < w + h; i += 18) {
+    const grad = ctx.createLinearGradient(i, 0, i + 46, 0);
+    grad.addColorStop(0, 'rgba(158,173,176,0.10)');
+    grad.addColorStop(0.35, 'rgba(132,148,152,0.52)');
+    grad.addColorStop(0.60, 'rgba(21,27,29,0.55)');
+    grad.addColorStop(1, 'rgba(98,111,115,0.06)');
+    ctx.fillStyle = grad;
+    ctx.save();
+    ctx.translate(i, 0);
+    ctx.rotate(-0.34);
+    ctx.fillRect(0, -h, 28, h * 3);
+    ctx.restore();
+  }
+  for (let i = 0; i < 300; i++) {
+    ctx.strokeStyle = `rgba(230,238,238,${0.015 + Math.random() * 0.025})`;
+    const y = Math.random() * h;
+    ctx.beginPath();
+    ctx.moveTo(0, y);
+    ctx.lineTo(w, y + 34);
+    ctx.stroke();
+  }
+}, { color: true });
+genevaFace.repeat.set(0.14, 0.14);
+const perlageRoughness = canvasTexture(512, 512, (ctx, w, h) => {
+  ctx.fillStyle = '#b8b8b8';
+  ctx.fillRect(0, 0, w, h);
+  const step = 40;
+  for (let gy = -step; gy < h + step; gy += step) {
+    for (let gx = -step; gx < w + step; gx += step) {
+      const ox = gx + (Math.floor(gy / step) % 2) * step * 0.5;
+      const grad = ctx.createRadialGradient(ox, gy, 1, ox, gy, 19);
+      grad.addColorStop(0, 'rgba(82,82,82,0.95)');
+      grad.addColorStop(0.55, 'rgba(208,208,208,0.85)');
+      grad.addColorStop(1, 'rgba(120,120,120,0.3)');
+      ctx.fillStyle = grad;
+      ctx.beginPath(); ctx.arc(ox, gy, 19, 0, TAU); ctx.fill();
+    }
+  }
+});
+perlageRoughness.repeat.set(0.29, 0.29);
+const perlageFace = canvasTexture(512, 512, (ctx, w, h) => {
+  ctx.fillStyle = '#22282a';
+  ctx.fillRect(0, 0, w, h);
+  const step = 40;
+  for (let gy = -step; gy < h + step; gy += step) {
+    for (let gx = -step; gx < w + step; gx += step) {
+      const ox = gx + (Math.floor(gy / step) % 2) * step * 0.5;
+      const grad = ctx.createRadialGradient(ox, gy, 1, ox, gy, 20);
+      grad.addColorStop(0, 'rgba(35,42,44,0.95)');
+      grad.addColorStop(0.45, 'rgba(57,66,69,0.8)');
+      grad.addColorStop(0.8, 'rgba(26,32,34,0.8)');
+      grad.addColorStop(1, 'rgba(22,28,30,0.0)');
+      ctx.fillStyle = grad;
+      ctx.beginPath(); ctx.arc(ox, gy, 20, 0, TAU); ctx.fill();
+    }
+  }
+}, { color: true });
+perlageFace.repeat.set(0.29, 0.29);
+
+/* ── Materials ───────────────────────────────────────────────── */
+
+const reflectiveMaterials = [];
+function metal(color, roughness = 0.24, opts = {}) {
+  const mat = new THREE.MeshPhysicalMaterial({
+    color,
+    metalness: 1,
+    roughness,
+    envMapIntensity: opts.env ?? 1.25,
+    clearcoat: opts.clearcoat ?? 0.15,
+    clearcoatRoughness: opts.ccRough ?? 0.24,
+    bumpMap: opts.bump ?? null,
+    bumpScale: opts.bumpScale ?? 0.005,
+    side: opts.side ?? THREE.FrontSide,
+  });
+  mat.userData.baseEnv = mat.envMapIntensity;
+  reflectiveMaterials.push(mat);
+  return mat;
+}
+
+const gold = metal(0xd2a273, 0.23, { env: 1.42 });
+const goldPolished = metal(0xedc695, 0.115, { env: 1.62, clearcoat: 0.34 });
+const goldSatin = metal(0xbe8f68, 0.32, {
+  env: 1.22,
+  bump: brushedBump,
+  bumpScale: 0.007,
+  side: THREE.DoubleSide,
+});
+const rhodium = metal(0x818b8f, 0.45, {
+  env: 1.26,
+  bump: genevaBump,
+  bumpScale: 0.026,
+});
+const rhodiumDark = metal(0x343b3e, 0.52, {
+  env: 0.78,
+  bump: perlageBump,
+  bumpScale: 0.04,
+});
+rhodium.roughnessMap = genevaRoughness;
+rhodium.bumpScale = 0.045;
+rhodiumDark.roughnessMap = perlageRoughness;
+rhodium.needsUpdate = true;
+rhodiumDark.needsUpdate = true;
+
+const bridgeTop = metal(0xffffff, 0.44, {
+  env: 1.55,
+  bump: genevaBump,
+  bumpScale: 0.045,
+});
+bridgeTop.map = genevaFace;
+bridgeTop.roughnessMap = genevaRoughness;
+bridgeTop.metalness = 0.84;
+bridgeTop.needsUpdate = true;
+const plateTop = metal(0xffffff, 0.58, {
+  env: 0.78,
+  bump: perlageBump,
+  bumpScale: 0.04,
+});
+plateTop.map = perlageFace;
+plateTop.roughnessMap = perlageRoughness;
+plateTop.needsUpdate = true;
+const steel = metal(0xd8dfe0, 0.15, { env: 1.58 });
+const lugGold = metal(0x946641, 0.49, {
+  env: 0.66,
+  bump: brushedBump,
+  bumpScale: 0.024,
+  side: THREE.DoubleSide,
+});
+const bluedSteel = metal(0x1b3450, 0.19, { env: 1.65 });
+const bluedBright = metal(0x2d5a84, 0.15, { env: 2.0, clearcoat: 0.25 });
+const darkSteel = metal(0x373b3d, 0.34, { env: 0.9 });
+const screwBlack = new THREE.MeshPhysicalMaterial({
+  color: 0x16181a,
+  metalness: 0.78,
+  roughness: 0.32,
+  clearcoat: 0.7,
+  clearcoatRoughness: 0.18,
+  envMapIntensity: 0.9,
+});
+const blackEnamel = new THREE.MeshPhysicalMaterial({
+  color: 0x070808,
+  metalness: 0.14,
+  roughness: 0.22,
+  clearcoat: 1.0,
+  clearcoatRoughness: 0.08,
+  envMapIntensity: 0.8,
+});
+const whiteEnamel = new THREE.MeshPhysicalMaterial({
+  color: 0xd9d4c6,
+  metalness: 0.0,
+  roughness: 0.3,
+  clearcoat: 0.8,
+  clearcoatRoughness: 0.2,
+  envMapIntensity: 0.65,
+});
+const ruby = new THREE.MeshPhysicalMaterial({
+  color: 0x8d0a28,
+  metalness: 0.05,
+  roughness: 0.06,
+  transmission: 0.0,
+  thickness: 0.22,
+  ior: 1.76,
+  clearcoat: 1,
+  clearcoatRoughness: 0.035,
+  envMapIntensity: 1.45,
+  emissive: 0x450012,
+  emissiveIntensity: 0.4,
+});
+const lume = new THREE.MeshStandardMaterial({
+  color: 0xd2ddbe,
+  emissive: 0x8fe58c,
+  emissiveIntensity: 0.32,
+  roughness: 0.55,
+  metalness: 0.0,
+  envMapIntensity: 0.45,
+});
+lume.userData.baseEmissive = lume.emissiveIntensity;
+const lumeBlue = new THREE.MeshStandardMaterial({
+  color: 0xbfe6e0,
+  emissive: 0x62ffd7,
+  emissiveIntensity: 0.5,
+  roughness: 0.48,
+  metalness: 0.0,
+  envMapIntensity: 0.4,
+});
+lumeBlue.userData.baseEmissive = lumeBlue.emissiveIntensity;
+
+const sapphire = new THREE.MeshPhysicalMaterial({
+  color: 0xf4fbff,
+  metalness: 0.0,
+  roughness: 0.025,
+  transmission: 0.0,
+  transparent: true,
+  opacity: 0.009,
+  clearcoat: 0.45,
+  clearcoatRoughness: 0.022,
+  ior: 1.78,
+  reflectivity: 0.35,
+  envMapIntensity: 0.7,
+  side: THREE.DoubleSide,
+  depthWrite: false,
+  premultipliedAlpha: true,
+});
+const sapphireGlow = new THREE.ShaderMaterial({
+  transparent: true,
+  depthWrite: false,
+  side: THREE.DoubleSide,
+  blending: THREE.AdditiveBlending,
+  uniforms: {
+    uColor: { value: new THREE.Color(0x6d9bc6) },
+    uIntensity: { value: 0.055 },
+  },
+  vertexShader: /* glsl */`
+    varying vec3 vN;
+    varying vec3 vV;
+    void main(){
+      vec4 wp = modelMatrix * vec4(position, 1.0);
+      vN = normalize(mat3(modelMatrix) * normal);
+      vV = normalize(cameraPosition - wp.xyz);
+      gl_Position = projectionMatrix * viewMatrix * wp;
+    }
+  `,
+  fragmentShader: /* glsl */`
+    uniform vec3 uColor;
+    uniform float uIntensity;
+    varying vec3 vN;
+    varying vec3 vV;
+    void main(){
+      float fres = pow(1.0 - clamp(dot(normalize(vN), normalize(vV)), 0.0, 1.0), 3.2);
+      gl_FragColor = vec4(uColor, fres * uIntensity + 0.012);
+    }
+  `,
+});
+
+const sapphireEdge = new THREE.MeshPhysicalMaterial({
+  color: 0xc5e2ee,
+  metalness: 1.0,
+  roughness: 0.06,
+  envMapIntensity: 2.4,
+});
+
+/* Materials whose reflections respond to the lights-out transition. */
+const allNightMaterials = [...reflectiveMaterials];
+
+
+/* ══════════════════════════════════════════════════════════════
+   Geometry helpers
+   ══════════════════════════════════════════════════════════════ */
+
+const watch = new THREE.Group();
+watch.rotation.x = -Math.PI / 2;
+const WATCH_Y = 0.12;
+watch.position.y = WATCH_Y;
+scene.add(watch);
+
+function makeExtruded(shape, material, opt = {}) {
+  const depth = opt.depth ?? 0.12;
+  const bevel = opt.bevel ?? 0.012;
+  const geo = new THREE.ExtrudeGeometry(shape, {
+    depth,
+    bevelEnabled: bevel > 0,
+    bevelSegments: opt.bevelSegments ?? 3,
+    steps: 1,
+    bevelSize: bevel,
+    bevelThickness: bevel,
+    curveSegments: opt.curveSegments ?? 56,
+  });
+  if (opt.centerZ !== false) geo.translate(0, 0, -depth / 2);
+  const mesh = new THREE.Mesh(geo, material);
+  mesh.castShadow = opt.castShadow ?? true;
+  mesh.receiveShadow = opt.receiveShadow ?? true;
+  if (opt.name) mesh.name = opt.name;
+  return mesh;
+}
+
+function addCurvedSlot(shape, inner, outer, a0, a1) {
+  const p = new THREE.Path();
+  p.absarc(0, 0, outer, a0, a1, false);
+  p.absarc(0, 0, inner, a1, a0, true);
+  p.closePath();
+  shape.holes.push(p);
+}
+
+function circlePath(radius, x = 0, y = 0) {
+  const p = new THREE.Path();
+  p.absarc(x, y, radius, 0, TAU, false);
+  p.closePath();
+  return p;
+}
+
+/* Gear silhouette with true trapezoidal teeth, skeletonised spokes
+   and a bore for the arbor. */
+function makeGearShape(radius, teeth, toothDepth, opt = {}) {
+  const spokes = opt.spokes ?? 5;
+  const hub = opt.hub ?? radius * 0.22;
+  const rim = opt.rim ?? Math.max(0.075, radius * 0.12);
+  const profile = opt.profile ?? 'trapezoid';
+  const step = TAU / teeth;
+  const root = radius - toothDepth;
+  const tip = radius;
+  const pts = [];
+
+  if (profile === 'club') {
+    // Asymmetric escapement teeth.
+    for (let i = 0; i < teeth; i++) {
+      const a = i * step;
+      pts.push([root, a - step * 0.33]);
+      pts.push([root, a + step * 0.04]);
+      pts.push([tip * 1.02, a + step * 0.36]);
+      pts.push([root + toothDepth * 0.14, a + step * 0.48]);
+      pts.push([root, a + step * 0.56]);
+    }
+  } else {
+    for (let i = 0; i < teeth; i++) {
+      const a = i * step;
+      pts.push([root, a]);
+      pts.push([tip, a + step * 0.16]);
+      pts.push([tip, a + step * 0.34]);
+      pts.push([root, a + step * 0.5]);
+    }
+  }
+
+  const shape = new THREE.Shape();
+  shape.moveTo(Math.cos(pts[0][1]) * pts[0][0], Math.sin(pts[0][1]) * pts[0][0]);
+  for (let i = 1; i < pts.length; i++) {
+    shape.lineTo(Math.cos(pts[i][1]) * pts[i][0], Math.sin(pts[i][1]) * pts[i][0]);
+  }
+  shape.closePath();
+
+  const holeOuter = root - rim;
+  const holeInner = hub;
+  if (holeOuter > holeInner + 0.08) {
+    const sector = TAU / spokes;
+    const gap = opt.spokeGap ?? 0.17;
+    for (let i = 0; i < spokes; i++) {
+      const p = new THREE.Path();
+      const a0 = i * sector + gap;
+      const a1 = (i + 1) * sector - gap;
+      p.absarc(0, 0, holeOuter, a0, a1, false);
+      p.lineTo(Math.cos(a1) * holeInner, Math.sin(a1) * holeInner);
+      p.absarc(0, 0, holeInner, a1, a0, true);
+      p.closePath();
+      shape.holes.push(p);
+    }
+  }
+  if (opt.bore !== false) shape.holes.push(circlePath(opt.bore ?? 0.045));
+  return shape;
+}
+
+function makeWheel(radius, teeth, toothDepth, material, opt = {}) {
+  const shape = makeGearShape(radius, teeth, toothDepth, opt);
+  const depth = opt.depth ?? 0.045;
+  const mesh = makeExtruded(shape, material, {
+    depth,
+    bevel: opt.bevel ?? 0.008,
+    bevelSegments: 2,
+    curveSegments: 6,
+  });
+  return mesh;
+}
+
+function addScrew(parent, x, y, z, radius = 0.075, opt = {}) {
+  const g = new THREE.Group();
+  g.position.set(x, y, z);
+  g.rotation.z = opt.rotation ?? Math.random() * TAU;
+  const headMat = opt.material ?? goldPolished;
+  const head = new THREE.Mesh(new THREE.CylinderGeometry(radius, radius * 0.93, 0.032, 24), headMat);
+  head.rotation.x = Math.PI / 2;
+  head.castShadow = true;
+  g.add(head);
+  const rim = new THREE.Mesh(new THREE.TorusGeometry(radius * 0.86, radius * 0.055, 6, 24), opt.rimMaterial ?? gold);
+  rim.position.z = 0.016;
+  g.add(rim);
+  const slot = new THREE.Mesh(new THREE.BoxGeometry(radius * 1.65, Math.max(0.012, radius * 0.16), 0.014), screwBlack);
+  slot.position.z = 0.028;
+  slot.rotation.z = opt.slotAngle ?? Math.random() * TAU;
+  g.add(slot);
+  parent.add(g);
+  return g;
+}
+
+function addRubyJewel(parent, x, y, z, radius = 0.075, withScrews = false) {
+  const g = new THREE.Group();
+  g.position.set(x, y, z);
+  const chaton = new THREE.Mesh(new THREE.CylinderGeometry(radius * 1.58, radius * 1.84, 0.055, 30), goldPolished);
+  chaton.rotation.x = Math.PI / 2;
+  chaton.castShadow = true;
+  g.add(chaton);
+  const ring = new THREE.Mesh(new THREE.TorusGeometry(radius * 1.19, radius * 0.26, 10, 30), gold);
+  ring.position.z = 0.037;
+  g.add(ring);
+  const stone = new THREE.Mesh(new THREE.TorusGeometry(radius * 0.82, radius * 0.44, 10, 30), ruby);
+  stone.position.z = 0.049;
+  stone.castShadow = true;
+  g.add(stone);
+  const hole = new THREE.Mesh(new THREE.CylinderGeometry(radius * 0.19, radius * 0.19, 0.03, 12), screwBlack);
+  hole.rotation.x = Math.PI / 2;
+  hole.position.z = 0.05;
+  g.add(hole);
+  if (withScrews) {
+    addScrew(g, radius * 2.0, 0, 0.012, radius * 0.56, { material: screwBlack, rimMaterial: darkSteel });
+    addScrew(g, -radius * 2.0, 0, 0.012, radius * 0.56, { material: screwBlack, rimMaterial: darkSteel });
+  }
+  parent.add(g);
+  return g;
+}
+
+function addPinion(parent, x, y, z, radius = 0.12, height = 0.11, material = steel) {
+  const g = new THREE.Group();
+  g.position.set(x, y, z);
+  const teeth = 10;
+  const shape = makeGearShape(radius, teeth, radius * 0.33, { spokes: 1, hub: radius * 0.2, rim: radius * 0.18, bore: radius * 0.15, spokeGap: 0.8 });
+  // miniature pinions are solid enough; remove spoke holes for legibility
+  const pinionGeo = new THREE.ExtrudeGeometry(shape, {
+    depth: height, bevelEnabled: true, bevelSegments: 1, bevelSize: 0.004, bevelThickness: 0.004, curveSegments: 4,
+  });
+  pinionGeo.translate(0, 0, -height / 2);
+  const pinion = new THREE.Mesh(pinionGeo, material);
+  pinion.castShadow = true;
+  g.add(pinion);
+  parent.add(g);
+  return g;
+}
+
+function makeArbor(parent, x, y, z, top, material = steel, radius = 0.027) {
+  const h = Math.max(0.05, top - z);
+  const arbor = new THREE.Mesh(new THREE.CylinderGeometry(radius, radius * 1.08, h, 12), material);
+  arbor.rotation.x = Math.PI / 2;
+  arbor.position.set(x, y, z + h / 2);
+  arbor.castShadow = true;
+  parent.add(arbor);
+  return arbor;
+}
+
+/* A solid, flat mainspring ribbon — rectangular in section, wound in
+   an Archimedean spiral. */
+function makeSpiralRibbon({ turns = 6, r0 = 0.2, r1 = 0.83, height = 0.17, thickness = 0.018, segments = 340, z = 0 }) {
+  const positions = [];
+  const indices = [];
+  for (let i = 0; i <= segments; i++) {
+    const t = i / segments;
+    const a = t * turns * TAU;
+    const r = lerp(r0, r1, t) + Math.sin(t * Math.PI) * 0.006;
+    const c = Math.cos(a), s = Math.sin(a);
+    const ri = r - thickness / 2, ro = r + thickness / 2;
+    positions.push(
+      c * ri, s * ri, z + 0,
+      c * ro, s * ro, z + 0,
+      c * ro, s * ro, z + height,
+      c * ri, s * ri, z + height
+    );
+  }
+  for (let i = 0; i < segments; i++) {
+    const a = i * 4, b = (i + 1) * 4;
+    // inner wall
+    indices.push(a, b, b + 3, a, b + 3, a + 3);
+    // outer wall
+    indices.push(a + 1, a + 2, b + 2, a + 1, b + 2, b + 1);
+    // top
+    indices.push(a + 3, b + 3, b + 2, a + 3, b + 2, a + 2);
+    // bottom
+    indices.push(a, a + 1, b + 1, a, b + 1, b);
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+  geo.setIndex(indices);
+  geo.computeVertexNormals();
+  return geo;
+}
+
+function addEngraving(parent, text, x, y, z, width, opts = {}) {
+  const c = document.createElement('canvas');
+  c.width = 1024;
+  c.height = 192;
+  const ctx = c.getContext('2d');
+  ctx.clearRect(0, 0, c.width, c.height);
+  ctx.fillStyle = opts.color ?? 'rgba(228,199,148,0.9)';
+  ctx.font = opts.font ?? '500 66px Georgia, "Times New Roman", serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.letterSpacing = opts.tracking ?? '12px';
+  ctx.fillText(text, c.width / 2, c.height / 2 + 3);
+  if (opts.sub) {
+    ctx.font = '400 26px Helvetica, Arial, sans-serif';
+    ctx.fillStyle = 'rgba(228,199,148,0.58)';
+    ctx.letterSpacing = '8px';
+    ctx.fillText(opts.sub, c.width / 2, c.height / 2 + 54);
+  }
+  const tex = new THREE.CanvasTexture(c);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  tex.anisotropy = Math.min(renderer.capabilities.getMaxAnisotropy(), 8);
+  const mat = new THREE.MeshBasicMaterial({
+    map: tex,
+    transparent: true,
+    depthWrite: false,
+    opacity: opts.opacity ?? 0.78,
+    side: THREE.DoubleSide,
+  });
+  const mesh = new THREE.Mesh(new THREE.PlaneGeometry(width, width * 0.1875), mat);
+  mesh.position.set(x, y, z);
+  mesh.renderOrder = 8;
+  parent.add(mesh);
+  return mesh;
+}
+
+/* Parts registry for raycasting, labels and the inspector. */
+const partRegistry = new Map();
+const pickables = [];
+const partList = [];
+
+function registerPart(id, cfg) {
+  const part = {
+    id,
+    index: cfg.index ?? String(partList.length + 1).padStart(2, '0'),
+    name: cfg.name,
+    en: cfg.en,
+    desc: cfg.desc,
+    chips: cfg.chips ?? [],
+    objects: cfg.objects ?? [],
+    anchor: cfg.anchor ?? null,
+    addToIndex: cfg.addToIndex ?? false,
+    indexName: cfg.indexName ?? cfg.name,
+    labelKicker: cfg.labelKicker,
+    materialHighlight: cfg.materialHighlight ?? null,
+  };
+  partRegistry.set(id, part);
+  if (part.addToIndex) partList.push(part);
+  part.objects.forEach((obj) => {
+    obj.userData.partId = id;
+    obj.traverse((child) => {
+      if (child.isMesh && !child.userData.noPick) {
+        child.userData.partId = id;
+        pickables.push(child);
+      }
+    });
+  });
+  return part;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   The case — hand-polished rose gold with a satin flank
+   ══════════════════════════════════════════════════════════════ */
+
+const caseBandGroup = new THREE.Group();
+watch.add(caseBandGroup);
+
+const caseProfile = [
+  [3.71, -0.58], [3.90, -0.66], [4.20, -0.66], [4.43, -0.53],
+  [4.52, -0.28], [4.52, 0.06], [4.43, 0.28], [4.23, 0.39],
+  [3.99, 0.40], [3.82, 0.31], [3.76, 0.16], [3.76, -0.40],
+  [3.71, -0.58],
+].map(([x, y]) => new THREE.Vector2(x, y));
+const caseGeo = new THREE.LatheGeometry(caseProfile, 192);
+caseGeo.rotateX(Math.PI / 2);
+const caseBand = new THREE.Mesh(caseGeo, goldSatin);
+caseBand.castShadow = true;
+caseBand.receiveShadow = true;
+caseBandGroup.add(caseBand);
+
+/* Dark inner movement tub, visible behind the openworked calibre. */
+const innerTub = new THREE.Mesh(
+  new THREE.CylinderGeometry(3.78, 3.78, 0.78, 128, 1, true),
+  new THREE.MeshPhysicalMaterial({
+    color: 0x12100e,
+    metalness: 0.78,
+    roughness: 0.42,
+    side: THREE.BackSide,
+    envMapIntensity: 0.65,
+    bumpMap: perlageBump,
+    bumpScale: 0.004,
+  })
+);
+innerTub.rotation.x = Math.PI / 2;
+innerTub.position.z = -0.22;
+caseBandGroup.add(innerTub);
+
+/* Polished edge rails. */
+const caseRails = [
+  { r: 4.36, z: 0.355, t: 0.035 },
+  { r: 4.43, z: -0.585, t: 0.030 },
+  { r: 3.98, z: 0.39, t: 0.022 },
+];
+for (const rail of caseRails) {
+  const ring = new THREE.Mesh(new THREE.TorusGeometry(rail.r, rail.t, 10, 192), goldPolished);
+  ring.position.z = rail.z;
+  ring.rotation.x = 0;
+  ring.castShadow = true;
+  caseBandGroup.add(ring);
+}
+
+/* Coin-edge flank: 104 minute vertical facets, instanced so they cost one draw call. */
+const fluteGeo = new THREE.BoxGeometry(0.020, 0.026, 0.23);
+const flutes = new THREE.InstancedMesh(fluteGeo, goldPolished, 104);
+flutes.castShadow = false;
+flutes.receiveShadow = false;
+const fluteMatrix = new THREE.Matrix4();
+const fluteQuat = new THREE.Quaternion();
+const flutePos = new THREE.Vector3();
+const fluteScale = new THREE.Vector3(1, 1, 1);
+for (let i = 0; i < 104; i++) {
+  const a = (i / 104) * TAU;
+  flutePos.set(Math.cos(a) * 4.515, Math.sin(a) * 4.515, -0.12);
+  fluteQuat.setFromAxisAngle(new THREE.Vector3(0, 0, 1), a + Math.PI / 2);
+  fluteMatrix.compose(flutePos, fluteQuat, fluteScale);
+  flutes.setMatrixAt(i, fluteMatrix);
+}
+caseBandGroup.add(flutes);
+
+/* Four sculpted, hollowed-out lugs. */
+function lugShape() {
+  const s = new THREE.Shape();
+  s.moveTo(0.96, 3.48);
+  s.bezierCurveTo(1.47, 3.63, 1.94, 3.92, 2.14, 4.33);
+  s.lineTo(2.22, 4.66);
+  s.quadraticCurveTo(2.30, 4.90, 2.08, 4.96);
+  s.lineTo(1.72, 4.96);
+  s.quadraticCurveTo(1.59, 4.94, 1.55, 4.73);
+  s.bezierCurveTo(1.45, 4.39, 1.25, 4.12, 0.92, 3.92);
+  s.bezierCurveTo(0.73, 3.81, 0.78, 3.44, 0.96, 3.48);
+  return s;
+}
+const lugGeo = makeExtruded(lugShape(), goldSatin, {
+  depth: 0.30,
+  bevel: 0.030,
+  bevelSegments: 4,
+  centerZ: false,
+  curveSegments: 56,
+});
+/* Curve the lug down and thin it toward the drilled tip. */
+{
+  const pos = lugGeo.geometry.attributes.position;
+  for (let i = 0; i < pos.count; i++) {
+    const x = pos.getX(i), y = pos.getY(i), z = pos.getZ(i);
+    const u = clamp((y - 3.9) / 1.3, 0, 1);
+    const topSide = z / 0.30;
+    pos.setZ(i, z * (1 - 0.40 * u) - 0.145 * Math.pow(u, 1.35) + topSide * 0.004);
+  }
+  pos.needsUpdate = true;
+  lugGeo.geometry.computeVertexNormals();
+}
+const lug = new THREE.Mesh(lugGeo.geometry, [lugGold, goldPolished]);
+lug.position.z = -0.245;
+lug.castShadow = true;
+lug.receiveShadow = true;
+caseBandGroup.add(lug);
+
+/* A polished ridge follows the carved top of each lug. */
+{
+  const ridgePts = [];
+  for (let i = 0; i <= 20; i++) {
+    const y = lerp(3.96, 4.83, i / 20);
+    const u = clamp((y - 3.9) / 1.3, 0, 1);
+    const zTop = 0.33 * (1 - 0.40 * u) - 0.145 * Math.pow(u, 1.35) + 0.0044;
+    const x = 1.30 + 0.56 * (y - 4.0);
+    ridgePts.push(new THREE.Vector3(x, y, zTop + 0.006));
+  }
+  const ridgeCurve = new THREE.CatmullRomCurve3(ridgePts);
+  const ridgeGeo = new THREE.TubeGeometry(ridgeCurve, 40, 0.018, 6, false);
+  const ridge = new THREE.Mesh(ridgeGeo, goldPolished);
+  ridge.castShadow = false;
+  lug.add(ridge);
+}
+
+const lugR = lug;
+const lugL = lugR.clone();
+lugL.scale.x = -1;
+caseBandGroup.add(lugL);
+const lugBottom = new THREE.Group();
+lugBottom.rotation.z = Math.PI;
+const lugBR = lugR.clone();
+const lugBL = lugL.clone();
+lugBottom.add(lugBR, lugBL);
+caseBandGroup.add(lugBottom);
+
+/* A small bezel-side gasket glints between gold and sapphire. */
+const gasket = new THREE.Mesh(new THREE.TorusGeometry(3.90, 0.018, 8, 180), darkSteel);
+gasket.position.z = 0.405;
+caseBandGroup.add(gasket);
+
+/* ── The crown, with hand-cut fluting ─────────────────────────── */
+
+const crownGroup = new THREE.Group();
+crownGroup.position.set(4.47, 0, -0.07);
+caseBandGroup.add(crownGroup);
+
+const crownNeck = new THREE.Mesh(new THREE.CylinderGeometry(0.20, 0.23, 0.20, 40), goldPolished);
+crownNeck.rotation.z = Math.PI / 2;
+crownNeck.position.x = 0.02;
+crownNeck.castShadow = true;
+crownGroup.add(crownNeck);
+
+const crownBody = new THREE.Mesh(new THREE.CylinderGeometry(0.30, 0.30, 0.31, 56), goldSatin);
+crownBody.rotation.z = Math.PI / 2;
+crownBody.position.x = 0.265;
+crownBody.castShadow = true;
+crownGroup.add(crownBody);
+
+const crownRimA = new THREE.Mesh(new THREE.TorusGeometry(0.292, 0.028, 9, 60), goldPolished);
+crownRimA.rotation.y = Math.PI / 2;
+crownRimA.position.x = 0.115;
+crownGroup.add(crownRimA);
+const crownRimB = crownRimA.clone();
+crownRimB.position.x = 0.418;
+crownGroup.add(crownRimB);
+
+/* Fluted outer surface — 26 hand-polished ribs. */
+const crownRibGeo = new THREE.BoxGeometry(0.255, 0.047, 0.075);
+const crownRibs = new THREE.InstancedMesh(crownRibGeo, gold, 26);
+const crownMatrix = new THREE.Matrix4();
+const crownQuat = new THREE.Quaternion();
+const crownPos = new THREE.Vector3(0.27, 0, 0);
+for (let i = 0; i < 26; i++) {
+  const a = (i / 26) * TAU;
+  crownQuat.setFromAxisAngle(new THREE.Vector3(1, 0, 0), a);
+  crownPos.set(0.27, Math.cos(a) * 0.303, Math.sin(a) * 0.303);
+  crownMatrix.compose(crownPos, crownQuat, new THREE.Vector3(1, 1, 1));
+  crownRibs.setMatrixAt(i, crownMatrix);
+}
+crownRibs.castShadow = true;
+crownGroup.add(crownRibs);
+
+const crownCap = new THREE.Mesh(new THREE.CylinderGeometry(0.275, 0.295, 0.045, 48), goldPolished);
+crownCap.rotation.z = Math.PI / 2;
+crownCap.position.x = 0.442;
+crownGroup.add(crownCap);
+
+/* Engraved A on the crown cap. */
+const crownLogoCanvas = document.createElement('canvas');
+crownLogoCanvas.width = crownLogoCanvas.height = 256;
+const clCtx = crownLogoCanvas.getContext('2d');
+clCtx.clearRect(0, 0, 256, 256);
+clCtx.strokeStyle = 'rgba(220,192,139,.6)';
+clCtx.lineWidth = 2;
+clCtx.beginPath();
+clCtx.arc(128, 128, 92, 0, TAU);
+clCtx.stroke();
+clCtx.fillStyle = 'rgba(27,20,11,.9)';
+clCtx.font = 'italic 118px Didot, Georgia, serif';
+clCtx.textAlign = 'center';
+clCtx.textBaseline = 'middle';
+clCtx.fillText('A', 128, 137);
+const crownLogoMat = new THREE.MeshBasicMaterial({
+  map: new THREE.CanvasTexture(crownLogoCanvas),
+  transparent: true,
+  depthWrite: false,
+});
+crownLogoMat.map.colorSpace = THREE.SRGBColorSpace;
+const crownLogo = new THREE.Mesh(new THREE.PlaneGeometry(0.36, 0.36), crownLogoMat);
+crownLogo.rotation.y = Math.PI / 2;
+crownLogo.position.set(0.467, 0, 0);
+crownGroup.add(crownLogo);
+
+/* ── Caseback, exhibition glass and six mirror-polished screws ─ */
+
+const casebackGroup = new THREE.Group();
+watch.add(casebackGroup);
+
+const casebackProfile = [
+  [3.12, -0.60], [3.18, -0.55], [3.42, -0.59], [4.17, -0.59],
+  [4.29, -0.63], [4.26, -0.69], [3.95, -0.73], [3.22, -0.73],
+  [3.12, -0.69], [3.12, -0.60],
+].map(([x, y]) => new THREE.Vector2(x, y));
+const casebackGeo = new THREE.LatheGeometry(casebackProfile, 160);
+casebackGeo.rotateX(Math.PI / 2);
+const caseback = new THREE.Mesh(casebackGeo, goldSatin);
+caseback.castShadow = true;
+casebackGroup.add(caseback);
+
+const casebackSapphire = new THREE.Mesh(new THREE.CircleGeometry(3.13, 128), sapphire);
+casebackSapphire.position.z = -0.625;
+casebackSapphire.rotation.x = 0;
+casebackSapphire.renderOrder = 2;
+casebackGroup.add(casebackSapphire);
+
+for (let i = 0; i < 6; i++) {
+  const a = i / 6 * TAU + Math.PI / 6;
+  const screw = new THREE.Group();
+  screw.position.set(Math.cos(a) * 3.68, Math.sin(a) * 3.68, -0.715);
+  const head = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.13, 0.032, 24), goldPolished);
+  head.rotation.x = Math.PI / 2;
+  const slot = new THREE.Mesh(new THREE.BoxGeometry(0.20, 0.024, 0.012), screwBlack);
+  slot.rotation.z = a * 1.7;
+  slot.position.z = -0.02;
+  screw.add(head, slot);
+  casebackGroup.add(screw);
+}
+
+/* Caseback outer engraving is mirrored to read from below. */
+const casebackRing = new THREE.Mesh(new THREE.TorusGeometry(4.03, 0.016, 6, 160), goldPolished);
+casebackRing.position.z = -0.72;
+casebackGroup.add(casebackRing);
+
+/* ── Polished bezel ───────────────────────────────────────────── */
+
+const bezelGroup = new THREE.Group();
+watch.add(bezelGroup);
+
+const bezelProfile = [
+  [3.73, -0.03], [3.83, -0.045], [3.92, -0.02], [4.28, -0.01],
+  [4.39, 0.025], [4.34, 0.075], [4.18, 0.105], [3.98, 0.10],
+  [3.81, 0.055], [3.73, -0.03],
+].map(([x, y]) => new THREE.Vector2(x, y));
+const bezelGeo = new THREE.LatheGeometry(bezelProfile, 192);
+bezelGeo.rotateX(Math.PI / 2);
+const bezel = new THREE.Mesh(bezelGeo, goldPolished);
+bezel.position.z = 0.405;
+bezel.castShadow = true;
+bezelGroup.add(bezel);
+
+const bezelEdge = new THREE.Mesh(new THREE.TorusGeometry(4.35, 0.030, 9, 192), goldPolished);
+bezelEdge.position.z = 0.432;
+bezelGroup.add(bezelEdge);
+
+/* Micro-bevelled screw heads at four hidden positions give the bezel
+   its hand-finished character when caught by the key light. */
+for (let i = 0; i < 4; i++) {
+  const a = i / 4 * TAU + Math.PI / 4;
+  const stud = new THREE.Mesh(new THREE.SphereGeometry(0.024, 10, 8), goldPolished);
+  stud.position.set(Math.cos(a) * 4.22, Math.sin(a) * 4.22, 0.5);
+  bezelGroup.add(stud);
+}
+
+/* ── Domed sapphire crystal ───────────────────────────────────── */
+
+const crystalGroup = new THREE.Group();
+watch.add(crystalGroup);
+crystalGroup.position.z = 0.49;
+
+const domeProfile = [
+  [0.002, 0.535], [0.8, 0.532], [1.7, 0.518], [2.45, 0.485],
+  [3.10, 0.413], [3.57, 0.304], [3.86, 0.178], [4.00, 0.070],
+  [4.01, 0.015],
+].map(([x, y]) => new THREE.Vector2(x, y));
+const domeGeo = new THREE.LatheGeometry(domeProfile, 192);
+domeGeo.rotateX(Math.PI / 2);
+const crystal = new THREE.Mesh(domeGeo, sapphire);
+crystal.renderOrder = 12;
+crystal.castShadow = false;
+crystal.receiveShadow = false;
+crystalGroup.add(crystal);
+
+const crystalFresnel = new THREE.Mesh(domeGeo, sapphireGlow);
+crystalFresnel.renderOrder = 13;
+crystalGroup.add(crystalFresnel);
+
+const crystalEdge = new THREE.Mesh(new THREE.TorusGeometry(3.995, 0.026, 8, 192), sapphireEdge);
+crystalEdge.position.z = 0.015;
+crystalEdge.castShadow = false;
+crystalGroup.add(crystalEdge);
+
+/* Faint AR coating shimmer over the crystal. */
+const arCanvas = document.createElement('canvas');
+arCanvas.width = arCanvas.height = 512;
+const arCtx = arCanvas.getContext('2d');
+const arGrad = arCtx.createRadialGradient(256, 256, 20, 256, 256, 256);
+arGrad.addColorStop(0, 'rgba(100,151,203,0.00)');
+arGrad.addColorStop(0.48, 'rgba(86,139,190,0.035)');
+arGrad.addColorStop(0.8, 'rgba(117,170,217,0.10)');
+arGrad.addColorStop(1, 'rgba(216,240,255,0.02)');
+arCtx.fillStyle = arGrad;
+arCtx.fillRect(0, 0, 512, 512);
+const arTex = new THREE.CanvasTexture(arCanvas);
+arTex.colorSpace = THREE.SRGBColorSpace;
+const arGlow = new THREE.Mesh(
+  new THREE.CircleGeometry(3.96, 128),
+  new THREE.MeshBasicMaterial({ map: arTex, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide, opacity: 0.5 })
+);
+arGlow.position.z = 0.49;
+arGlow.renderOrder = 11;
+crystalGroup.add(arGlow);
+
+/* A restrained, broad glass reflection overlay. The alpha is deliberately
+   low: it should whisper 'sapphire', never obscure the movement. */
+const glareCanvas = document.createElement('canvas');
+glareCanvas.width = glareCanvas.height = 1024;
+const glCtx = glareCanvas.getContext('2d');
+glCtx.clearRect(0, 0, 1024, 1024);
+glCtx.save();
+glCtx.filter = 'blur(38px)';
+const gl1 = glCtx.createLinearGradient(130, 120, 760, 690);
+gl1.addColorStop(0.00, 'rgba(205,228,255,0.00)');
+gl1.addColorStop(0.34, 'rgba(226,241,255,0.42)');
+gl1.addColorStop(0.52, 'rgba(255,255,255,0.18)');
+gl1.addColorStop(0.72, 'rgba(168,207,255,0.00)');
+glCtx.fillStyle = gl1;
+glCtx.beginPath();
+glCtx.ellipse(430, 360, 390, 132, -0.66, 0, TAU);
+glCtx.fill();
+glCtx.fillStyle = 'rgba(210,235,255,0.11)';
+glCtx.beginPath();
+glCtx.ellipse(700, 720, 290, 70, -0.66, 0, TAU);
+glCtx.fill();
+glCtx.restore();
+glCtx.strokeStyle = 'rgba(218,239,255,0.15)';
+glCtx.lineWidth = 5;
+glCtx.beginPath();
+glCtx.arc(512, 512, 470, 2.9, 4.1);
+glCtx.stroke();
+const glareTex = new THREE.CanvasTexture(glareCanvas);
+glareTex.colorSpace = THREE.SRGBColorSpace;
+const crystalGlare = new THREE.Mesh(
+  new THREE.CircleGeometry(3.98, 128),
+  new THREE.MeshBasicMaterial({
+    map: glareTex, transparent: true, depthWrite: false,
+    blending: THREE.AdditiveBlending, side: THREE.DoubleSide, opacity: 0.10,
+  })
+);
+crystalGlare.position.z = 0.30;
+crystalGlare.renderOrder = 14;
+crystalGlare.userData.noPick = true;
+crystalGroup.add(crystalGlare);
+
+/* ══════════════════════════════════════════════════════════════
+   Movement foundation — skeletonised main plate
+   ══════════════════════════════════════════════════════════════ */
+
+const movementBaseGroup = new THREE.Group();
+watch.add(movementBaseGroup);
+
+const plateShape = new THREE.Shape();
+plateShape.absarc(0, 0, 3.38, 0, TAU, false);
+plateShape.holes.push(circlePath(0.16));
+for (let i = 0; i < 6; i++) {
+  const a0 = i / 6 * TAU + 0.12;
+  addCurvedSlot(plateShape, 0.48, 2.88, a0, a0 + 0.76);
+}
+for (const a of [0.65, 2.74, 4.84]) {
+  plateShape.holes.push(circlePath(0.17, Math.cos(a) * 3.08, Math.sin(a) * 3.08));
+}
+for (const a of [1.3, 3.40, 5.50]) {
+  plateShape.holes.push(circlePath(0.085, Math.cos(a) * 2.64, Math.sin(a) * 2.64));
+}
+const mainPlate = makeExtruded(plateShape, [plateTop, darkSteel], {
+  depth: 0.18,
+  bevel: 0.025,
+  bevelSegments: 4,
+  curveSegments: 48,
+});
+mainPlate.position.z = -0.24;
+mainPlate.castShadow = true;
+mainPlate.receiveShadow = true;
+movementBaseGroup.add(mainPlate);
+
+/* Polished circumference and movement clamps. */
+const plateRim = new THREE.Mesh(new THREE.TorusGeometry(3.34, 0.035, 9, 192), goldSatin);
+plateRim.position.z = -0.145;
+movementBaseGroup.add(plateRim);
+
+for (let i = 0; i < 3; i++) {
+  const a = i / 3 * TAU + 0.35;
+  const clamp = new THREE.Group();
+  clamp.position.set(Math.cos(a) * 3.16, Math.sin(a) * 3.16, -0.12);
+  clamp.rotation.z = a + Math.PI / 2;
+  const tongue = new THREE.Mesh(new THREE.BoxGeometry(0.44, 0.24, 0.055), goldPolished);
+  tongue.position.x = -0.05;
+  tongue.castShadow = true;
+  clamp.add(tongue);
+  addScrew(clamp, -0.24, 0, 0.035, 0.065, { material: goldPolished });
+  movementBaseGroup.add(clamp);
+}
+
+/* Three movement pillars rising from the plate. */
+for (let i = 0; i < 3; i++) {
+  const a = i / 3 * TAU + 1.12;
+  const pillar = new THREE.Mesh(new THREE.CylinderGeometry(0.065, 0.085, 0.55, 20), goldSatin);
+  pillar.rotation.x = Math.PI / 2;
+  pillar.position.set(Math.cos(a) * 2.74, Math.sin(a) * 2.74, 0.14);
+  pillar.castShadow = true;
+  movementBaseGroup.add(pillar);
+}
+
+/* Base-plate engraving, positioned where the open bridge leaves it visible. */
+addEngraving(movementBaseGroup, 'CAL. A–01 · 29 JEWELS', 1.78, -1.73, -0.14, 1.28, {
+  opacity: 0.46,
+  color: 'rgba(223,195,143,0.9)',
+  font: 'italic 52px Georgia, serif',
+  tracking: '3px',
+});
+
+/* ── Mainspring barrel, deliberately shown without a cover ─────── */
+
+const barrelGroup = new THREE.Group();
+barrelGroup.position.set(1.72, 1.05, 0);
+watch.add(barrelGroup);
+
+const barrelDrum = new THREE.Mesh(
+  new THREE.CylinderGeometry(0.97, 0.99, 0.08, 96),
+  rhodiumDark
+);
+barrelDrum.rotation.x = Math.PI / 2;
+barrelDrum.position.z = 0.025;
+barrelDrum.castShadow = true;
+barrelDrum.receiveShadow = true;
+barrelGroup.add(barrelDrum);
+
+const barrelWall = new THREE.Mesh(
+  new THREE.CylinderGeometry(0.985, 0.985, 0.24, 96, 1, true),
+  darkSteel
+);
+barrelWall.rotation.x = Math.PI / 2;
+barrelWall.position.z = 0.13;
+barrelWall.material.side = THREE.DoubleSide;
+barrelGroup.add(barrelWall);
+
+/* Toothed barrel ring. */
+const barrelTeeth = 64;
+const barrelPts = [];
+for (let i = 0; i < barrelTeeth; i++) {
+  const a = i / barrelTeeth * TAU;
+  barrelPts.push([1.025, a], [1.105, a + 0.028], [1.105, a + 0.055], [1.025, a + 0.083]);
+}
+const barrelRingShape = new THREE.Shape();
+barrelRingShape.moveTo(Math.cos(barrelPts[0][1]) * barrelPts[0][0], Math.sin(barrelPts[0][1]) * barrelPts[0][0]);
+for (let i = 1; i < barrelPts.length; i++) barrelRingShape.lineTo(Math.cos(barrelPts[i][1]) * barrelPts[i][0], Math.sin(barrelPts[i][1]) * barrelPts[i][0]);
+barrelRingShape.closePath();
+barrelRingShape.holes.push(circlePath(0.86));
+const barrelRing = makeExtruded(barrelRingShape, gold, {
+  depth: 0.085,
+  bevel: 0.012,
+  bevelSegments: 2,
+  curveSegments: 6,
+});
+barrelRing.position.z = 0.20;
+barrelRing.castShadow = true;
+barrelGroup.add(barrelRing);
+
+const barrelRimLow = new THREE.Mesh(new THREE.TorusGeometry(0.92, 0.033, 8, 96), goldPolished);
+barrelRimLow.position.z = 0.265;
+barrelGroup.add(barrelRimLow);
+
+/* The blued mainspring itself. */
+const mainspring = new THREE.Mesh(
+  makeSpiralRibbon({ turns: 7.4, r0: 0.185, r1: 0.80, height: 0.155, thickness: 0.018, segments: 560, z: 0.06 }),
+  bluedSteel
+);
+mainspring.material = bluedBright;
+mainspring.castShadow = true;
+barrelGroup.add(mainspring);
+
+/* Inner coil end and arbor. */
+const barrelArbor = new THREE.Mesh(new THREE.CylinderGeometry(0.095, 0.12, 0.44, 28), goldPolished);
+barrelArbor.rotation.x = Math.PI / 2;
+barrelArbor.position.z = 0.22;
+barrelArbor.castShadow = true;
+barrelGroup.add(barrelArbor);
+
+/* Skeleton barrel bridges — three curved spokes. */
+for (let i = 0; i < 2; i++) {
+  const spokePivot = new THREE.Group();
+  spokePivot.rotation.z = i * Math.PI + 0.36;
+  const spoke = new THREE.Mesh(new THREE.BoxGeometry(0.052, 0.82, 0.026), goldPolished);
+  spoke.position.set(0, 0.44, 0.322);
+  spoke.castShadow = true;
+  spokePivot.add(spoke);
+  barrelGroup.add(spokePivot);
+}
+const barrelTopRing = new THREE.Mesh(new THREE.TorusGeometry(0.86, 0.030, 8, 96), goldPolished);
+barrelTopRing.position.z = 0.315;
+barrelGroup.add(barrelTopRing);
+
+/* Ratchet wheel and blued centre screw. */
+const ratchetShape = makeGearShape(0.295, 17, 0.045, {
+  spokes: 1, hub: 0.17, rim: 0.05, bore: 0.045, spokeGap: 1.0,
+});
+const ratchet = makeExtruded(ratchetShape, bluedSteel, { depth: 0.045, bevel: 0.007, bevelSegments: 2, curveSegments: 4 });
+ratchet.position.z = 0.345;
+ratchet.castShadow = true;
+barrelGroup.add(ratchet);
+addScrew(barrelGroup, 0, 0, 0.38, 0.11, { material: goldPolished, slotAngle: 0.5 });
+for (let i = 0; i < 3; i++) {
+  const a = i / 3 * TAU + 0.4;
+  addScrew(barrelGroup, Math.cos(a) * 0.70, Math.sin(a) * 0.70, 0.34, 0.045, {
+    material: screwBlack, rimMaterial: darkSteel,
+  });
+}
+
+const barrelAnchor = new THREE.Object3D();
+barrelAnchor.position.set(0.15, 0.10, 0.56);
+barrelGroup.add(barrelAnchor);
+
+/* ── The going train ──────────────────────────────────────────── */
+
+const trainGroup = new THREE.Group();
+watch.add(trainGroup);
+
+const wheelAnimations = [];
+
+function buildWheel(x, y, wheelZ, radius, teeth, toothDepth, material, speed, opt = {}) {
+  const root = new THREE.Group();
+  root.position.set(x, y, 0);
+  trainGroup.add(root);
+
+  const spinner = new THREE.Group();
+  spinner.position.z = wheelZ;
+  root.add(spinner);
+
+  const wheel = makeWheel(radius, teeth, toothDepth, material, {
+    spokes: opt.spokes ?? 5,
+    hub: opt.hub ?? radius * 0.20,
+    rim: opt.rim ?? radius * 0.105,
+    spokeGap: opt.spokeGap ?? 0.16,
+    depth: 0.045,
+    bevel: 0.009,
+  });
+  spinner.add(wheel);
+
+  const hub = new THREE.Mesh(new THREE.CylinderGeometry(radius * 0.17, radius * 0.19, 0.075, 24), goldPolished);
+  hub.rotation.x = Math.PI / 2;
+  hub.position.z = 0.04;
+  hub.castShadow = true;
+  spinner.add(hub);
+  addScrew(spinner, 0, 0, 0.083, radius * 0.075, { material: screwBlack, rimMaterial: darkSteel });
+
+  /* A smaller pinion on the same arbor. */
+  const pinion = addPinion(spinner, 0, 0, 0.10, opt.pinionR ?? 0.145, 0.14, bluedSteel);
+  pinion.rotation.z = 0.13;
+
+  /* Steel arbor down to the main plate. */
+  const arbor = new THREE.Mesh(new THREE.CylinderGeometry(0.032, 0.038, 0.52, 12), steel);
+  arbor.rotation.x = Math.PI / 2;
+  arbor.position.z = -0.03;
+  arbor.castShadow = true;
+  root.add(arbor);
+
+  const lowerPivot = new THREE.Mesh(new THREE.ConeGeometry(0.062, 0.10, 12), steel);
+  lowerPivot.rotation.x = Math.PI / 2;
+  lowerPivot.position.z = -0.31;
+  root.add(lowerPivot);
+
+  wheelAnimations.push({ object: spinner, speed });
+  return { root, spinner, wheel, radius };
+}
+
+/* Centre wheel — directly beneath the hands. */
+buildWheel(0, 0, 0.095, 0.695, 52, 0.075, gold, -0.055, {
+  spokes: 5, hub: 0.145, rim: 0.076, spokeGap: 0.17, pinionR: 0.150,
+});
+
+/* Third wheel — rhodium, with a pierced and brushed surface. */
+buildWheel(-1.34, 0.36, 0.155, 0.535, 43, 0.060, rhodium, 0.145, {
+  spokes: 6, hub: 0.108, rim: 0.060, spokeGap: 0.15, pinionR: 0.126,
+});
+
+/* Fourth wheel — warm gold, finer teeth. */
+buildWheel(-1.24, -0.94, 0.205, 0.435, 37, 0.050, gold, -0.28, {
+  spokes: 5, hub: 0.090, rim: 0.052, spokeGap: 0.18, pinionR: 0.108,
+});
+
+/* A small intermediate wheel adds visual density below the bridge. */
+const intermediate = buildWheel(-0.46, -0.67, 0.265, 0.245, 29, 0.036, rhodium, 0.57, {
+  spokes: 4, hub: 0.060, rim: 0.042, spokeGap: 0.2, pinionR: 0.08,
+});
+
+/* Curved, pierced centre bridge from the upper rail to the centre arbor. */
+const centreBoss = new THREE.Mesh(new THREE.CylinderGeometry(0.215, 0.255, 0.095, 40), rhodium);
+centreBoss.rotation.x = Math.PI / 2;
+centreBoss.position.z = 0.39;
+centreBoss.castShadow = true;
+trainGroup.add(centreBoss);
+
+const trainAnchor = new THREE.Object3D();
+trainAnchor.position.set(-0.4, -0.25, 0.62);
+trainGroup.add(trainAnchor);
+
+/* ══════════════════════════════════════════════════════════════
+   Escapement & balance
+   ══════════════════════════════════════════════════════════════ */
+
+const escapementGroup = new THREE.Group();
+watch.add(escapementGroup);
+
+/* Club-tooth escape wheel. */
+const escapeRoot = new THREE.Group();
+escapeRoot.position.set(0.82, -1.30, 0);
+escapementGroup.add(escapeRoot);
+const escapeSpinner = new THREE.Group();
+escapeSpinner.position.z = 0.30;
+escapeRoot.add(escapeSpinner);
+
+const escapeWheel = makeWheel(0.315, 15, 0.075, steel, {
+  profile: 'club', spokes: 4, hub: 0.060, rim: 0.045, spokeGap: 0.23, depth: 0.038, bevel: 0.007,
+});
+escapeSpinner.add(escapeWheel);
+const escapeHub = new THREE.Mesh(new THREE.CylinderGeometry(0.085, 0.10, 0.075, 24), bluedSteel);
+escapeHub.rotation.x = Math.PI / 2;
+escapeHub.position.z = 0.03;
+escapeSpinner.add(escapeHub);
+addPinion(escapeSpinner, 0, 0, 0.09, 0.082, 0.10, steel);
+const escapeArbor = new THREE.Mesh(new THREE.CylinderGeometry(0.024, 0.03, 0.54, 10), steel);
+escapeArbor.rotation.x = Math.PI / 2;
+escapeArbor.position.z = 0.04;
+escapeRoot.add(escapeArbor);
+
+/* Pallet fork, with ruby stones set into steel arms. */
+const palletRoot = new THREE.Group();
+palletRoot.position.set(0.39, -1.72, 0.275);
+palletRoot.rotation.z = -0.54;
+escapementGroup.add(palletRoot);
+const palletSpinner = new THREE.Group();
+palletRoot.add(palletSpinner);
+
+const forkShape = new THREE.Shape();
+forkShape.moveTo(-0.055, -0.24);
+forkShape.quadraticCurveTo(-0.10, -0.15, -0.062, -0.055);
+forkShape.quadraticCurveTo(-0.035, 0.02, -0.055, 0.10);
+forkShape.lineTo(-0.25, 0.33);
+forkShape.quadraticCurveTo(-0.29, 0.39, -0.22, 0.43);
+forkShape.lineTo(-0.04, 0.22);
+forkShape.lineTo(0.00, 0.17);
+forkShape.lineTo(0.04, 0.22);
+forkShape.lineTo(0.22, 0.43);
+forkShape.quadraticCurveTo(0.29, 0.39, 0.25, 0.33);
+forkShape.lineTo(0.055, 0.10);
+forkShape.quadraticCurveTo(0.035, 0.02, 0.062, -0.055);
+forkShape.quadraticCurveTo(0.10, -0.15, 0.055, -0.24);
+forkShape.quadraticCurveTo(0, -0.30, -0.055, -0.24);
+forkShape.closePath();
+const fork = makeExtruded(forkShape, steel, { depth: 0.055, bevel: 0.012, bevelSegments: 3, curveSegments: 24 });
+palletSpinner.add(fork);
+
+const palletPivot = new THREE.Mesh(new THREE.CylinderGeometry(0.105, 0.105, 0.08, 28), darkSteel);
+palletPivot.rotation.x = Math.PI / 2;
+palletPivot.position.z = 0.02;
+palletSpinner.add(palletPivot);
+addRubyJewel(palletSpinner, 0, -0.26, 0.065, 0.045);
+
+for (const [x, y, r] of [[-0.228, 0.355, -0.54], [0.228, 0.355, 0.54]]) {
+  const stone = new THREE.Mesh(new THREE.BoxGeometry(0.085, 0.16, 0.06), ruby);
+  stone.position.set(x, y, 0.018);
+  stone.rotation.z = r;
+  palletSpinner.add(stone);
+  const stoneHolder = new THREE.Mesh(new THREE.BoxGeometry(0.115, 0.045, 0.075), steel);
+  stoneHolder.position.set(x + Math.sin(r) * 0.07, y + 0.075, 0.01);
+  stoneHolder.rotation.z = r;
+  palletSpinner.add(stoneHolder);
+}
+
+const palletArbor = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.03, 0.49, 10), steel);
+palletArbor.rotation.x = Math.PI / 2;
+palletArbor.position.z = -0.02;
+palletRoot.add(palletArbor);
+
+/* Rolling impulse jewel visible at the balance. */
+const escapementAnchor = new THREE.Object3D();
+escapementAnchor.position.set(0.1, 0.15, 0.58);
+escapementGroup.add(escapementAnchor);
+
+/* Free-sprung balance, gold timing weights and hand-formed Breguet hairspring. */
+const balanceGroup = new THREE.Group();
+balanceGroup.position.set(-0.65, -2.12, 0);
+watch.add(balanceGroup);
+
+const balanceSpinner = new THREE.Group();
+balanceSpinner.position.z = 0.24;
+balanceGroup.add(balanceSpinner);
+
+const balanceRim = new THREE.Mesh(new THREE.TorusGeometry(0.815, 0.055, 12, 128), gold);
+balanceRim.castShadow = true;
+balanceSpinner.add(balanceRim);
+const balanceInner = new THREE.Mesh(new THREE.TorusGeometry(0.728, 0.012, 6, 128), goldPolished);
+balanceInner.castShadow = false;
+balanceSpinner.add(balanceInner);
+
+/* Four curved spokes. */
+for (let i = 0; i < 4; i++) {
+  const a = i / 4 * TAU + 0.11;
+  const spoke = new THREE.Mesh(new THREE.BoxGeometry(0.070, 0.735, 0.045), gold);
+  spoke.position.set(Math.cos(a) * 0.36, Math.sin(a) * 0.36, 0);
+  spoke.rotation.z = a - Math.PI / 2;
+  spoke.castShadow = true;
+  balanceSpinner.add(spoke);
+}
+const balanceHub = new THREE.Mesh(new THREE.CylinderGeometry(0.105, 0.13, 0.09, 28), goldPolished);
+balanceHub.rotation.x = Math.PI / 2;
+balanceSpinner.add(balanceHub);
+addScrew(balanceSpinner, 0, 0, 0.065, 0.058, { material: bluedSteel, rimMaterial: goldPolished });
+
+/* Eight timing weights around the rim. */
+for (let i = 0; i < 8; i++) {
+  const a = i / 8 * TAU + 0.20;
+  const weight = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.083, 14), goldPolished);
+  weight.position.set(Math.cos(a) * 0.815, Math.sin(a) * 0.815, 0.005);
+  weight.rotation.z = a - Math.PI / 2;
+  balanceSpinner.add(weight);
+  const endCap = new THREE.Mesh(new THREE.CylinderGeometry(0.022, 0.022, 0.090, 12), screwBlack);
+  endCap.position.set(Math.cos(a) * 0.862, Math.sin(a) * 0.862, 0.005);
+  endCap.rotation.z = a - Math.PI / 2;
+  balanceSpinner.add(endCap);
+}
+
+/* Roller and impulse jewel */
+const roller = new THREE.Mesh(new THREE.CylinderGeometry(0.15, 0.15, 0.035, 28), steel);
+roller.rotation.x = Math.PI / 2;
+roller.position.z = -0.11;
+balanceSpinner.add(roller);
+const impulseJewel = new THREE.Mesh(new THREE.CylinderGeometry(0.028, 0.028, 0.06, 12), ruby);
+impulseJewel.rotation.x = Math.PI / 2;
+impulseJewel.position.set(0.13, 0.05, -0.08);
+balanceSpinner.add(impulseJewel);
+
+const balanceArbor = new THREE.Mesh(new THREE.CylinderGeometry(0.032, 0.04, 0.95, 12), steel);
+balanceArbor.rotation.x = Math.PI / 2;
+balanceArbor.position.z = 0.10;
+balanceGroup.add(balanceArbor);
+
+/* Hairspring group oscillates with a lag, breathing subtly. */
+const hairspringGroup = new THREE.Group();
+hairspringGroup.position.z = 0.335;
+balanceGroup.add(hairspringGroup);
+
+class SpiralCurve extends THREE.Curve {
+  constructor(turns, r0, r1, height = 0) {
+    super();
+    this.turns = turns;
+    this.r0 = r0;
+    this.r1 = r1;
+    this.h = height;
+  }
+  getPoint(t, target = new THREE.Vector3()) {
+    const a = t * this.turns * TAU;
+    const r = lerp(this.r0, this.r1, t);
+    return target.set(Math.cos(a) * r, Math.sin(a) * r, Math.sin(t * Math.PI) * this.h);
+  }
+}
+const hairCurve = new SpiralCurve(9.5, 0.12, 0.62, 0.035);
+const hairGeo = new THREE.TubeGeometry(hairCurve, 560, 0.0092, 5, false);
+const hairspring = new THREE.Mesh(hairGeo, bluedBright);
+hairspring.castShadow = true;
+hairspringGroup.add(hairspring);
+
+/* Terminal curve and stud. */
+const hairStud = new THREE.Mesh(new THREE.CylinderGeometry(0.038, 0.038, 0.10, 14), goldPolished);
+hairStud.rotation.x = Math.PI / 2;
+hairStud.position.set(0.625, 0.02, 0.02);
+hairspringGroup.add(hairStud);
+const hairEnd = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.11, 0.03), bluedSteel);
+hairEnd.position.set(0.64, 0.06, 0.01);
+hairspringGroup.add(hairEnd);
+
+const balanceAnchor = new THREE.Object3D();
+balanceAnchor.position.set(0.18, -0.05, 0.74);
+balanceGroup.add(balanceAnchor);
+
+
+/* ══════════════════════════════════════════════════════════════
+   Skeletonised bridges — black rhodium, polished bevels
+   ══════════════════════════════════════════════════════════════ */
+
+const bridgesGroup = new THREE.Group();
+bridgesGroup.position.z = 0.37;
+watch.add(bridgesGroup);
+
+const jewelGroups = [];
+let balanceJewelGroup = null;
+
+/* Build a flat ribbon from a smooth spine. */
+function ribbonShape(points, width, opt = {}) {
+  const vpts = points.map(([x, y]) => new THREE.Vector3(x, y, 0));
+  const curve = new THREE.CatmullRomCurve3(vpts, false, 'catmullrom', 0.32);
+  const samples = opt.samples ?? 72;
+  const left = [];
+  const right = [];
+  for (let i = 0; i <= samples; i++) {
+    const t = i / samples;
+    const p = curve.getPoint(t);
+    const tan = curve.getTangent(t).normalize();
+    const nx = -tan.y, ny = tan.x;
+    const w = typeof width === 'function' ? width(t) : width;
+    const half = w * 0.5;
+    left.push(new THREE.Vector2(p.x + nx * half, p.y + ny * half));
+    right.push(new THREE.Vector2(p.x - nx * half, p.y - ny * half));
+  }
+  const shape = new THREE.Shape();
+  shape.moveTo(left[0].x, left[0].y);
+  for (let i = 1; i < left.length; i++) shape.lineTo(left[i].x, left[i].y);
+  for (let i = right.length - 1; i >= 0; i--) shape.lineTo(right[i].x, right[i].y);
+  shape.closePath();
+  return shape;
+}
+
+function bridgeMesh(shape, material = [bridgeTop, goldPolished], depth = 0.105) {
+  return makeExtruded(shape, material, {
+    depth,
+    bevel: 0.022,
+    bevelSegments: 4,
+    curveSegments: 32,
+  });
+}
+
+/* Upper bridge — a long crescent following the top of the movement. */
+const upperPts = [];
+for (let d = 16; d <= 164; d += 8) {
+  upperPts.push([Math.cos(d * DEG) * 2.68, Math.sin(d * DEG) * 2.68]);
+}
+const upperShape = ribbonShape(upperPts, 0.60);
+for (const [a, r] of [[55, 0.19], [96, 0.18], [138, 0.20]]) {
+  const x = Math.cos(a * DEG) * 2.68;
+  const y = Math.sin(a * DEG) * 2.68;
+  upperShape.holes.push(circlePath(r, x, y));
+}
+const upperBridge = bridgeMesh(upperShape);
+bridgesGroup.add(upperBridge);
+
+/* Sweeping arm to the barrel pivot. */
+const barrelArmShape = ribbonShape([
+  [1.95, 2.02], [1.72, 1.70], [1.66, 1.31], [1.72, 1.05],
+], 0.255);
+barrelArmShape.holes.push(circlePath(0.070, 1.73, 1.61));
+const barrelArm = bridgeMesh(barrelArmShape, undefined, 0.10);
+bridgesGroup.add(barrelArm);
+
+/* Central web supporting the centre arbor — visible between the hands. */
+const centreArmShape = ribbonShape([
+  [0.05, 2.55], [0.14, 1.87], [0.06, 1.06], [0, 0.12],
+], 0.30);
+const centreArm = bridgeMesh(centreArmShape, undefined, 0.095);
+bridgesGroup.add(centreArm);
+
+/* Going-train bridge, tracing the left side down to the fourth wheel. */
+const trainBridgeShape = ribbonShape([
+  [-3.12, 0.46], [-2.55, 0.18], [-1.98, -0.22], [-1.52, -0.57], [-1.24, -0.94],
+], 0.45);
+trainBridgeShape.holes.push(circlePath(0.13, -2.18, -0.20));
+trainBridgeShape.holes.push(circlePath(0.10, -2.84, 0.34));
+const trainBridge = bridgeMesh(trainBridgeShape, undefined, 0.11);
+bridgesGroup.add(trainBridge);
+
+/* A short spur to the third wheel. */
+const thirdArmShape = ribbonShape([
+  [-2.45, 0.18], [-2.06, 0.30], [-1.66, 0.38], [-1.34, 0.36],
+], 0.33);
+const thirdArm = bridgeMesh(thirdArmShape, undefined, 0.095);
+bridgesGroup.add(thirdArm);
+
+/* Escape bridge, deliberately slender. */
+const escapeBridgeShape = ribbonShape([
+  [3.07, -0.78], [2.39, -0.91], [1.65, -1.09], [1.16, -1.20], [0.82, -1.30],
+], 0.36);
+const escapeBridge = bridgeMesh(escapeBridgeShape, undefined, 0.095);
+bridgesGroup.add(escapeBridge);
+
+/* Balance cock — the long polished finger at six o'clock. */
+const balanceCockShape = ribbonShape([
+  [3.05, -1.72], [2.43, -1.91], [1.55, -2.17], [0.61, -2.31], [-0.38, -2.18], [-0.65, -2.12],
+], 0.355);
+balanceCockShape.holes.push(circlePath(0.13, 1.62, -2.19));
+balanceCockShape.holes.push(circlePath(0.105, 2.58, -1.94));
+const balanceCock = bridgeMesh(balanceCockShape, undefined, 0.12);
+bridgesGroup.add(balanceCock);
+
+/* Raised, polished chatons and pierce-work bosses. */
+function bridgeBoss(x, y, r = 0.22, z = 0.065, mat = rhodium) {
+  const boss = new THREE.Mesh(new THREE.CylinderGeometry(r, r * 1.08, 0.075, 36), mat);
+  boss.rotation.x = Math.PI / 2;
+  boss.position.set(x, y, z);
+  boss.castShadow = true;
+  bridgesGroup.add(boss);
+  const ring = new THREE.Mesh(new THREE.TorusGeometry(r * 0.80, 0.025, 8, 36), goldPolished);
+  ring.position.set(x, y, z + 0.04);
+  bridgesGroup.add(ring);
+  return boss;
+}
+
+bridgeBoss(1.72, 1.05, 0.245);
+bridgeBoss(-1.34, 0.36, 0.19);
+bridgeBoss(-1.24, -0.94, 0.17);
+bridgeBoss(0.82, -1.30, 0.155);
+bridgeBoss(-0.65, -2.12, 0.25, 0.08);
+
+const barrelJewel = addRubyJewel(bridgesGroup, 1.72, 1.05, 0.12, 0.086, true);
+const thirdJewel = addRubyJewel(bridgesGroup, -1.34, 0.36, 0.09, 0.062);
+const fourthJewel = addRubyJewel(bridgesGroup, -1.24, -0.94, 0.09, 0.055);
+const escapeJewel = addRubyJewel(bridgesGroup, 0.82, -1.30, 0.09, 0.053);
+const cockJewel = addRubyJewel(bridgesGroup, -0.65, -2.12, 0.14, 0.096, true);
+jewelGroups.push(barrelJewel, thirdJewel, fourthJewel, escapeJewel, cockJewel);
+balanceJewelGroup = cockJewel;
+
+/* Screws and mirror-polished pins. */
+const bridgeScrews = [
+  [-2.72, 1.22, 0.065, 0.075], [2.74, 1.15, 0.065, 0.075],
+  [-0.26, 2.67, 0.065, 0.062], [-2.86, 0.36, 0.065, 0.06],
+  [2.84, -0.92, 0.062, 0.055], [2.87, -1.78, 0.065, 0.065],
+  [0.92, -2.34, 0.065, 0.052], [-1.12, -0.98, 0.062, 0.05],
+  [-2.14, -0.14, 0.063, 0.05],
+];
+for (const [x, y, z, r] of bridgeScrews) {
+  addScrew(bridgesGroup, x, y, z, r, {
+    material: goldPolished,
+    rimMaterial: gold,
+  });
+}
+addScrew(bridgesGroup, 0.10, 2.54, 0.062, 0.05, { material: bluedSteel, rimMaterial: darkSteel });
+
+/* The name, inlaid on the upper bridge. */
+addEngraving(bridgesGroup, 'AURELIS', -1.42, 1.76, 0.065, 0.82, {
+  opacity: 0.58,
+  color: 'rgba(223,193,137,.95)',
+  font: '500 66px Georgia, "Times New Roman", serif',
+  tracking: '9px',
+});
+
+/* Extra decorative pins under the openwork. */
+for (const [x, y] of [[-2.08, 1.23], [2.05, 1.18], [1.55, -1.12], [-0.15, -1.52]]) {
+  const pin = new THREE.Mesh(new THREE.CylinderGeometry(0.026, 0.026, 0.10, 10), bluedSteel);
+  pin.rotation.x = Math.PI / 2;
+  pin.position.set(x, y, 0.03);
+  bridgesGroup.add(pin);
+}
+
+const bridgeAnchor = new THREE.Object3D();
+bridgeAnchor.position.set(-1.55, 1.95, 0.24);
+bridgesGroup.add(bridgeAnchor);
+
+const jewelsAnchor = new THREE.Object3D();
+jewelsAnchor.position.set(0.05, 0.02, 0.22);
+cockJewel.add(jewelsAnchor);
+
+/* ══════════════════════════════════════════════════════════════
+   Chapter ring with minute track
+   ══════════════════════════════════════════════════════════════ */
+
+const chapterGroup = new THREE.Group();
+chapterGroup.position.z = 0.425;
+watch.add(chapterGroup);
+
+/* Rehaut / sloping flange. */
+const rehaut = new THREE.Mesh(
+  new THREE.CylinderGeometry(4.06, 3.80, 0.14, 192, 1, true),
+  new THREE.MeshPhysicalMaterial({
+    color: 0x161310,
+    metalness: 0.8,
+    roughness: 0.24,
+    side: THREE.DoubleSide,
+    envMapIntensity: 0.9,
+  })
+);
+rehaut.rotation.x = Math.PI / 2;
+rehaut.position.z = 0.06;
+chapterGroup.add(rehaut);
+
+const chapterRing = new THREE.Mesh(
+  new THREE.RingGeometry(3.26, 4.04, 192, 1),
+  new THREE.MeshPhysicalMaterial({
+    color: 0x050505,
+    metalness: 0.28,
+    roughness: 0.25,
+    clearcoat: 0.9,
+    clearcoatRoughness: 0.10,
+    envMapIntensity: 0.65,
+    side: THREE.DoubleSide,
+  })
+);
+chapterRing.position.z = 0.006;
+chapterRing.receiveShadow = true;
+chapterGroup.add(chapterRing);
+
+/* Printed minute track and signatures. */
+const trackTexture = canvasTexture(2048, 2048, (ctx, w, h) => {
+  const c = w / 2;
+  const unit = w / 9.15;
+  const R = (r) => r * unit;
+  ctx.clearRect(0, 0, w, h);
+
+  // Fine outer circles.
+  ctx.strokeStyle = 'rgba(230,206,160,0.82)';
+  ctx.lineWidth = 3.0;
+  ctx.beginPath(); ctx.arc(c, c, R(3.965), 0, TAU); ctx.stroke();
+  ctx.strokeStyle = 'rgba(226,202,155,0.20)';
+  ctx.lineWidth = 1.1;
+  ctx.beginPath(); ctx.arc(c, c, R(3.81), 0, TAU); ctx.stroke();
+  ctx.beginPath(); ctx.arc(c, c, R(3.37), 0, TAU); ctx.stroke();
+
+  for (let i = 0; i < 60; i++) {
+    const a = i / 60 * TAU - Math.PI / 2;
+    const long = i % 5 === 0;
+    const inner = long ? 3.80 : 3.865;
+    const outer = 3.955;
+    ctx.strokeStyle = long ? 'rgba(246,224,180,0.98)' : 'rgba(207,186,150,0.80)';
+    ctx.lineWidth = long ? 4.1 : 1.8;
+    ctx.beginPath();
+    ctx.moveTo(c + Math.cos(a) * R(inner), c + Math.sin(a) * R(inner));
+    ctx.lineTo(c + Math.cos(a) * R(outer), c + Math.sin(a) * R(outer));
+    ctx.stroke();
+  }
+
+  // Fine radial snailing on the black chapter ring.
+  ctx.save();
+  ctx.translate(c, c);
+  for (let i = 0; i < 280; i++) {
+    const a = i / 280 * TAU;
+    const rr = R(3.30);
+    ctx.strokeStyle = i % 4 === 0 ? 'rgba(224,201,162,0.045)' : 'rgba(224,201,162,0.018)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(Math.cos(a) * rr, Math.sin(a) * rr);
+    ctx.lineTo(Math.cos(a) * R(3.78), Math.sin(a) * R(3.78));
+    ctx.stroke();
+  }
+  ctx.restore();
+
+  // Small, jewel-like signature between the minute track and the indexes.
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillStyle = 'rgba(235,212,170,0.86)';
+  ctx.font = '500 32px Didot, Georgia, "Times New Roman", serif';
+  ctx.letterSpacing = '7px';
+  ctx.fillText('AURELIS', c, c - R(3.95) + 2);
+
+  // SWISS MADE at six, discreetly set into the minute track.
+  ctx.font = '400 15px Helvetica, Arial, sans-serif';
+  ctx.fillStyle = 'rgba(221,198,155,0.62)';
+  ctx.letterSpacing = '4px';
+  ctx.fillText('SWISS MADE', c, c + R(3.955) - 2);
+
+  // Calibre mark at nine, reading along the flange.
+  ctx.save();
+  ctx.translate(c, c);
+  ctx.rotate(-Math.PI / 2);
+  ctx.font = 'italic 400 18px Georgia, serif';
+  ctx.fillStyle = 'rgba(212,190,150,0.40)';
+  ctx.letterSpacing = '2px';
+  ctx.fillText('CAL. A–01', R(3.56), 0);
+  ctx.restore();
+}, { color: true, clamp: true });
+const trackMat = new THREE.MeshStandardMaterial({
+  map: trackTexture,
+  transparent: true,
+  alphaTest: 0.02,
+  roughness: 0.36,
+  metalness: 0.55,
+  envMapIntensity: 0.7,
+  side: THREE.DoubleSide,
+  depthWrite: false,
+  polygonOffset: true,
+  polygonOffsetFactor: -2,
+});
+const trackPlane = new THREE.Mesh(new THREE.PlaneGeometry(9.15, 9.15), trackMat);
+trackPlane.position.z = 0.012;
+trackPlane.renderOrder = 4;
+chapterGroup.add(trackPlane);
+
+/* Hairline polished chapter edges. */
+for (const r of [3.285, 4.015]) {
+  const trim = new THREE.Mesh(new THREE.TorusGeometry(r, 0.012, 6, 192), goldPolished);
+  trim.position.z = 0.022;
+  chapterGroup.add(trim);
+}
+
+/* Applied rose-gold hour markers, each with a luminous inlay. */
+const markerRadius = 3.55;
+const lumeMeshes = [];
+for (let i = 0; i < 12; i++) {
+  const angle = i / 12 * TAU;
+  if (i === 0) {
+    for (const side of [-1, 1]) {
+      const m = new THREE.Group();
+      m.position.set(side * 0.14, markerRadius, 0.046);
+      const frame = new THREE.Mesh(new THREE.BoxGeometry(0.13, 0.48, 0.060), goldPolished);
+      frame.castShadow = true;
+      m.add(frame);
+      const insert = new THREE.Mesh(new THREE.BoxGeometry(0.072, 0.33, 0.025), lume);
+      insert.position.z = 0.041;
+      m.add(insert);
+      lumeMeshes.push(insert);
+      chapterGroup.add(m);
+    }
+    continue;
+  }
+  const m = new THREE.Group();
+  m.position.set(Math.sin(angle) * markerRadius, Math.cos(angle) * markerRadius, 0.046);
+  m.rotation.z = -angle;
+  const frame = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.50, 0.062), goldPolished);
+  frame.castShadow = true;
+  m.add(frame);
+  const insert = new THREE.Mesh(new THREE.BoxGeometry(0.083, 0.355, 0.026), lume);
+  insert.position.z = 0.042;
+  m.add(insert);
+  lumeMeshes.push(insert);
+  chapterGroup.add(m);
+}
+
+/* A single, perfectly proportioned lume pip at each five-minute station. */
+for (let i = 0; i < 12; i++) {
+  if (i === 0) continue;
+  const a = i / 12 * TAU;
+  const dot = new THREE.Mesh(new THREE.SphereGeometry(0.018, 6, 5), lume);
+  dot.position.set(Math.sin(a) * 3.93, Math.cos(a) * 3.93, 0.028);
+  dot.scale.set(1, 1, 0.38);
+  chapterGroup.add(dot);
+  lumeMeshes.push(dot);
+}
+
+const chapterAnchor = new THREE.Object3D();
+chapterAnchor.position.set(2.35, 2.36, 0.08);
+chapterGroup.add(chapterAnchor);
+
+/* ══════════════════════════════════════════════════════════════
+   Skeletonised luminous hands
+   ══════════════════════════════════════════════════════════════ */
+
+const handsGroup = new THREE.Group();
+watch.add(handsGroup);
+
+const handLumeMeshes = [];
+
+function handOutlineShape(length, width, baseWidth, tail = 0.38) {
+  const s = new THREE.Shape();
+  s.moveTo(0, length);
+  s.bezierCurveTo(width * 0.34, length * 0.90, width * 0.76, length * 0.56, width * 0.63, length * 0.19);
+  s.lineTo(baseWidth * 0.92, 0.055);
+  s.lineTo(baseWidth, -tail * 0.45);
+  s.quadraticCurveTo(baseWidth * 0.94, -tail, baseWidth * 0.46, -tail);
+  s.lineTo(-baseWidth * 0.46, -tail);
+  s.quadraticCurveTo(-baseWidth * 0.94, -tail, -baseWidth, -tail * 0.45);
+  s.lineTo(-baseWidth * 0.92, 0.055);
+  s.lineTo(-width * 0.63, length * 0.19);
+  s.bezierCurveTo(-width * 0.76, length * 0.56, -width * 0.34, length * 0.90, 0, length);
+  s.closePath();
+  return s;
+}
+
+function buildHand({ length, width, baseWidth, depth, lumeDepth, material, z, lumeScale = 0.62, name }) {
+  const root = new THREE.Group();
+  root.name = name;
+  root.position.z = z;
+
+  // A hairline black silhouette lifts the gold frame away from bright bridges.
+  const outlineShape = handOutlineShape(length * 1.010, width * 1.20, baseWidth * 1.10, 0.40);
+  const outline = makeExtruded(outlineShape, blackEnamel, {
+    depth: depth * 0.88,
+    bevel: 0.006,
+    bevelSegments: 2,
+    curveSegments: 32,
+  });
+  outline.position.z = -0.004;
+  outline.castShadow = false;
+  root.add(outline);
+
+  const shape = handOutlineShape(length, width, baseWidth);
+  const hand = makeExtruded(shape, material, {
+    depth,
+    bevel: 0.009,
+    bevelSegments: 3,
+    curveSegments: 40,
+  });
+  hand.castShadow = true;
+  root.add(hand);
+
+  // Black recess then a raised, hand-applied luminous core.
+  const recessShape = handOutlineShape(length * 0.90, width * lumeScale * 1.24, baseWidth * 0.48, 0.18);
+  const recess = makeExtruded(recessShape, blackEnamel, {
+    depth: lumeDepth * 0.52,
+    bevel: 0.004,
+    bevelSegments: 2,
+    curveSegments: 32,
+  });
+  recess.position.set(0, 0.055, depth / 2 + 0.001);
+  recess.renderOrder = 5;
+  root.add(recess);
+
+  const lumeShape = handOutlineShape(length * 0.86, width * lumeScale, baseWidth * 0.39, 0.14);
+  const lumeHand = makeExtruded(lumeShape, lume, {
+    depth: lumeDepth * 0.46,
+    bevel: 0.003,
+    bevelSegments: 2,
+    curveSegments: 32,
+  });
+  lumeHand.position.set(0, 0.06, depth / 2 + lumeDepth * 0.50);
+  lumeHand.castShadow = false;
+  lumeHand.renderOrder = 6;
+  root.add(lumeHand);
+  handLumeMeshes.push(lumeHand);
+
+  handsGroup.add(root);
+  return root;
+}
+
+const hourHand = buildHand({
+  length: 2.43, width: 0.178, baseWidth: 0.225, depth: 0.034, lumeDepth: 0.036,
+  material: goldPolished, z: 0.548, lumeScale: 0.60, name: 'hour-hand',
+});
+const minuteHand = buildHand({
+  length: 3.17, width: 0.145, baseWidth: 0.205, depth: 0.030, lumeDepth: 0.032,
+  material: goldPolished, z: 0.583, lumeScale: 0.56, name: 'minute-hand',
+});
+
+/* Slim blued seconds hand with a floating luminous pearl. */
+const secondRoot = new THREE.Group();
+secondRoot.position.z = 0.621;
+handsGroup.add(secondRoot);
+const secondShape = handOutlineShape(3.27, 0.036, 0.064, 0.28);
+const secondHand = makeExtruded(secondShape, goldPolished, {
+  depth: 0.018, bevel: 0.003, bevelSegments: 2, curveSegments: 24,
+});
+secondHand.castShadow = true;
+secondRoot.add(secondHand);
+const secondCounter = new THREE.Mesh(new THREE.TorusGeometry(0.117, 0.019, 6, 28), goldPolished);
+secondCounter.position.z = 0.01;
+secondRoot.add(secondCounter);
+const secondPearl = new THREE.Mesh(new THREE.SphereGeometry(0.061, 14, 10), lume);
+secondPearl.position.set(0, 2.92, 0.020);
+secondPearl.scale.set(1.15, 1.15, .62);
+secondPearl.scale.z = 0.58;
+secondPearl.castShadow = false;
+secondRoot.add(secondPearl);
+handLumeMeshes.push(secondPearl);
+
+/* The hands ride on a hand-finished central cannon pinion. */
+const centreCapGroup = new THREE.Group();
+centreCapGroup.position.z = 0.625;
+handsGroup.add(centreCapGroup);
+const capBase = new THREE.Mesh(new THREE.CylinderGeometry(0.158, 0.185, 0.045, 36), gold);
+capBase.rotation.x = Math.PI / 2;
+capBase.castShadow = true;
+centreCapGroup.add(capBase);
+const capMid = new THREE.Mesh(new THREE.CylinderGeometry(0.102, 0.138, 0.045, 36), goldPolished);
+capMid.rotation.x = Math.PI / 2;
+capMid.position.z = 0.04;
+capMid.castShadow = true;
+centreCapGroup.add(capMid);
+const capTop = new THREE.Mesh(new THREE.CylinderGeometry(0.062, 0.082, 0.035, 24), bluedSteel);
+capTop.rotation.x = Math.PI / 2;
+capTop.position.z = 0.075;
+centreCapGroup.add(capTop);
+addScrew(centreCapGroup, 0, 0, 0.098, 0.045, { material: goldPolished, rimMaterial: darkSteel });
+
+const handsAnchor = new THREE.Object3D();
+handsAnchor.position.set(0, 0.86, 0.72);
+handsGroup.add(handsAnchor);
+
+/* Set the classic display time: 10:10:37. */
+const DISPLAY_START = 10 * 3600 + 10 * 60 + 37;
+
+/* ══════════════════════════════════════════════════════════════
+   Registration, inspector and hover labels
+   ══════════════════════════════════════════════════════════════ */
+
+registerPart('barrel', {
+  index: '01',
+  name: '发条盒',
+  en: 'Mainspring Barrel',
+  labelKicker: '01 · MOTIVE POWER',
+  desc: '蓝钢发条以 7.4 圈手工盘绕，为整枚机芯提供 72 小时的稳定扭矩。开放式桶盖让每一圈张力都清晰可见。',
+  chips: ['72H Power Reserve', 'Blued Steel'],
+  objects: [barrelGroup],
+  anchor: barrelAnchor,
+  addToIndex: true,
+  indexName: '发条盒',
+});
+
+registerPart('gearTrain', {
+  index: '02',
+  name: '传动轮系',
+  en: 'Going Train',
+  labelKicker: '02 · GOING TRAIN',
+  desc: '52 齿中心轮、43 齿三轮与 37 齿四轮交替采用玫瑰金与镀铑处理；每一道轮辐边缘都由手工倒角与抛光。',
+  chips: ['52 / 43 / 37 Teeth', 'Hand-bevelled'],
+  objects: [trainGroup],
+  anchor: trainAnchor,
+  addToIndex: true,
+  indexName: '传动轮系',
+});
+
+registerPart('escapement', {
+  index: '03',
+  name: '擒纵机构',
+  en: 'Swiss Lever Escapement',
+  labelKicker: '03 · THE ESCAPEMENT',
+  desc: '十五枚俱乐部齿擒纵轮与红宝石叉瓦协作，每秒八次释放能量。这里是机械心跳的第一声，也是时间被切分的瞬间。',
+  chips: ['28,800 vph', 'Ruby Pallets'],
+  objects: [escapementGroup],
+  anchor: escapementAnchor,
+  addToIndex: true,
+  indexName: '擒纵机构',
+});
+
+registerPart('balance', {
+  index: '04',
+  name: '摆轮与游丝',
+  en: 'Free-Sprung Balance',
+  labelKicker: '04 · REGULATOR',
+  desc: '无卡度玫瑰金摆轮搭载手工蓝钢游丝，以 4Hz 持续振荡。八枚惯性砝码让每一次摆动都精确且从容。',
+  chips: ['4 Hz / 28,800 vph', 'Breguet Hairspring'],
+  objects: [balanceGroup],
+  anchor: balanceAnchor,
+  addToIndex: true,
+  indexName: '摆轮游丝',
+});
+
+registerPart('bridges', {
+  index: '05',
+  name: '镂空桥板',
+  en: 'Openworked Bridges',
+  labelKicker: '05 · ARCHITECTURE',
+  desc: '黑铑桥板经手工倒角、日内瓦波纹与镜面抛光处理，在结构与通透之间取得平衡。每一枚固定螺钉均独立修饰。',
+  chips: ['Black Rhodium', 'Côtes de Genève'],
+  objects: [bridgesGroup],
+  anchor: bridgeAnchor,
+  addToIndex: true,
+  indexName: '镂空夹板',
+});
+
+registerPart('jewels', {
+  index: '06',
+  name: '红宝石轴承',
+  en: 'Ruby Jewels',
+  labelKicker: '06 · JEWEL SETTINGS',
+  desc: '29 枚合成红宝石轴承以黄金托座手工固定，将轮轴摩擦降至最低，并以深红色调点亮整枚机芯。',
+  chips: ['29 Ruby Jewels', 'Solid Gold Châtons'],
+  objects: jewelGroups,
+  anchor: jewelsAnchor,
+  addToIndex: true,
+  indexName: '红宝石轴承',
+});
+
+registerPart('hands', {
+  index: '07',
+  name: '荧光指针',
+  en: 'Luminescent Hands',
+  labelKicker: '07 · LEGIBILITY',
+  desc: '玫瑰金指针中央填充 Super-LumiNova® 夜光涂层，在暗处持续释放柔和绿光；秒针尖端的一颗夜光明珠，让读时更加轻盈。',
+  chips: ['Super-LumiNova®', 'Rose Gold'],
+  objects: [handsGroup],
+  anchor: handsAnchor,
+});
+
+registerPart('chapter', {
+  index: '08',
+  name: '刻度圈',
+  en: 'Chapter Ring',
+  labelKicker: '08 · INDICATION',
+  desc: '黑漆刻度圈上的 60 道分钟刻线与立体夜光时标均由手工装配，在黑色蓝宝石与玫瑰金之间形成纤细的时间索引。',
+  chips: ['Applied Indexes', '60 Minute Track'],
+  objects: [chapterGroup],
+  anchor: chapterAnchor,
+});
+
+registerPart('case', {
+  index: '09',
+  name: '玫瑰金表壳',
+  en: '5N Rose Gold Case',
+  labelKicker: '09 · THE CASE',
+  desc: '5N 玫瑰金表壳经缎面拉丝、镜面倒角与 104 道侧面手工饰纹处理，在柔和光线下呈现温暖而克制的光泽。',
+  chips: ['5N Rose Gold', '42 mm'],
+  objects: [caseBandGroup],
+  anchor: (() => {
+    const a = new THREE.Object3D();
+    a.position.set(3.65, 2.15, 0.25);
+    caseBandGroup.add(a);
+    return a;
+  })(),
+});
+
+registerPart('crown', {
+  index: '10',
+  name: '手工雕纹表冠',
+  en: 'Fluted Crown',
+  labelKicker: '10 · WINDING',
+  desc: '26 道独立雕纹与手工抛光端盖组成的表冠，以品牌字母 A 收束。手动上链的每一次旋转，都将能量注入发条盒。',
+  chips: ['Hand-fluted', 'Signed Crown'],
+  objects: [crownGroup],
+  anchor: (() => {
+    const a = new THREE.Object3D();
+    a.position.set(0.24, 0.24, 0.26);
+    crownGroup.add(a);
+    return a;
+  })(),
+});
+
+registerPart('bezel', {
+  index: '11',
+  name: '抛光表圈',
+  en: 'Polished Bezel',
+  labelKicker: '11 · FRAME',
+  desc: '镜面抛光表圈以连续弧线收拢光线，将视线引向内部的机械宇宙。它与表壳的缎面形成克制的明暗对照。',
+  chips: ['Mirror Polished', '18K Rose Gold'],
+  objects: [bezel],
+  anchor: (() => {
+    const a = new THREE.Object3D();
+    a.position.set(3.3, 1.85, 0.1);
+    bezelGroup.add(a);
+    return a;
+  })(),
+});
+
+registerPart('crystal', {
+  index: '12',
+  name: '双曲面蓝宝石',
+  en: 'Domed Sapphire Crystal',
+  labelKicker: '12 · THE WINDOW',
+  desc: '双面防眩光蓝宝石水晶带着极轻的弧度覆盖机芯，在几乎不可见的存在中，放大每一层机械结构的深度。',
+  chips: ['Domed Sapphire', 'Anti-reflective'],
+  objects: [crystalEdge],
+  anchor: (() => {
+    const a = new THREE.Object3D();
+    a.position.set(-2.75, 2.7, 0.42);
+    crystalGroup.add(a);
+    return a;
+  })(),
+});
+
+
+/* The printed chapter plane is intentionally transparent at its centre; it
+   must never intercept the pointer. */
+trackPlane.userData.noPick = true;
+
+const mainPlateAnchor = new THREE.Object3D();
+mainPlateAnchor.position.set(2.55, 2.18, 0.02);
+movementBaseGroup.add(mainPlateAnchor);
+registerPart('mainplate', {
+  index: '13',
+  name: '主夹板',
+  en: 'Skeletonised Main Plate',
+  labelKicker: '13 · FOUNDATION',
+  desc: '喷砂与珍珠纹装饰的主夹板被极大镂空，十二枚支撑孔洞让光线穿透整个机芯。它是全部 218 枚组件的无声基座。',
+  chips: ['Perlage Finish', 'Skeletonised'],
+  objects: [movementBaseGroup],
+  anchor: mainPlateAnchor,
+});
+
+/* ==============================================================
+   Inspector data, labels, and picking
+   ============================================================== */
+
+const defaultInfo = {
+  index: '00',
+  title: '整体机芯',
+  en: 'The Openworked Calibre',
+  desc: '悬浮于光影之间的机械宇宙。218 枚手工修饰的组件，以 72 小时动力储存与 4Hz 高振频，将时间的流动化为可见的精密艺术。',
+  chips: ['218 Components', 'Hand-finished', '72h Reserve'],
+};
+
+const detailIndexEl = $('#detailIndex');
+const detailTitleEl = $('#detailTitle');
+const detailEnEl = $('#detailEn');
+const detailDescEl = $('#detailDesc');
+const detailChipsEl = $('#detailChips');
+const statusTextEl = $('#statusText');
+const componentListEl = $('#componentList');
+
+function chipHTML(items) {
+  return items.map((text) => `<span class="chip"><i></i>${text}</span>`).join('');
+}
+
+function setInfoPanel(part) {
+  if (!part) {
+    detailIndexEl.textContent = defaultInfo.index;
+    detailTitleEl.textContent = defaultInfo.title;
+    detailEnEl.textContent = defaultInfo.en;
+    detailDescEl.textContent = defaultInfo.desc;
+    detailChipsEl.innerHTML = chipHTML(defaultInfo.chips);
+    return;
+  }
+  detailIndexEl.textContent = part.index;
+  detailTitleEl.textContent = part.name;
+  detailEnEl.textContent = part.en;
+  detailDescEl.textContent = part.desc;
+  detailChipsEl.innerHTML = chipHTML(part.chips);
+}
+
+let selectedPart = null;
+let hovered3D = null;
+let hoveredList = null;
+let focusPart = null;
+let labelPart = null;
+let pointerDown = false;
+let pointerMoved = false;
+let pointerStartX = 0;
+let pointerStartY = 0;
+let pointerDirty = false;
+
+const raycaster = new THREE.Raycaster();
+const pointerNdc = new THREE.Vector2();
+const projectedAnchor = new THREE.Vector3();
+const partLabel = $('#partLabel');
+const labelKicker = $('#labelKicker');
+const labelName = $('#labelName');
+const labelSub = $('#labelSub');
+const labelHint = partLabel.querySelector('.label-hint');
+const canvas = renderer.domElement;
+
+for (const part of partList) {
+  const button = document.createElement('button');
+  button.className = 'component-row';
+  button.type = 'button';
+  button.dataset.partId = part.id;
+  button.innerHTML = `
+    <span class="num">${part.index}</span>
+    <span class="row-name">${part.indexName}<em>${part.en}</em></span>
+    <span class="row-arrow">↗</span>
+  `;
+  button.addEventListener('pointerenter', () => {
+    hoveredList = part;
+    refreshFocus();
+    button.classList.add('preview');
+  });
+  button.addEventListener('pointerleave', () => {
+    hoveredList = null;
+    button.classList.remove('preview');
+    refreshFocus();
+  });
+  button.addEventListener('focus', () => {
+    hoveredList = part;
+    refreshFocus();
+  });
+  button.addEventListener('blur', () => {
+    hoveredList = null;
+    refreshFocus();
+  });
+  button.addEventListener('click', () => {
+    selectPart(part);
+  });
+  componentListEl.appendChild(button);
+}
+
+function meshesForPart(part) {
+  const set = new Set();
+  part.objects.forEach((obj) => {
+    obj.traverse((child) => {
+      if (child.isMesh && !child.userData.noOutline) set.add(child);
+    });
+  });
+  return [...set];
+}
+
+function updateOutline(part) {
+  if (!part) {
+    outlinePass.selectedObjects = [];
+    outlinePass.enabled = false;
+    return;
+  }
+  outlinePass.selectedObjects = meshesForPart(part);
+  outlinePass.enabled = true;
+}
+
+function updateRowStates() {
+  componentListEl.querySelectorAll('.component-row').forEach((row) => {
+    row.classList.toggle('selected', !!selectedPart && row.dataset.partId === selectedPart.id);
+  });
+}
+
+function showLabel(part, temporary = false) {
+  if (!part) {
+    partLabel.classList.remove('visible');
+    labelPart = null;
+    return;
+  }
+  labelPart = part;
+  labelKicker.textContent = part.labelKicker || `${part.index} · ${part.en}`;
+  labelName.textContent = part.name;
+  labelSub.textContent = part.en;
+  labelHint.textContent = temporary ? 'Click to inspect' : 'Selected · inspect details';
+  partLabel.classList.add('visible');
+}
+
+function hideLabel() {
+  partLabel.classList.remove('visible');
+  labelPart = null;
+}
+
+function refreshFocus() {
+  const hoverPart = hovered3D || hoveredList;
+  const nextFocus = hoverPart || selectedPart;
+  if (nextFocus !== focusPart) {
+    focusPart = nextFocus;
+    updateOutline(focusPart);
+  }
+  if (hoverPart) {
+    showLabel(hoverPart, true);
+  } else if (selectedPart) {
+    showLabel(selectedPart, false);
+  } else {
+    hideLabel();
+  }
+  canvas.style.cursor = hoverPart ? 'pointer' : (pointerDown ? 'grabbing' : 'grab');
+}
+
+function selectPart(part) {
+  selectedPart = part || null;
+  setInfoPanel(selectedPart);
+  updateRowStates();
+  refreshFocus();
+  if (selectedPart) {
+    // A restrained haptic tick where supported.
+    if (navigator.vibrate) navigator.vibrate(8);
+  }
+}
+
+function setHovered3D(part) {
+  if (part === hovered3D) return;
+  hovered3D = part;
+  refreshFocus();
+}
+
+function updatePointerNdc(event) {
+  const rect = canvas.getBoundingClientRect();
+  pointerNdc.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+  pointerNdc.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+}
+
+function pickPart() {
+  raycaster.setFromCamera(pointerNdc, camera);
+  const hits = raycaster.intersectObjects(pickables, false);
+  for (const hit of hits) {
+    const part = partRegistry.get(hit.object.userData.partId);
+    if (part) return part;
+  }
+  return null;
+}
+
+canvas.addEventListener('pointerenter', () => {
+  canvas.style.cursor = 'grab';
+});
+canvas.addEventListener('pointerleave', () => {
+  pointerDirty = false;
+  if (!pointerDown) setHovered3D(null);
+  if (!selectedPart) hideLabel();
+});
+canvas.addEventListener('pointerdown', (e) => {
+  if (e.button !== undefined && e.button !== 0) return;
+  pointerDown = true;
+  pointerMoved = false;
+  pointerStartX = e.clientX;
+  pointerStartY = e.clientY;
+  document.body.classList.add('is-dragging');
+  canvas.style.cursor = 'grabbing';
+  // Controls take over; pause pointer picking until release.
+  setHovered3D(null);
+});
+canvas.addEventListener('pointermove', (e) => {
+  if (pointerDown) {
+    if (Math.hypot(e.clientX - pointerStartX, e.clientY - pointerStartY) > 4) pointerMoved = true;
+    return;
+  }
+  updatePointerNdc(e);
+  pointerDirty = true;
+  canvas.style.cursor = 'grab';
+});
+canvas.addEventListener('pointerup', (e) => {
+  const wasDown = pointerDown;
+  pointerDown = false;
+  document.body.classList.remove('is-dragging');
+  canvas.style.cursor = 'grab';
+  if (!wasDown) return;
+  const moved = pointerMoved || Math.hypot(e.clientX - pointerStartX, e.clientY - pointerStartY) > 6;
+  if (moved) {
+    setHovered3D(null);
+    return;
+  }
+  updatePointerNdc(e);
+  const part = pickPart();
+  selectPart(part);
+  setHovered3D(null);
+});
+canvas.addEventListener('pointercancel', () => {
+  pointerDown = false;
+  document.body.classList.remove('is-dragging');
+  setHovered3D(null);
+});
+canvas.addEventListener('contextmenu', (e) => e.preventDefault());
+
+/* ==============================================================
+   Exploded view
+   ============================================================== */
+
+const explodeState = { amount: 0, target: 0 };
+const explodeGroups = [
+  { group: casebackGroup, offset: -0.28 },
+  { group: movementBaseGroup, offset: 0.55 },
+  { group: barrelGroup, offset: 0.62 },
+  { group: trainGroup, offset: 0.68 },
+  { group: escapementGroup, offset: 0.74 },
+  { group: balanceGroup, offset: 0.80 },
+  { group: bridgesGroup, offset: 1.40 },
+  { group: chapterGroup, offset: 1.95 },
+  { group: handsGroup, offset: 2.40 },
+  { group: bezelGroup, offset: 2.95 },
+  { group: crystalGroup, offset: 3.50 },
+];
+for (const item of explodeGroups) item.baseZ = item.group.position.z;
+
+const axisMaterial = new THREE.MeshBasicMaterial({
+  color: 0xdfbc80,
+  transparent: true,
+  opacity: 0,
+  depthWrite: false,
+  blending: THREE.AdditiveBlending,
+});
+const axisLine = new THREE.Mesh(new THREE.CylinderGeometry(0.006, 0.006, 4.2, 5), axisMaterial);
+axisLine.rotation.x = Math.PI / 2;
+axisLine.position.set(-3.82, 0, 1.15);
+axisLine.renderOrder = 1;
+watch.add(axisLine);
+
+let preExplodeView = null;
+
+function getExplodedView() {
+  const portrait = isPortrait();
+  const target = new THREE.Vector3(0, portrait ? 1.45 : 1.7, 0);
+  const distance = portrait ? 38 : 23.5;
+  return {
+    target,
+    distance,
+    position: viewPosition(portrait ? 27 : 34, portrait ? 34 : 27.5, distance, target),
+  };
+}
+
+function setExploded(on) {
+  explodeState.target = on ? 1 : 0;
+  const button = document.querySelector('[data-action="explode"]');
+  button.classList.toggle('active', on);
+  button.setAttribute('aria-pressed', String(on));
+  button.querySelector('span').textContent = on ? '收起视图' : '爆炸视图';
+  if (on) {
+    preExplodeView = {
+      position: camera.position.clone(),
+      target: controls.target.clone(),
+    };
+    selectPart(null);
+    const ev = getExplodedView();
+    beginFlight(ev.position, ev.target, 1.55);
+  } else {
+    const back = preExplodeView || getHomeView();
+    beginFlight(back.position, back.target, 1.45);
+  }
+}
+const explodeBtn = document.querySelector('[data-action="explode"]');
+
+/* ==============================================================
+   Night / lume mode
+   ============================================================== */
+
+const lumeState = { blend: 0, on: false };
+const lightBase = {
+  key: key.intensity,
+  fill: fill.intensity,
+  warmRim: warmRim.intensity,
+  lowRim: lowRim.intensity,
+  softTop: softTop.intensity,
+  ambient: ambient.intensity,
+  dialGlow: dialGlow.intensity,
+  interiorFill: interiorFill.intensity,
+  innerCool: innerCool.intensity,
+  movementSoftbox: movementSoftbox.intensity,
+  movementCoolbox: movementCoolbox.intensity,
+};
+const nightTargets = {
+  key: lightBase.key * 0.075,
+  fill: lightBase.fill * 0.11,
+  warmRim: lightBase.warmRim * 0.22,
+  lowRim: lightBase.lowRim * 0.22,
+  softTop: lightBase.softTop * 0.08,
+  ambient: lightBase.ambient * 0.13,
+  dialGlow: 7.0,
+  interiorFill: lightBase.interiorFill * 0.06,
+  innerCool: lightBase.innerCool * 0.08,
+  movementSoftbox: lightBase.movementSoftbox * 0.05,
+  movementCoolbox: lightBase.movementCoolbox * 0.05,
+};
+
+function setLumeMode(on) {
+  lumeState.on = on;
+  const button = document.querySelector('[data-action="lume"]');
+  button.classList.toggle('active', on);
+  button.setAttribute('aria-pressed', String(on));
+  const label = button.querySelector('span:not(.key)');
+  if (label) label.textContent = on ? '日间模式' : '夜光模式';
+  document.body.classList.toggle('lume-on', on);
+  statusTextEl.textContent = on ? 'Lume' : 'Running';
+}
+
+/* ==============================================================
+   Camera choreography
+   ============================================================== */
+
+function viewPosition(azimuthDeg, elevationDeg, distance, target) {
+  const az = azimuthDeg * DEG;
+  const el = elevationDeg * DEG;
+  const horizontal = Math.cos(el) * distance;
+  return new THREE.Vector3(
+    target.x + Math.sin(az) * horizontal,
+    target.y + Math.sin(el) * distance,
+    target.z + Math.cos(az) * horizontal
+  );
+}
+
+function getHomeView() {
+  const portrait = isPortrait();
+  const target = new THREE.Vector3(0, portrait ? 0.18 : 0.12, 0);
+  const distance = portrait ? 41.5 : 25.3 + Math.max(0, 1000 - window.innerWidth) * 0.04;
+  return {
+    target,
+    position: viewPosition(portrait ? 27 : 33.5, portrait ? 53 : 48, distance, target),
+    distance,
+  };
+}
+
+const flight = {
+  active: false,
+  start: 0,
+  duration: 0,
+  fromPos: new THREE.Vector3(),
+  toPos: new THREE.Vector3(),
+  fromTarget: new THREE.Vector3(),
+  toTarget: new THREE.Vector3(),
+  onComplete: null,
+};
+
+function beginFlight(position, target, duration = 2.4, onComplete = null) {
+  flight.active = true;
+  flight.start = performance.now();
+  flight.duration = duration;
+  flight.fromPos.copy(camera.position);
+  flight.toPos.copy(position);
+  flight.fromTarget.copy(controls.target);
+  flight.toTarget.copy(target);
+  flight.onComplete = onComplete;
+  controls.enabled = false;
+  controls.autoRotate = false;
+}
+
+function easeInOutCubic(t) {
+  return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+}
+
+function updateFlight(now) {
+  if (!flight.active) return;
+  const raw = clamp((now - flight.start) / (flight.duration * 1000), 0, 1);
+  const t = easeInOutCubic(raw);
+  camera.position.lerpVectors(flight.fromPos, flight.toPos, t);
+  controls.target.lerpVectors(flight.fromTarget, flight.toTarget, t);
+  camera.lookAt(controls.target);
+  if (raw >= 1) {
+    flight.active = false;
+    controls.enabled = true;
+    controls.autoRotate = autoRotateState && !reduceMotion;
+    if (flight.onComplete) flight.onComplete();
+  }
+}
+
+let autoRotateState = !reduceMotion;
+function setAutoRotate(on) {
+  autoRotateState = on;
+  if (!flight.active) controls.autoRotate = on && !reduceMotion;
+  const button = document.querySelector('[data-action="rotate"]');
+  button.classList.toggle('active', on);
+  button.setAttribute('aria-pressed', String(on));
+}
+
+function resetView() {
+  const view = explodeState.target > 0.5 ? getExplodedView() : getHomeView();
+  beginFlight(view.position, view.target, 1.55);
+}
+
+/* ==============================================================
+   Controls / keyboard
+   ============================================================== */
+
+document.querySelectorAll('[data-action]').forEach((button) => {
+  button.addEventListener('click', () => {
+    const action = button.dataset.action;
+    if (action === 'explode') setExploded(explodeState.target < 0.5);
+    if (action === 'lume') setLumeMode(!lumeState.on);
+    if (action === 'rotate') setAutoRotate(!autoRotateState);
+    if (action === 'reset') resetView();
+  });
+});
+
+window.addEventListener('keydown', (e) => {
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  const tag = document.activeElement?.tagName;
+  if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+  const key = e.key.toLowerCase();
+  if (key === 'e') setExploded(explodeState.target < 0.5);
+  if (key === 'l') setLumeMode(!lumeState.on);
+  if (key === 'r') setAutoRotate(!autoRotateState);
+  if (key === 'escape') selectPart(null);
+});
+
+/* ==============================================================
+   Animation
+   ============================================================== */
+
+const clock = new THREE.Clock();
+let elapsed = 0;
+let labelProjectionVisible = true;
+let frameCount = 0;
+let experienceStarted = false;
+let loaderDismissTimer = 0;
+
+const tmpProjection = new THREE.Vector3();
+const tmpQuat = new THREE.Quaternion();
+
+function animateMechanics(dt, t) {
+  // Going train.
+  for (const item of wheelAnimations) {
+    item.object.rotation.z = t * item.speed;
+  }
+  barrelGroup.rotation.z = t * 0.011;
+
+  // The balance oscillates at 4 Hz, with a small hairspring breathing motion.
+  const phase = t * TAU * 4.0;
+  balanceSpinner.rotation.z = Math.sin(phase) * 2.38;
+  hairspringGroup.rotation.z = Math.sin(phase - 0.28) * 0.72;
+  const breathing = 1 + Math.sin(phase - 0.7) * 0.017;
+  hairspringGroup.scale.set(breathing, breathing, 1);
+
+  // Escapement: eight beats per second, smoothly caught by the eye.
+  const escapeTarget = -Math.floor(t * 8) * (TAU / 30);
+  escapeSpinner.rotation.z = damp(escapeSpinner.rotation.z, escapeTarget, 34, dt);
+  palletSpinner.rotation.z = Math.sin(phase) * 0.085;
+
+  // The time display runs forward from 10:10:37.
+  const seconds = DISPLAY_START + t;
+  hourHand.rotation.z = -(seconds / 43200) * TAU;
+  minuteHand.rotation.z = -(seconds / 3600) * TAU;
+  secondRoot.rotation.z = -(seconds / 60) * TAU;
+
+  // A living watch breathes almost imperceptibly above its plinth.
+  watch.position.y = WATCH_Y + Math.sin(t * 0.52) * 0.0085 + explodeState.amount * 0.30;
+}
+
+function animateDust(t) {
+  dust.rotation.y = t * 0.008;
+  dust.position.y = Math.sin(t * 0.18) * 0.09;
+}
+
+function updateExplosion(dt) {
+  explodeState.amount = damp(explodeState.amount, explodeState.target, 3.0, dt);
+  if (Math.abs(explodeState.amount - explodeState.target) < 0.0005) explodeState.amount = explodeState.target;
+  const eased = easeInOutCubic(explodeState.amount);
+  for (const item of explodeGroups) {
+    item.group.position.z = item.baseZ + item.offset * eased;
+  }
+  axisMaterial.opacity = eased * 0.18;
+  axisLine.scale.y = 0.75 + eased * 0.55;
+}
+
+function updateLume(dt, t) {
+  const targetBlend = lumeState.on ? 1 : 0;
+  lumeState.blend = damp(lumeState.blend, targetBlend, 2.2, dt);
+  const b = lumeState.blend;
+
+  key.intensity = lerp(lightBase.key, nightTargets.key, b);
+  fill.intensity = lerp(lightBase.fill, nightTargets.fill, b);
+  warmRim.intensity = lerp(lightBase.warmRim, nightTargets.warmRim, b);
+  lowRim.intensity = lerp(lightBase.lowRim, nightTargets.lowRim, b);
+  softTop.intensity = lerp(lightBase.softTop, nightTargets.softTop, b);
+  ambient.intensity = lerp(lightBase.ambient, nightTargets.ambient, b);
+  dialGlow.intensity = lerp(lightBase.dialGlow, nightTargets.dialGlow, b);
+  interiorFill.intensity = lerp(lightBase.interiorFill, nightTargets.interiorFill, b);
+  innerCool.intensity = lerp(lightBase.innerCool, nightTargets.innerCool, b);
+  movementSoftbox.intensity = lerp(lightBase.movementSoftbox, nightTargets.movementSoftbox, b);
+  movementCoolbox.intensity = lerp(lightBase.movementCoolbox, nightTargets.movementCoolbox, b);
+  dialGlow.color.setRGB(0.45, 1.0, 0.56);
+
+  renderer.toneMappingExposure = lerp(1.09, 0.92, b);
+  bloomPass.strength = lerp(0.075, 0.58, b);
+  bloomPass.threshold = lerp(4.2, 0.9, b);
+  bloomPass.radius = lerp(0.34, 0.7, b);
+
+  const pulse = 0.9 + Math.sin(t * 1.8) * 0.06;
+  const lumeIntensity = lerp(lume.userData.baseEmissive, 4.6 * pulse, b);
+  lume.emissiveIntensity = lumeIntensity;
+  lumeBlue.emissiveIntensity = lerp(lumeBlue.userData.baseEmissive, 3.7 * pulse, b);
+
+  for (const mat of reflectiveMaterials) {
+    mat.envMapIntensity = lerp(mat.userData.baseEnv, mat.userData.baseEnv * 0.28, b);
+  }
+}
+
+function updateLabelPosition() {
+  if (!labelPart || !labelPart.anchor) {
+    return;
+  }
+  labelPart.anchor.getWorldPosition(projectedAnchor);
+  tmpProjection.copy(projectedAnchor).project(camera);
+  const x = (tmpProjection.x * 0.5 + 0.5) * window.innerWidth;
+  const y = (-tmpProjection.y * 0.5 + 0.5) * window.innerHeight;
+  const behind = tmpProjection.z > 1 || tmpProjection.z < -1;
+  if (behind || x < -80 || x > window.innerWidth + 80 || y < -80 || y > window.innerHeight + 80) {
+    partLabel.classList.remove('visible');
+    labelProjectionVisible = false;
+    return;
+  }
+  labelProjectionVisible = true;
+  const cardWidth = partLabel.querySelector('.label-card')?.offsetWidth || (window.innerWidth <= 860 ? 192 : 230);
+  const sidePanelLeft = window.innerWidth > 860
+    ? window.innerWidth - (window.innerWidth > 1100 ? 384 : 342)
+    : window.innerWidth;
+  let flip = x + cardWidth + 32 > sidePanelLeft - 14;
+  if (flip && x - cardWidth - 32 < 12) flip = false;
+  partLabel.classList.toggle('flip', flip);
+  partLabel.style.transform = `translate3d(${x.toFixed(2)}px, ${y.toFixed(2)}px, 0)`;
+  partLabel.classList.add('visible');
+}
+
+function animate() {
+  requestAnimationFrame(animate);
+  const dt = Math.min(clock.getDelta(), 0.045);
+  elapsed += dt;
+  const t = elapsed;
+
+  animateMechanics(dt, elapsed);
+  animateDust(elapsed);
+  updateExplosion(dt);
+  updateLume(dt, elapsed);
+  updateFlight(performance.now());
+
+  if (pointerDirty && !pointerDown) {
+    pointerDirty = false;
+    setHovered3D(pickPart());
+  }
+
+  if (!flight.active) {
+    controls.update(dt);
+  }
+
+  updateLabelPosition();
+
+  composer.render();
+  frameCount++;
+
+  if (!experienceStarted && frameCount > 1) {
+    experienceStarted = true;
+    finishLoading();
+  }
+}
+
+function finishLoading() {
+  clearInterval(loadTimer);
+  setLoad(100, '机芯就绪');
+  setTimeout(() => {
+    loader.classList.add('done');
+    document.body.classList.add('loaded');
+    loaderBar.style.width = '100%';
+  }, 560);
+  setTimeout(() => {
+    loader.style.display = 'none';
+  }, 1900);
+}
+
+function startExperience() {
+  setHovered3D(null);
+  setLoad(91, '正在校准摆轮');
+  const home = getHomeView();
+  controls.target.copy(new THREE.Vector3(0, 0.15, 0));
+  if (reduceMotion) {
+    controls.target.copy(home.target);
+    camera.position.copy(home.position);
+    camera.lookAt(home.target);
+    controls.enabled = true;
+    controls.autoRotate = false;
+    setLoad(100, '准备呈现');
+    return;
+  }
+  controls.enabled = false;
+  controls.autoRotate = false;
+  camera.position.copy(viewPosition(isPortrait() ? 19 : 24, 64, home.distance + 9.5, controls.target));
+  camera.lookAt(controls.target);
+  beginFlight(home.position, home.target, 2.9, () => {
+    controls.autoRotate = autoRotateState && !reduceMotion;
+  });
+  setLoad(97, '准备呈现');
+}
+
+/* ==============================================================
+   Resize
+   ============================================================== */
+
+function onResize() {
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+  camera.aspect = width / height;
+  applyViewOffset();
+  renderer.setSize(width, height);
+  composer.setSize(width, height);
+  if (labelPart) updateLabelPosition();
+}
+window.addEventListener('resize', onResize);
+
+/* ==============================================================
+   Boot
+   ============================================================== */
+
+scene.updateMatrixWorld(true);
+renderer.compile(scene, camera);
+startExperience();
+setInfoPanel(null);
+updateRowStates();
+
+animate();
+
+  </script>
+</body>
+</html>
