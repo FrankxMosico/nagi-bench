@@ -40,6 +40,13 @@
         "en": "One-shot by the exact deepseek-flash selector (high) in DeepSeek Harness 0.2.1-rc.2, unmodified, 99 minutes 26 seconds. Run on the Agent Bench isolated runner: empty workspace, no skills/plugins/MCP, No-Web."
       },
       "contributor": "Nagi-ovo"
+    },
+    "skeleton-watch": {
+      "note": {
+        "zh": "在本地通过 DeepSeek Harness 0.2.1-rc.2 以精确选择器 deepseek-flash（high）一次生成，未经修改，耗时 123 分 27 秒。跑在 Agent Bench 隔离 runner：空 workspace、无 skill/plugin/MCP、No-Web。",
+        "en": "One-shot by the exact deepseek-flash selector (high) in DeepSeek Harness 0.2.1-rc.2, unmodified, 123 minutes 27 seconds. Run on the Agent Bench isolated runner: empty workspace, no skills/plugins/MCP, No-Web."
+      },
+      "contributor": "Nagi-ovo"
     }
   }
 }
