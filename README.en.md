@@ -58,7 +58,7 @@ One-shot LLM eval cases by NAGI STUDIO: same prompt, different model x harness x
 | Gemini 3.6 Flash | Google | AntiGravity · High | 05 |
 | Gemini 3.5 Flash | Google | AntiGravity · High<br>Cursor · Default<br>Google AI Studio · High | 06 |
 | Gemini 3.1 Pro | Google | AntiGravity · High<br>Cursor · Default<br>Gemini Web · Deep Think<br>Google AI Studio · High | 11 |
-| DeepSeek V4.1 Flash 1017 | DeepSeek | DeepSeek Harness · High<br>DeepSeek Harness · Max | 02 |
+| DeepSeek V4.1 Flash 1017 | DeepSeek | DeepSeek Harness · High<br>DeepSeek Harness · Max | 10 |
 | DeepSeek V4.1 Flash | DeepSeek | DeepSeek Harness · High | 04 |
 | DeepSeek V4 Pro 0831 | DeepSeek | DeepSeek Harness · Minimal | 01 |
 | DeepSeek V4 Pro 0813 | DeepSeek | DeepSeek Harness · High<br>DeepSeek Harness · Minimal · High<br>DeepSeek Harness · Max<br>Codex CLI · xhigh | 21 (showcase 01) |
