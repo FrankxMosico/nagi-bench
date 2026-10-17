@@ -87,15 +87,16 @@ NAGI STUDIO 的 LLM 测评案例集：同一段提示词，不同「模型 × Ha
 | GLM-5.1 | Zhipu AI | ZCode · Max | 01 |
 | GLM-5 Turbo | Zhipu AI | ZCode · Thinking | 03 |
 | Qwen3.8-Max-Preview | Alibaba | Qoder · Default<br>Qwen Studio Web · Thinking | 06 |
+| Qwen3.7-Max | Alibaba | Qoder · Default | 03 |
 | Qoder Ultimate | Alibaba | Qoder · Default<br>Qoder · Max | 05 |
 | Qwen 3.8 27B | Alibaba | OMP · Default | 01（仅展示 01） |
-| Qwen3.7-Max | Alibaba | Qoder · Default | 03 |
 | Qwen 3.6 27B | Alibaba | OMP · Default | 01（仅展示 01） |
 | Step 3.7 Flash | StepFun | Claude Code · High | 02 |
 | Spark X2.5 | iFlytek | Spark Web Harness · Reasoning | 01 |
 | Spark X2 | iFlytek | Web · Reasoning | 01 |
 | Inkling | Thinking Machines Lab | Tinker Web · xHigh | 02 |
 | Inkling-Small | Thinking Machines Lab | Tinker Web · xHigh | 03 |
+| Hy4 Preview | Tencent | WorkBuddy · Default | 04（仅展示 04） |
 <!-- registry:end -->
 
 ## Arena 盲评与社区榜单
