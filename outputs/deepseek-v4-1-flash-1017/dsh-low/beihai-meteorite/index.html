@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="theme-color" content="#05070b" />
+    <title>陨石 · METEORITE</title>
+  </head>
+  <body>
+    <main id="stage" aria-label="程序化三维电影《陨石》">
+      <div id="vignette"></div>
+      <div id="scope-mask" class="film-overlay"><div id="reticle"></div></div>
+      <div id="title-card" class="film-overlay">
+        <div class="title-cn">陨石</div>
+        <div class="title-en">METEORITE</div>
+        <div class="title-rule"></div>
+        <div class="title-credit">根据刘慈欣《三体》片段改编</div>
+      </div>
+      <div id="chapter-card" class="film-overlay"><span id="chapter-text"></span></div>
+      <div id="flash" class="film-overlay"></div>
+      <div id="fade" class="film-overlay"></div>
+      <div id="credits" class="film-overlay">
+        <div class="credits-inner">
+          <div class="credits-title">陨石</div>
+          <div class="credits-en">METEORITE</div>
+          <div class="credits-gap"></div>
+          <p>根据刘慈欣《三体》片段改编</p>
+          <p>导演 · 视觉 · 声音设计　　本片</p>
+          <p>全部人物、场景、材质与声音均由代码实时生成</p>
+          <p>没有使用任何外部影像、模型、贴图或音频素材</p>
+          <div class="credits-gap"></div>
+          <p class="credits-line">“在父亲从冥冥中投下的目光里，他可以安心了。”</p>
+          <div class="credits-gap"></div>
+          <p class="credits-small">一部程序化体素电影</p>
+        </div>
+      </div>
+      <div id="loading"><div class="loading-inner"><span class="loading-mark">▦</span><br />正在构筑宇宙</div></div>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
