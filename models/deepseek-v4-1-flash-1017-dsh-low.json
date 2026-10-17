@@ -1,0 +1,17 @@
+{
+  "label": "DeepSeek V4.1 Flash 1017",
+  "vendor": "DeepSeek",
+  "harness": "DeepSeek Harness",
+  "effort": "Low",
+  "artifactDir": "deepseek-v4-1-flash-1017/dsh-low",
+  "runs": {
+    "turf-war": {
+      "note": {
+        "zh": "在本地通过 DeepSeek Harness 0.2.1-rc.2 以精确选择器 deepseek-flash（low）一次生成，未经修改，耗时 9 分 1 秒。跑在 Agent Bench 隔离 runner：空 workspace、无 skill/plugin/MCP、No-Web。按案例规则策略文件不公开、仅注册运行；产出文件仅按模型 id 重命名，内容逐字节未改。自命名「\\u7ec7\\u7f51\\u8005」。",
+        "en": "One-shot by the exact deepseek-flash selector (low) in DeepSeek Harness 0.2.1-rc.2, unmodified, 9 minutes 1 seconds. Run on the Agent Bench isolated runner: empty workspace, no skills/plugins/MCP, No-Web. Per case rules the policy file is unpublished; this registers the run. The produced file was only renamed to the model id, byte-identical otherwise. It named itself \"\\u7ec7\\u7f51\\u8005\"."
+      },
+      "contributor": "Nagi-ovo",
+      "agentName": "\\u7ec7\\u7f51\\u8005"
+    }
+  }
+}
