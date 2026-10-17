@@ -1,0 +1,22 @@
+{
+  "name": "meteor-bullets",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "vite build",
+    "preview": "vite preview --host 0.0.0.0",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@agentbench/cinematic-player": "file:/opt/agentbench/cinematic-player",
+    "@agentbench/voxel-kit": "file:/opt/agentbench/voxel-kit",
+    "three": "0.180.0"
+  },
+  "devDependencies": {
+    "@types/three": "0.180.0",
+    "typescript": "5.9.2",
+    "vite": "8.2.0"
+  }
+}

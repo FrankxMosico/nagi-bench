@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#050708" />
+    <meta name="description" content="陨石子弹——一部由 Three.js 与 Web Audio 实时生成的体素电影。" />
+    <title>陨石子弹 · The Meteor Bullets</title>
+  </head>
+  <body>
+    <div id="boot" aria-hidden="true">
+      <span class="boot__mark">陨石子弹</span>
+      <span class="boot__line"></span>
+      <span class="boot__label">正在生成宇宙</span>
+    </div>
+    <div id="backdrop" class="backdrop backdrop--space" aria-hidden="true"></div>
+    <main id="stage" aria-label="陨石子弹，程序化 3D 电影"></main>
+
+    <div class="cinema-overlay" aria-hidden="true">
+      <div class="film-title" id="film-title">
+        <p class="film-title__eyebrow">一部程序化体素电影</p>
+        <h1>陨石子弹</h1>
+        <p class="film-title__latin">THE METEOR BULLETS</p>
+        <p class="film-title__credit">根据刘慈欣《三体Ⅱ：黑暗森林》片段改编</p>
+      </div>
+
+      <div class="place-card" id="place-card">
+        <span class="place-card__index" id="place-index"></span>
+        <div>
+          <p class="place-card__title" id="place-title"></p>
+          <p class="place-card__sub" id="place-sub"></p>
+        </div>
+      </div>
+
+      <div class="scope" id="scope">
+        <div class="scope__ring"></div>
+        <div class="scope__cross scope__cross--h"></div>
+        <div class="scope__cross scope__cross--v"></div>
+        <div class="scope__ticks"></div>
+        <div class="scope__readout scope__readout--left">8×</div>
+        <div class="scope__readout scope__readout--right">VACUUM</div>
+      </div>
+
+      <div class="end-card" id="end-card">
+        <p class="end-card__mark">三十次闪光之后</p>
+        <h2>陨石子弹</h2>
+        <div class="end-card__rule"></div>
+        <p>声音 · 全部由 Web Audio API 实时合成</p>
+        <p>画面 · Three.js 与 Voxel Kit 程序化生成</p>
+        <p class="end-card__small">献给所有在黑暗里替我们看路的人</p>
+      </div>
+
+      <div class="start-prompt" id="start-prompt">
+        <button class="start-prompt__button" id="start-button" type="button" aria-label="开始放映">
+          <span class="start-prompt__icon">▶</span>
+        </button>
+        <span class="start-prompt__label">开始放映</span>
+        <span class="start-prompt__hint">建议佩戴耳机 · 全片约 6 分钟</span>
+      </div>
+    </div>
+
+    <div class="grain" id="grain" aria-hidden="true"></div>
+    <div class="vignette" id="vignette" aria-hidden="true"></div>
+    <div class="letterbox letterbox--top" aria-hidden="true"></div>
+    <div class="letterbox letterbox--bottom" aria-hidden="true"></div>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

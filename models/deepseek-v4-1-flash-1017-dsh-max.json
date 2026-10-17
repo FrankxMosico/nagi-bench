@@ -40,6 +40,13 @@
         "en": "One-shot by the exact deepseek-flash selector (max) in DeepSeek Harness 0.2.1-rc.2, unmodified, 100 minutes 5 seconds. Run on the Agent Bench isolated runner: empty workspace, no skills/plugins/MCP, No-Web. This page is its build output (bundled from source into a single file at deploy time)."
       },
       "contributor": "Nagi-ovo"
+    },
+    "beihai-meteorite": {
+      "note": {
+        "zh": "在本地通过 DeepSeek Harness 0.2.1-rc.2 以精确选择器 deepseek-flash（max）一次生成，未经修改，耗时 128 分 10 秒。跑在 Agent Bench 隔离 runner：空 workspace、无 skill/plugin/MCP、No-Web。本页为其构建产物（部署时由源码打包为单文件）。",
+        "en": "One-shot by the exact deepseek-flash selector (max) in DeepSeek Harness 0.2.1-rc.2, unmodified, 128 minutes 10 seconds. Run on the Agent Bench isolated runner: empty workspace, no skills/plugins/MCP, No-Web. This page is its build output (bundled from source into a single file at deploy time)."
+      },
+      "contributor": "Nagi-ovo"
     }
   }
 }
