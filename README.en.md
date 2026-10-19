@@ -1,7 +1,7 @@
 <div align="center">
 
 <p align="center">
-  <a href="https://bench.nagi.fun/"><img src="https://bench.nagi.fun/og-1200.png" alt="NAGI BENCH: same prompt, different models, one shot, no retries" width="720"></a>
+  <a href="https://bench.nagi.fun/"><img src="https://bench.nagi.fun/og-1200.png?v=2026-10-19" alt="NAGI BENCH: same prompt, different models, one shot, no retries" width="720"></a>
 </p>
 
 # NAGI BENCH
