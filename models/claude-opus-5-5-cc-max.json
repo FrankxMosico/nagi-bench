@@ -40,6 +40,14 @@
         "en": "One-shot by claude-opus-5-5 (max) in Claude Code 2.1.302, unmodified, 239 minutes 40 seconds. Run on the Agent Bench isolated runner: empty workspace, no skills/plugins/MCP, No-Web. This page is its build output (bundled from source into a single file at deploy time)."
       },
       "contributor": "Nagi-ovo"
+    },
+    "turf-war": {
+      "note": {
+        "zh": "在本地通过 Claude Code 2.1.302 以 claude-opus-5-5（max）一次生成，未经修改，耗时 44 分 27 秒。跑在 Agent Bench 隔离 runner：空 workspace、无 skill/plugin/MCP、No-Web。按案例规则策略文件不公开、仅注册运行；产出文件仅按模型 id 重命名，内容逐字节未改。自命名「画地为王」。",
+        "en": "One-shot by claude-opus-5-5 (max) in Claude Code 2.1.302, unmodified, 44 minutes 27 seconds. Run on the Agent Bench isolated runner: empty workspace, no skills/plugins/MCP, No-Web. Per case rules the policy file is unpublished; this registers the run. The produced file was only renamed to the model id, byte-identical otherwise. It named itself \"画地为王\"."
+      },
+      "contributor": "Nagi-ovo",
+      "agentName": "画地为王"
     }
   }
 }
