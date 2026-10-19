@@ -27,6 +27,13 @@
         "en": "One-shot by claude-opus-5-5 (xhigh) in Claude Code 2.1.302, unmodified, 76 minutes 40 seconds. Run on the Agent Bench isolated runner: empty workspace, no skills/plugins/MCP, No-Web. The complete source project is submitted as produced (no code changes) and bundled into a single file from source at site deploy time. The model delivered the project inside a dust2-fps/ subfolder; for the site build that folder was moved up one level to the case root, with file contents unchanged."
       },
       "contributor": "Nagi-ovo"
+    },
+    "beihai-meteorite": {
+      "note": {
+        "zh": "在本地通过 Claude Code 2.1.302 以 claude-opus-5-5（xhigh）一次生成，未经修改，耗时 99 分 55 秒。跑在 Agent Bench 隔离 runner：空 workspace、无 skill/plugin/MCP、No-Web。runner 隔离审计误报：模型用 grep 自查构建产物里有没有 fetch(，被当成网络脚本；复查日志无任何网络访问，检测器已修正。本页为其构建产物（部署时由源码打包为单文件）。",
+        "en": "One-shot by claude-opus-5-5 (xhigh) in Claude Code 2.1.302, unmodified, 99 minutes 55 seconds. Run on the Agent Bench isolated runner: empty workspace, no skills/plugins/MCP, No-Web. False positive from the runner's isolation audit: the model grepped its own build for fetch( and that was read as a network script; the log shows no network access, and the detector has been fixed. This page is its build output (bundled from source into a single file at deploy time)."
+      },
+      "contributor": "Nagi-ovo"
     }
   }
 }
