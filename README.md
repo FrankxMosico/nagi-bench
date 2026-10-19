@@ -146,9 +146,9 @@ NAGI STUDIO 的 LLM 测评案例集：把「模型 × Harness × 思考配额」
 | Grok 4.5<br><sub>xAI</sub> | 03 | Grok Build TUI · High |
 | Grok Build<br><sub>xAI</sub> | 02 | Grok Build TUI · Max |
 | Grok 4.3<br><sub>xAI</sub> | 02 | Cursor · Default |
+| Composer 2.5<br><sub>xAI</sub> | 05 | Cursor · Max / Default<br>Grok Build TUI · Default |
 | Hy4 Preview<br><sub>Tencent</sub> | 09<br><sub>（仅展示 06）</sub> | WorkBuddy · High / Default |
 | Nex-N2-Pro<br><sub>Nex-AGI</sub> | 02 | Claude Code · Max |
-| Composer 2.5<br><sub>Cursor</sub> | 05 | Cursor · Max / Default<br>Grok Build TUI · Default |
 | Mistral Medium 3.5<br><sub>Mistral AI</sub> | 02 | Vibe · Thinking |
 | ERNIE 4.5<br><sub>Baidu</sub> | 05 | Wenxin Work Task Mode · Professional Skill |
 | Doubao 2.1 Pro<br><sub>ByteDance</sub> | 05 | Doubao Work · High |

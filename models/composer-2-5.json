@@ -1,6 +1,6 @@
 {
   "label": "Composer 2.5",
-  "vendor": "Cursor",
+  "vendor": "xAI",
   "harness": "Cursor",
   "effort": "Max",
   "artifactDir": "composer-2-5/cursor-max",

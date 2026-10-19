@@ -1,6 +1,6 @@
 {
   "label": "Composer 2.5",
-  "vendor": "Cursor",
+  "vendor": "xAI",
   "harness": "Grok Build TUI",
   "effort": "Default",
   "artifactDir": "composer-2-5/grok-build-tui-default",
