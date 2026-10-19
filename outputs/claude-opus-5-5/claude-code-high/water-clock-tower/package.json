@@ -1,0 +1,22 @@
+{
+  "name": "shuiyun-yixiangtai",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --configLoader native",
+    "build": "tsc --noEmit && vite build --configLoader native",
+    "preview": "vite preview --configLoader native",
+    "simtest": "bun tools/simtest.ts"
+  },
+  "dependencies": {
+    "@dimforge/rapier3d-compat": "0.21.0",
+    "three": "0.180.0"
+  },
+  "devDependencies": {
+    "@types/three": "0.180.0",
+    "playwright-core": "1.61.1",
+    "typescript": "5.9.2",
+    "vite": "8.2.0"
+  }
+}

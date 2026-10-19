@@ -144,5 +144,28 @@
       "text": "Inspired by Andrej Karpathy's long-horizon Three.js story render",
       "url": "https://x.com/karpathy/status/2083749667410727319"
     }
+  },
+  {
+    "id": "water-clock-tower",
+    "index": "07",
+    "kind": "react",
+    "title": {
+      "zh": "水运仪象台",
+      "en": "Water-Driven Clock Tower"
+    },
+    "tagline": {
+      "zh": "用实时物理引擎做一部 30 秒 3D 科普短片，讲清北宋苏颂的水运仪象台如何靠水驱动、按时报时；原理细节全凭模型自己掌握，技术栈与风格自选。",
+      "en": "A 30-second 3D science explainer driven by a real-time physics engine, showing how Su Song's Northern Song clock tower ran on water and struck the hours; the model must know the mechanism itself and picks its own stack and style."
+    },
+    "prompt": {
+      "zh": "做一部可在浏览器中直接打开的 3D 科普短片，时长 30 秒左右，讲清北宋苏颂的水运仪象台如何靠水驱动、按时报时。讲清每一步是怎么带动下一步的，让从没听说过它的人看完就懂。\n\n仪象台的所有机械运动必须由物理引擎实时计算，不能用手写动画或直接设置位置代替；镜头与字幕不受此限。以画面为主、文字为辅，技术栈与美术风格自选。配乐和音效全部用 Web Audio API 在运行时程序化合成，不使用任何音频文件，音量适中、不要爆音；也不使用外部模型、贴图等资产文件。\n\n这是一次 one-shot 评测：除这条指令外，不会有补充说明、确认或反馈。你可以自行搭建项目、运行和调试。请实际运行作品，截图预览，反复观看、反复修改，不要交最小可用版。最终交付一个标准 Vite 项目（根目录含 `package.json`、`index.html`、`src/`），并实际运行构建；`dist/index.html` 必须离线即可直接运行，不依赖任何网络资源。",
+      "en": "Make a 3D science explainer short that opens directly in a browser, about 30 seconds long, showing how Su Song's Northern Song astronomical clock tower (the Shuiyun Yixiangtai) was driven by water and announced the time. Make clear how each step drives the next, so that someone who has never heard of it understands it after one viewing.\n\nEvery mechanical motion of the tower must be computed in real time by a physics engine; no hand-keyed animation or directly set positions may stand in for it. The camera and captions are exempt. Let the visuals carry the explanation, with text in a supporting role; the tech stack and art style are your choice. Synthesize all music and sound effects at runtime with the Web Audio API, without any audio files, at a comfortable volume with no harsh peaks; do not use external asset files such as models or textures either.\n\nThis is a one-shot evaluation: beyond this instruction there will be no clarification, confirmation, or feedback. You may set up, run, and debug the project yourself. Actually run the piece, preview it with screenshots, watch it and revise it repeatedly; do not hand in a minimum viable version. Deliver a standard Vite project (with `package.json`, `index.html` and `src/` at its root) and actually run the build; `dist/index.html` must run offline as is, with no network dependencies."
+    },
+    "tags": [
+      "3D",
+      "PHYSICS",
+      "EXPLAINER",
+      "ONE-SHOT"
+    ]
   }
 ]
