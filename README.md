@@ -68,78 +68,78 @@ NAGI STUDIO 的 LLM 测评案例集：把「模型 × Harness × 思考配额」
 <!-- registry:start -->
 > 此表由 `bun scripts/update-registry.ts` 从 `models/*.json` 生成；合并到 `main` 后由 CI 自动同步，贡献者无需手改。
 
-| 模型 | 厂商 | 运行环境（Harness）× 思考配额 | 产出 |
-|---|---|---|---|
-| Claude Opus 5.5 | Anthropic | Claude Code · Max<br>Claude Code · High | 10 |
-| Claude Sonnet 5.5 | Anthropic | Claude Code · High<br>Claude Code · Max<br>Claude Code · xhigh | 17 |
-| Claude Haiku 5.5 | Anthropic | Claude Code · High | 06 |
-| Claude Fable 5.1 | Anthropic | Claude Code · High | 06 |
-| Claude Opus 5 | Anthropic | Claude Code · Max<br>Claude Code · xhigh<br>Claude Code · High | 16 |
-| Claude Fable 5 | Anthropic | Claude Web App · Max<br>Claude Code · High<br>Claude Code · Max<br>Claude Code · xhigh<br>Cursor · High | 11 |
-| Claude Sonnet 5 | Anthropic | Claude Code · Max | 01 |
-| Claude Opus 4.8 | Anthropic | Claude Code · Max<br>Claude Code · xhigh | 08 |
-| Claude Opus 4.7 | Anthropic | Claude Code · Max<br>Cursor · Max | 05 |
-| Claude Opus 4.6 | Anthropic | Claude Code · Max<br>Cursor · Max | 04 |
-| Claude Sonnet 4.6 | Anthropic | Claude Code · Max<br>Cursor · High | 03 |
-| Claude Opus 4.5 | Anthropic | Cursor · Thinking | 02 |
-| Claude Haiku 4.5 | Anthropic | Claude Code · Default | 02 |
-| GPT-6.1 Sol | OpenAI | Codex CLI · High | 06 |
-| GPT-6 Astra | OpenAI | Codex CLI · xhigh | 06 |
-| GPT-6 Sol | OpenAI | Codex CLI · xhigh | 06 |
-| GPT-5.6-Sol | OpenAI | Codex CLI · ultra<br>Codex CLI · max<br>Codex CLI · xhigh | 11 |
-| GPT-5.6-Terra | OpenAI | Codex CLI · ultra<br>Codex CLI · xhigh | 05 |
-| GPT-5.5 Pro | OpenAI | ChatGPT Web · Extended Pro | 03 |
-| GPT-5.5 | OpenAI | Codex CLI · xhigh | 03 |
-| GPT-5.4 | OpenAI | Cursor · xhigh<br>Codex CLI · xhigh | 06 |
-| GPT-5.3 Codex | OpenAI | Cursor · xhigh | 02 |
-| GPT-5.2 | OpenAI | Cursor · xhigh | 02 |
-| Gemini 3.8 Flash | Google | AntiGravity · High | 06 |
-| Gemini 3.7 Flash | Google | AntiGravity · Low<br>AntiGravity · Medium<br>AntiGravity · High | 08 |
-| Gemini 3.6 Flash | Google | AntiGravity · High | 05 |
-| Gemini 3.5 Flash | Google | AntiGravity · High<br>Cursor · Default<br>Google AI Studio · High | 06 |
-| Gemini 3.1 Pro | Google | AntiGravity · High<br>Cursor · Default<br>Gemini Web · Deep Think<br>Google AI Studio · High | 11 |
-| DeepSeek V4.1 Flash 1017 | DeepSeek | DeepSeek Harness · High<br>DeepSeek Harness · Low<br>DeepSeek Harness · Max | 18 |
-| DeepSeek V4.1 Flash | DeepSeek | DeepSeek Harness · High<br>WorkBuddy · High | 08 |
-| DeepSeek V4 Pro 0831 | DeepSeek | DeepSeek Harness · Minimal | 01 |
-| DeepSeek V4 Pro 0813 | DeepSeek | DeepSeek Harness · High<br>DeepSeek Harness · Minimal · High<br>DeepSeek Harness · Max<br>Codex CLI · xhigh | 21（仅展示 01） |
-| DeepSeek-V4-Pro | DeepSeek | Claude Code · Max<br>Qoder · Max<br>Open Code · High | 05 |
-| DeepSeek V4 Flash 0731 | DeepSeek | Claude Code · Max<br>OMP · Default | 05（仅展示 01） |
-| DeepSeek V4 Flash | DeepSeek | Claude Code · Max<br>Reasonix · Max | 02 |
-| Grok 4.7 | xAI | Grok Build TUI · High | 06 |
-| Grok 4.6 | xAI | Grok Build TUI · High | 06 |
-| Grok 4.5 | xAI | Grok Build TUI · High | 03 |
-| Grok Build | xAI | Grok Build TUI · Max | 02 |
-| Grok 4.3 | xAI | Cursor · Default | 02 |
-| Hy4 Preview | Tencent | WorkBuddy · High<br>WorkBuddy · Default | 09（仅展示 06） |
-| Nex-N2-Pro | Nex-AGI | Claude Code · Max | 02 |
-| Composer 2.5 | Cursor | Cursor · Max<br>Cursor · Default<br>Grok Build TUI · Default | 05 |
-| Mistral Medium 3.5 | Mistral AI | Vibe · Thinking | 02 |
-| ERNIE 4.5 | Baidu | Wenxin Work Task Mode · Professional Skill | 05 |
-| Doubao 2.1 Pro | ByteDance | Doubao Work · High | 05 |
-| Doubao Seed 2.0 Pro | ByteDance | Doubao Web · Pro Mode | 01 |
-| Doubao Seed 2.0 Mini | ByteDance | Doubao Web · Fast Mode | 01 |
-| MiMo V2.5 | Xiaomi | MiMo Code · High | 03 |
-| MiMo v2.5 Pro | Xiaomi | Claude Code · Max<br>MiMo Code · Max | 03 |
-| MiMo v2.5 Pro UltraSpeed | Xiaomi | Web · Default | 05 |
-| Kimi K3 | Moonshot AI | Claude Code · Max<br>Kimi Code · Max<br>Kimi Web · Max | 12 |
-| Kimi K2.7-Code | Moonshot AI | Kimi Code · Thinking<br>Qoder · Default | 04 |
-| Kimi K2.6 | Moonshot AI | Kimi Code · Thinking | 02 |
-| MiniMax M3 | MiniMax | MiniMax Code Web · Thinking<br>Qoder · Default | 03 |
-| MiniMax M2.7 | MiniMax | MiniMax Code Web · Thinking | 01 |
-| GLM-5.3 Flash | Zhipu AI | WorkBuddy · High | 05 |
-| GLM-5.2 | Zhipu AI | ZCode · Max<br>Qoder · Max | 05 |
-| GLM-5.1 | Zhipu AI | ZCode · Max | 01 |
-| GLM-5 Turbo | Zhipu AI | ZCode · Thinking | 03 |
-| Qwen3.8-Max-Preview | Alibaba | Qoder · Default<br>Qwen Studio Web · Thinking | 06 |
-| Qwen3.7-Max | Alibaba | Qoder · Default | 03 |
-| Qwen 3.6 27B | Alibaba | OMP · Default | 01（仅展示 01） |
-| Qoder Ultimate | Alibaba | Qoder · Default<br>Qoder · Max | 05 |
-| Qwen 3.8 27B | Alibaba | OMP · Default | 01（仅展示 01） |
-| Step 3.7 Flash | StepFun | Claude Code · High | 02 |
-| Spark X2.5 | iFlytek | Spark Web Harness · Reasoning | 01 |
-| Spark X2 | iFlytek | Web · Reasoning | 01 |
-| Inkling | Thinking Machines Lab | Tinker Web · xHigh | 02 |
-| Inkling-Small | Thinking Machines Lab | Tinker Web · xHigh | 03 |
+| 模型 / 厂商 | 产出 | 运行环境 · 思考配额 |
+|---|---|---|
+| Claude Opus 5.5<br><sub>Anthropic</sub> | 10 | Claude Code · Max / High |
+| Claude Sonnet 5.5<br><sub>Anthropic</sub> | 17 | Claude Code · High / Max / xhigh |
+| Claude Haiku 5.5<br><sub>Anthropic</sub> | 06 | Claude Code · High |
+| Claude Fable 5.1<br><sub>Anthropic</sub> | 06 | Claude Code · High |
+| Claude Opus 5<br><sub>Anthropic</sub> | 16 | Claude Code · Max / xhigh / High |
+| Claude Fable 5<br><sub>Anthropic</sub> | 11 | Claude Web App · Max<br>Claude Code · High / Max / xhigh<br>Cursor · High |
+| Claude Sonnet 5<br><sub>Anthropic</sub> | 01 | Claude Code · Max |
+| Claude Opus 4.8<br><sub>Anthropic</sub> | 08 | Claude Code · Max / xhigh |
+| Claude Opus 4.7<br><sub>Anthropic</sub> | 05 | Claude Code · Max<br>Cursor · Max |
+| Claude Opus 4.6<br><sub>Anthropic</sub> | 04 | Claude Code · Max<br>Cursor · Max |
+| Claude Sonnet 4.6<br><sub>Anthropic</sub> | 03 | Claude Code · Max<br>Cursor · High |
+| Claude Opus 4.5<br><sub>Anthropic</sub> | 02 | Cursor · Thinking |
+| Claude Haiku 4.5<br><sub>Anthropic</sub> | 02 | Claude Code · Default |
+| GPT-6.1 Sol<br><sub>OpenAI</sub> | 06 | Codex CLI · High |
+| GPT-6 Astra<br><sub>OpenAI</sub> | 06 | Codex CLI · xhigh |
+| GPT-6 Sol<br><sub>OpenAI</sub> | 06 | Codex CLI · xhigh |
+| GPT-5.6-Sol<br><sub>OpenAI</sub> | 11 | Codex CLI · ultra / max / xhigh |
+| GPT-5.6-Terra<br><sub>OpenAI</sub> | 05 | Codex CLI · ultra / xhigh |
+| GPT-5.5 Pro<br><sub>OpenAI</sub> | 03 | ChatGPT Web · Extended Pro |
+| GPT-5.5<br><sub>OpenAI</sub> | 03 | Codex CLI · xhigh |
+| GPT-5.4<br><sub>OpenAI</sub> | 06 | Cursor · xhigh<br>Codex CLI · xhigh |
+| GPT-5.3 Codex<br><sub>OpenAI</sub> | 02 | Cursor · xhigh |
+| GPT-5.2<br><sub>OpenAI</sub> | 02 | Cursor · xhigh |
+| Gemini 3.8 Flash<br><sub>Google</sub> | 06 | AntiGravity · High |
+| Gemini 3.7 Flash<br><sub>Google</sub> | 08 | AntiGravity · Low / Medium / High |
+| Gemini 3.6 Flash<br><sub>Google</sub> | 05 | AntiGravity · High |
+| Gemini 3.5 Flash<br><sub>Google</sub> | 06 | AntiGravity · High<br>Cursor · Default<br>Google AI Studio · High |
+| Gemini 3.1 Pro<br><sub>Google</sub> | 11 | AntiGravity · High<br>Cursor · Default<br>Gemini Web · Deep Think<br>Google AI Studio · High |
+| DeepSeek V4.1 Flash 1017<br><sub>DeepSeek</sub> | 18 | DeepSeek Harness · High / Low / Max |
+| DeepSeek V4.1 Flash<br><sub>DeepSeek</sub> | 08 | DeepSeek Harness · High<br>WorkBuddy · High |
+| DeepSeek V4 Pro 0831<br><sub>DeepSeek</sub> | 01 | DeepSeek Harness · Minimal |
+| DeepSeek V4 Pro 0813<br><sub>DeepSeek</sub> | 21<br><sub>（仅展示 01）</sub> | DeepSeek Harness · High / Max<br>DeepSeek Harness · Minimal · High<br>Codex CLI · xhigh |
+| DeepSeek-V4-Pro<br><sub>DeepSeek</sub> | 05 | Claude Code · Max<br>Qoder · Max<br>Open Code · High |
+| DeepSeek V4 Flash 0731<br><sub>DeepSeek</sub> | 05<br><sub>（仅展示 01）</sub> | Claude Code · Max<br>OMP · Default |
+| DeepSeek V4 Flash<br><sub>DeepSeek</sub> | 02 | Claude Code · Max<br>Reasonix · Max |
+| Grok 4.7<br><sub>xAI</sub> | 06 | Grok Build TUI · High |
+| Grok 4.6<br><sub>xAI</sub> | 06 | Grok Build TUI · High |
+| Grok 4.5<br><sub>xAI</sub> | 03 | Grok Build TUI · High |
+| Grok Build<br><sub>xAI</sub> | 02 | Grok Build TUI · Max |
+| Grok 4.3<br><sub>xAI</sub> | 02 | Cursor · Default |
+| Hy4 Preview<br><sub>Tencent</sub> | 09<br><sub>（仅展示 06）</sub> | WorkBuddy · High / Default |
+| Nex-N2-Pro<br><sub>Nex-AGI</sub> | 02 | Claude Code · Max |
+| Composer 2.5<br><sub>Cursor</sub> | 05 | Cursor · Max / Default<br>Grok Build TUI · Default |
+| Mistral Medium 3.5<br><sub>Mistral AI</sub> | 02 | Vibe · Thinking |
+| ERNIE 4.5<br><sub>Baidu</sub> | 05 | Wenxin Work Task Mode · Professional Skill |
+| Doubao 2.1 Pro<br><sub>ByteDance</sub> | 05 | Doubao Work · High |
+| Doubao Seed 2.0 Pro<br><sub>ByteDance</sub> | 01 | Doubao Web · Pro Mode |
+| Doubao Seed 2.0 Mini<br><sub>ByteDance</sub> | 01 | Doubao Web · Fast Mode |
+| MiMo V2.5<br><sub>Xiaomi</sub> | 03 | MiMo Code · High |
+| MiMo v2.5 Pro<br><sub>Xiaomi</sub> | 03 | Claude Code · Max<br>MiMo Code · Max |
+| MiMo v2.5 Pro UltraSpeed<br><sub>Xiaomi</sub> | 05 | Web · Default |
+| Kimi K3<br><sub>Moonshot AI</sub> | 12 | Claude Code · Max<br>Kimi Code · Max<br>Kimi Web · Max |
+| Kimi K2.7-Code<br><sub>Moonshot AI</sub> | 04 | Kimi Code · Thinking<br>Qoder · Default |
+| Kimi K2.6<br><sub>Moonshot AI</sub> | 02 | Kimi Code · Thinking |
+| MiniMax M3<br><sub>MiniMax</sub> | 03 | MiniMax Code Web · Thinking<br>Qoder · Default |
+| MiniMax M2.7<br><sub>MiniMax</sub> | 01 | MiniMax Code Web · Thinking |
+| GLM-5.3 Flash<br><sub>Zhipu AI</sub> | 05 | WorkBuddy · High |
+| GLM-5.2<br><sub>Zhipu AI</sub> | 05 | ZCode · Max<br>Qoder · Max |
+| GLM-5.1<br><sub>Zhipu AI</sub> | 01 | ZCode · Max |
+| GLM-5 Turbo<br><sub>Zhipu AI</sub> | 03 | ZCode · Thinking |
+| Qwen3.8-Max-Preview<br><sub>Alibaba</sub> | 06 | Qoder · Default<br>Qwen Studio Web · Thinking |
+| Qwen3.7-Max<br><sub>Alibaba</sub> | 03 | Qoder · Default |
+| Qwen 3.6 27B<br><sub>Alibaba</sub> | 01<br><sub>（仅展示 01）</sub> | OMP · Default |
+| Qoder Ultimate<br><sub>Alibaba</sub> | 05 | Qoder · Default / Max |
+| Qwen 3.8 27B<br><sub>Alibaba</sub> | 01<br><sub>（仅展示 01）</sub> | OMP · Default |
+| Step 3.7 Flash<br><sub>StepFun</sub> | 02 | Claude Code · High |
+| Spark X2.5<br><sub>iFlytek</sub> | 01 | Spark Web Harness · Reasoning |
+| Spark X2<br><sub>iFlytek</sub> | 01 | Web · Reasoning |
+| Inkling<br><sub>Thinking Machines Lab</sub> | 02 | Tinker Web · xHigh |
+| Inkling-Small<br><sub>Thinking Machines Lab</sub> | 03 | Tinker Web · xHigh |
 <!-- registry:end -->
 
 </details>

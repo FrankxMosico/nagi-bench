@@ -23,7 +23,8 @@ type ModelJson = {
 }
 
 type HarnessEntry = {
-  label: string
+  harness: string
+  effort: string
   order: number
 }
 
@@ -53,12 +54,28 @@ function runCounts(runs: ModelJson['runs']): { total: number; showcases: number 
   )
 }
 
-function harnessLabel(def: ModelJson): string {
+// Splits a model JSON into the harness name and its effort. A missing harness
+// with a set effort keeps the old behaviour of showing the effort alone.
+function harnessParts(def: ModelJson): { harness: string; effort: string } {
   const harness = typeof def.harness === 'string' ? def.harness.trim() : ''
   const effort = typeof def.effort === 'string' ? def.effort.trim() : ''
-  if (!harness && !effort) return 'Default'
-  if (!harness) return effort
-  return effort ? `${harness} · ${effort}` : harness
+  if (!harness && !effort) return { harness: 'Default', effort: '' }
+  if (!harness) return { harness: effort, effort: '' }
+  return { harness, effort }
+}
+
+// One line per harness, its efforts joined with " / " in registry order:
+// "Claude Code · Max / xhigh / High". Keeps the table narrow enough for phones.
+function harnessLines(entries: HarnessEntry[]): string[] {
+  const byHarness = new Map<string, { order: number; efforts: string[] }>()
+  for (const entry of [...entries].sort((a, b) => a.order - b.order || a.harness.localeCompare(b.harness) || a.effort.localeCompare(b.effort))) {
+    const line = byHarness.get(entry.harness) ?? { order: entry.order, efforts: [] }
+    if (entry.effort) line.efforts.push(entry.effort)
+    byHarness.set(entry.harness, line)
+  }
+  return [...byHarness.entries()].map(([harness, { efforts }]) =>
+    efforts.length ? `${escapeCell(harness)} · ${efforts.map(escapeCell).join(' / ')}` : escapeCell(harness),
+  )
 }
 
 function escapeCell(value: string): string {
@@ -83,9 +100,10 @@ function registryGroups(): RegistryGroup[] {
     const counts = runCounts(def.runs)
     group.runs += counts.total
     group.showcases += counts.showcases
-    const harness = harnessLabel(def)
-    const existing = group.harnesses.get(harness)
-    if (!existing || order < existing.order) group.harnesses.set(harness, { label: harness, order })
+    const parts = harnessParts(def)
+    const key2 = `${parts.harness}\0${parts.effort}`
+    const existing = group.harnesses.get(key2)
+    if (!existing || order < existing.order) group.harnesses.set(key2, { ...parts, order })
   }
 
   const asModel = (g: RegistryGroup) => ({
@@ -107,26 +125,28 @@ function table(lang: 'zh' | 'en'): string {
     lang === 'zh'
       ? '> 此表由 `bun scripts/update-registry.ts` 从 `models/*.json` 生成；合并到 `main` 后由 CI 自动同步，贡献者无需手改。'
       : '> This table is generated from `models/*.json` by `bun scripts/update-registry.ts`; CI re-syncs it automatically after merge — contributors need not hand-edit it.'
+  // Three columns, count second: on a phone-width README the last column is the
+  // one that gets clipped, so the short count goes before the long harness list.
+  // The vendor sits under the model name instead of taking its own column.
   const header =
     lang === 'zh'
-      ? '| 模型 | 厂商 | 运行环境（Harness）× 思考配额 | 产出 |'
-      : '| Model | Vendor | Harness x Effort | Runs |'
+      ? '| 模型 / 厂商 | 产出 | 运行环境 · 思考配额 |'
+      : '| Model / Vendor | Runs | Harness · Effort |'
 
   const rows = tested.map((group) => {
-    const harnesses = [...group.harnesses.values()]
-      .sort((a, b) => a.order - b.order || a.label.localeCompare(b.label))
-      .map((entry) => escapeCell(entry.label))
-      .join('<br>')
+    const harnesses = harnessLines([...group.harnesses.values()]).join('<br>')
     const runs = String(group.runs).padStart(2, '0')
+    const showcases = String(group.showcases).padStart(2, '0')
     const runLabel = group.showcases
       ? lang === 'zh'
-        ? `${runs}（仅展示 ${String(group.showcases).padStart(2, '0')}）`
-        : `${runs} (showcase ${String(group.showcases).padStart(2, '0')})`
+        ? `${runs}<br><sub>（仅展示 ${showcases}）</sub>`
+        : `${runs}<br><sub>(showcase ${showcases})</sub>`
       : runs
-    return `| ${escapeCell(group.label)} | ${escapeCell(group.vendor)} | ${harnesses} | ${runLabel} |`
+    const model = `${escapeCell(group.label)}<br><sub>${escapeCell(group.vendor)}</sub>`
+    return `| ${model} | ${runLabel} | ${harnesses} |`
   })
 
-  const lines = [START, note, '', header, '|---|---|---|---|', ...rows]
+  const lines = [START, note, '', header, '|---|---|---|', ...rows]
   if (pending.length) {
     lines.push(
       '',
