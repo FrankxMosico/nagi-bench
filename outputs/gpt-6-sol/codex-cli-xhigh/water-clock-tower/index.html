@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#081622" />
+  <title>水运仪象台 · 一滴水如何报时</title>
+</head>
+<body>
+  <div id="app">
+    <canvas id="scene" aria-label="水运仪象台三维机械演示"></canvas>
+    <div class="vignette"></div>
+    <header class="header">
+      <div class="identity"><span class="seal">宋</span><div><div class="eyebrow">北宋 · 约 1092 年</div><div class="brand">水运仪象台</div></div></div>
+      <div class="header-right"><span class="edition">SU SONG'S ASTRONOMICAL CLOCK TOWER</span><span id="chapterTag" class="chapter-tag">序章 / 全貌</span></div>
+    </header>
+    <div class="side-index"><span>天</span><i></i><span>地</span><i></i><span>人</span></div>
+    <div id="calloutA" class="callout"><span class="callout-index">01</span><span class="callout-text">水斗</span><span class="callout-line"></span></div>
+    <div id="calloutB" class="callout"><span class="callout-index">02</span><span class="callout-text">擒纵</span><span class="callout-line"></span></div>
+    <div id="calloutC" class="callout"><span class="callout-index">03</span><span class="callout-text">传动齿轮</span><span class="callout-line"></span></div>
+    <div id="calloutD" class="callout"><span class="callout-index">04</span><span class="callout-text">报时偶人</span><span class="callout-line"></span></div>
+    <main class="narration">
+      <div class="narration-top"><span id="stepNumber">引子 · 00</span><span class="separator"></span><span id="stepTitleEn">THE WATER CLOCK</span></div>
+      <h1 id="headline">一滴水，如何报时？</h1>
+      <p id="description">北宋苏颂造了一座会观星、会报时的天文钟。它的动力，来自不断流下的水。</p>
+      <div id="chain" class="chain"><span>流水</span><b>→</b><span>水轮</span><b>→</b><span>擒纵</span><b>→</b><span>齿轮</span><b>→</b><span>报时</span></div>
+    </main>
+    <footer class="footer">
+      <button id="playButton" class="control" aria-label="暂停"><span id="playIcon">Ⅱ</span></button>
+      <div class="timeline-wrap"><div class="timeline-label"><span id="timeText">00:00</span><span>约 30 秒 · 拖动回看</span><span>00:30</span></div><input id="timeline" type="range" min="0" max="30" step="0.01" value="0" aria-label="播放进度" /></div>
+      <button id="soundButton" class="sound" aria-label="开启声音">声音 <span id="soundIcon">○</span></button>
+    </footer>
+    <div class="credit">依据苏颂《新仪象法要》原理绘制 · 机械结构为教学示意</div>
+  </div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
