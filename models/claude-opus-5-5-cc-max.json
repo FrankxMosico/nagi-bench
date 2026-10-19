@@ -33,6 +33,13 @@
         "en": "One-shot by claude-opus-5-5 (max) in Claude Code CLI, unmodified, 1 hour 37 minutes 23 seconds. Empty workspace, all skills (including claude.ai-synced and bundled ones), plugins (including built-in ones) and MCP servers/connectors disabled, WebFetch/WebSearch denied, no custom system prompt, no human input. As the prompt allows, the model used npm to query versions and install the project dependencies (react, react-dom, three and the Vite/TypeScript toolchain), and installed puppeteer-core in its scratch directory to drive the local Edge for headless-browser testing; no other sites were accessed. No dist/ was kept at the end of the run; the full source project is submitted (without node_modules, no files changed)."
       },
       "contributor": "HearTFireJ"
+    },
+    "water-clock-tower": {
+      "note": {
+        "zh": "在本地通过 Claude Code 2.1.302 以 claude-opus-5-5（max）一次生成，未经修改，耗时 239 分 40 秒。跑在 Agent Bench 隔离 runner：空 workspace、无 skill/plugin/MCP、No-Web。本页为其构建产物（部署时由源码打包为单文件）。",
+        "en": "One-shot by claude-opus-5-5 (max) in Claude Code 2.1.302, unmodified, 239 minutes 40 seconds. Run on the Agent Bench isolated runner: empty workspace, no skills/plugins/MCP, No-Web. This page is its build output (bundled from source into a single file at deploy time)."
+      },
+      "contributor": "Nagi-ovo"
     }
   }
 }

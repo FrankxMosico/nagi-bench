@@ -1,0 +1,22 @@
+{
+  "name": "shuiyun-yixiangtai",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "水运仪象台：物理驱动的 3D 科普短片（three.js + Rapier + Web Audio）",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build --configLoader runner",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@dimforge/rapier3d-compat": "0.21.0",
+    "three": "0.180.0"
+  },
+  "devDependencies": {
+    "@types/three": "0.180.0",
+    "playwright-core": "1.61.1",
+    "typescript": "5.9.2",
+    "vite": "8.2.0"
+  }
+}
