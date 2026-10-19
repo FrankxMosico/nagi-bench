@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>水运仪象台 · 水如何驱动一座天文钟</title>
+    <style>
+      :root {
+        --gold: #f2c46d;
+        --gold-dim: rgba(242, 196, 109, 0.55);
+        --ink: #f7efe0;
+        --sans: "Noto Sans CJK SC", "Source Han Sans SC", "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", "WenQuanYi Micro Hei", sans-serif;
+        --serif: "Noto Serif CJK SC", "Source Han Serif SC", "Songti SC", "STSong", "SimSun", "AR PL UMing CN", serif;
+      }
+      html, body { margin: 0; height: 100%; background: #07070b; overflow: hidden; color: var(--ink); font-family: var(--sans); }
+      #app { position: fixed; inset: 0; }
+      #gl { display: block; width: 100%; height: 100%; }
+      #overlay { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+      #loading { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+        background: radial-gradient(ellipse at 50% 60%, #2a2030 0%, #0b0a10 70%); }
+      #loading .lt { font-family: var(--serif); font-size: min(8vw, 84px); letter-spacing: 0.2em; padding-left: 0.2em; color: var(--gold); }
+      #loading .ls { margin-top: 1.2em; font-size: min(1.8vw, 18px); color: rgba(247,239,224,0.7); letter-spacing: 0.1em; }
+      #loading .lbar { margin-top: 1.4em; width: min(30vw, 300px); height: 2px; background: rgba(242,196,109,0.18); overflow: hidden; }
+      #loading .lbar i { display: block; width: 40%; height: 100%; background: var(--gold); animation: lb 1.4s ease-in-out infinite; }
+      @keyframes lb { 0% { transform: translateX(-100%); } 100% { transform: translateX(250%); } }
+      .vignette { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 45%, rgba(0,0,0,0) 55%, rgba(0,0,0,0.55) 100%); }
+      .fade { position: absolute; inset: 0; background: #000; opacity: 0; }
+
+      /* 片头标题 */
+      .title { position: absolute; left: 7%; top: 27%; text-align: left; opacity: 0; transform: translateY(10px); }
+      .title h1 { margin: 0; font-family: var(--serif); font-weight: 700; font-size: min(9vw, 104px); letter-spacing: 0.16em; color: var(--gold);
+        text-shadow: 0 4px 30px rgba(0,0,0,0.85), 0 0 2px rgba(0,0,0,0.9); }
+      .title .sub { margin-top: 0.7em; font-family: var(--serif); font-size: min(2.4vw, 26px); letter-spacing: 0.28em; color: var(--ink); text-shadow: 0 2px 12px rgba(0,0,0,0.9); }
+      .title .tag { margin-top: 1.0em; font-size: min(2.0vw, 21px); letter-spacing: 0.1em; color: #fff; opacity: 0.92; text-shadow: 0 2px 12px rgba(0,0,0,0.9); }
+      .title .line { width: min(34vw, 380px); height: 1px; margin: 0.8em 0 0; background: linear-gradient(90deg, var(--gold), transparent); }
+
+      /* 因果链提示条 */
+      .hud { position: absolute; top: 2.2vh; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 0.35vw;
+        padding: 0.7vh 1.1vw; background: rgba(12, 10, 14, 0.66); border: 1px solid rgba(242,196,109,0.25); border-radius: 999px;
+        opacity: 0; white-space: nowrap; }
+      .hud .node { font-size: min(1.55vw, 17px); padding: 0.35vh 0.75vw; border-radius: 999px; color: rgba(247,239,224,0.42);
+        border: 1px solid transparent; transition: all 0.35s ease; }
+      .hud .node.done { color: var(--gold-dim); }
+      .hud .node.on { color: #1a1206; background: var(--gold); box-shadow: 0 0 14px rgba(242,196,109,0.85); }
+      .hud .arr { color: rgba(242,196,109,0.45); font-size: min(1.3vw, 14px); transition: color 0.35s; }
+      .hud .arr.on { color: var(--gold); }
+
+      /* 字幕 */
+      .cap { position: absolute; left: 50%; bottom: 6.5vh; transform: translateX(-50%); width: min(86vw, 1100px); text-align: center; }
+      .cap .box { display: inline-block; padding: 1.1vh 1.6vw 1.2vh; background: rgba(8, 7, 10, 0.72); border-radius: 10px;
+        border-left: 3px solid var(--gold); opacity: 0; transform: translateY(8px); transition: opacity 0.35s, transform 0.35s; }
+      .cap .box.show { opacity: 1; transform: translateY(0); }
+      .cap .main { font-size: min(2.75vw, 30px); line-height: 1.45; letter-spacing: 0.04em; text-shadow: 0 1px 4px rgba(0,0,0,0.6); }
+      .cap .main b { color: var(--gold); font-weight: 700; }
+      .cap .num { display: inline-block; min-width: 1.6em; height: 1.6em; line-height: 1.6em; margin-right: 0.5em; border-radius: 50%;
+        background: var(--gold); color: #1a1206; font-weight: 700; font-size: 0.85em; vertical-align: 0.08em; }
+      .cap .sub { margin-top: 0.35vh; font-size: min(1.75vw, 19px); color: rgba(247,239,224,0.78); letter-spacing: 0.03em; }
+
+      /* 标注 */
+      svg.lines { position: absolute; inset: 0; width: 100%; height: 100%; }
+      .label { position: absolute; transform: translate(-50%, -50%); font-size: min(1.6vw, 17px); padding: 0.25em 0.7em; border-radius: 6px;
+        background: rgba(10, 9, 12, 0.72); border: 1px solid rgba(242,196,109,0.65); color: var(--ink); white-space: nowrap; opacity: 0;
+        transition: opacity 0.3s; font-family: var(--serif); letter-spacing: 0.08em; }
+      .label.hot { background: rgba(242,196,109,0.92); color: #1a1206; border-color: #fff3d0; }
+      .label small { font-family: var(--sans); font-size: 0.78em; opacity: 0.8; margin-left: 0.4em; letter-spacing: 0; }
+
+      .inset { position: absolute; display: none; box-sizing: border-box; border: 2px solid var(--gold); border-radius: 4px;
+        box-shadow: 0 0 0 1px rgba(0,0,0,0.6), 0 8px 28px rgba(0,0,0,0.6); }
+      .inset .it { position: absolute; left: -2px; right: -2px; top: 100%; margin-top: 2px; padding: 0.3em 0.6em; font-size: min(1.4vw, 15px);
+        background: rgba(10,9,12,0.8); color: var(--gold); letter-spacing: 0.08em; text-align: center; border-radius: 0 0 4px 4px; }
+      .note { position: absolute; right: 1.6vw; bottom: 2vh; font-size: min(1.25vw, 13px); color: rgba(247,239,224,0.6); opacity: 0; transition: opacity 0.5s; }
+      .speed { position: absolute; left: 1.6vw; top: 2.6vh; font-size: min(1.35vw, 14px); color: var(--gold); letter-spacing: 0.1em; opacity: 0; transition: opacity 0.4s; }
+
+      /* 结尾 */
+      .end { position: absolute; left: 0; top: 17%; width: min(50vw, 600px); padding: 3vh 4vw 3.5vh 6vw; text-align: left; opacity: 0;
+        background: linear-gradient(90deg, rgba(6,5,9,0.72) 0%, rgba(6,5,9,0.55) 65%, rgba(6,5,9,0) 100%); }
+      .end .eh { font-family: var(--serif); font-weight: 700; font-size: min(5vw, 54px); letter-spacing: 0.14em; color: var(--gold);
+        text-shadow: 0 4px 24px rgba(0,0,0,0.9); }
+      .end .chain { margin-top: 1.6vh; font-family: var(--serif); font-size: min(2.1vw, 22px); letter-spacing: 0.04em; line-height: 1.75; color: var(--ink);
+        text-shadow: 0 2px 12px rgba(0,0,0,0.95); }
+      .end .chain .n { white-space: nowrap; }
+      .end .chain em { font-style: normal; color: var(--gold); }
+      .end .lead, .end .lead2 { margin-top: 1.6vh; font-size: min(1.75vw, 19px); line-height: 1.6; color: #fff; text-shadow: 0 2px 10px rgba(0,0,0,0.95); }
+      .end .lead2 { color: rgba(247,239,224,0.82); }
+
+      /* 交互按钮 */
+      .btn { pointer-events: auto; cursor: pointer; border: 1px solid var(--gold); background: rgba(20, 16, 10, 0.75); color: var(--gold);
+        font-family: var(--serif); letter-spacing: 0.2em; border-radius: 999px; }
+      .start { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+        background: rgba(5,5,8,0.55); pointer-events: auto; cursor: pointer; }
+      .start .btn { font-size: min(3vw, 30px); padding: 0.55em 1.6em 0.55em 1.8em; }
+      .start .st { margin-bottom: 1.4em; font-family: var(--serif); font-size: min(2.6vw, 26px); letter-spacing: 0.16em; color: var(--ink); text-shadow: 0 2px 10px #000; }
+      .start .hint { margin-top: 1.2em; font-size: min(1.6vw, 16px); color: rgba(247,239,224,0.7); }
+      .replay { position: absolute; left: 50%; bottom: 7vh; transform: translateX(-50%); font-size: min(2vw, 20px); padding: 0.5em 1.5em; display: none; }
+      .sound { position: absolute; right: 1.4vw; top: 2.2vh; font-size: min(1.5vw, 15px); padding: 0.35em 1em; display: none; letter-spacing: 0.1em; }
+    </style>
+    <script defer src="./assets/index-dB-Wq6Aw.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <canvas id="gl"></canvas>
+      <div id="overlay"></div>
+      <div id="loading">
+        <div class="lt">水运仪象台</div>
+        <div class="ls">正在搭建机械与物理世界…</div>
+        <div class="lbar"><i></i></div>
+      </div>
+    </div>
+  </body>
+</html>

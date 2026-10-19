@@ -1,0 +1,17 @@
+{
+  "label": "Claude Opus 5.5",
+  "vendor": "Anthropic",
+  "harness": "Claude Code",
+  "effort": "xhigh",
+  "artifactDir": "claude-opus-5-5/claude-code-xhigh",
+  "order": 8.4,
+  "runs": {
+    "water-clock-tower": {
+      "note": {
+        "zh": "在本地通过 Claude Code 2.1.302 以 claude-opus-5-5（xhigh）一次生成，未经修改，耗时 144 分 10 秒。跑在 Agent Bench 隔离 runner：空 workspace、无 skill/plugin/MCP、No-Web。runner 隔离审计误报：模型用 grep 统计 Rapier 源码中“fetch(”字样的出现次数，被误判为联网脚本；全程未联网，交付物校验有效。检测规则已修正。本页为其构建产物（部署时由源码打包为单文件）。",
+        "en": "One-shot by claude-opus-5-5 (xhigh) in Claude Code 2.1.302, unmodified, 144 minutes 10 seconds. Run on the Agent Bench isolated runner: empty workspace, no skills/plugins/MCP, No-Web. Runner isolation audit false positive: the model grep-counted the text \"fetch(\" inside the Rapier source, which was misread as a network script; it never used the network and the deliverable validated. The detector has been fixed. This page is its build output (bundled from source into a single file at deploy time)."
+      },
+      "contributor": "Nagi-ovo"
+    }
+  }
+}
