@@ -47,6 +47,13 @@
       },
       "contributor": "Nagi-ovo",
       "agentName": "缝海"
+    },
+    "water-clock-tower": {
+      "note": {
+        "zh": "在本地通过 Codex CLI 0.159.0 以精确选择器 gpt-6.1-sol（high）一次生成，未经修改，耗时 19 分 20 秒。跑在 Agent Bench 隔离 runner：空 workspace、无 skill/plugin/MCP、No-Web。本题工具链为 1.0.1（截图超时放宽至 120 秒，并提示 Vite 配置用 .js），比 Claude Opus 5.5 三档所用的 1.0.0 略好。本页为其构建产物（部署时由源码打包为单文件）。",
+        "en": "One-shot by the exact gpt-6.1-sol selector (high) in Codex CLI 0.159.0, unmodified, 19 minutes 20 seconds. Run on the Agent Bench isolated runner: empty workspace, no skills/plugins/MCP, No-Web. This case used toolchain 1.0.1 (screenshot timeout raised to 120 s, plus a hint to keep the Vite config in .js), slightly better than the 1.0.0 used by the three Claude Opus 5.5 runs. This page is its build output (bundled from source into a single file at deploy time)."
+      },
+      "contributor": "Nagi-ovo"
     }
   }
 }

@@ -1,0 +1,5 @@
+[shot] /workspace/preview-final/t000s.png
+[shot] /workspace/preview-final/t005s.png
+[shot] /workspace/preview-final/t010s.png
+[shot] /workspace/preview-final/t020s.png
+[shot] /workspace/preview-final/t030s.png

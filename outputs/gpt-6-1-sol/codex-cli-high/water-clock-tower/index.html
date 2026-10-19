@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0b2022" />
+    <link rel="stylesheet" href="./src/style.css" />
+    <title>把流水变成时间 · 苏颂水运仪象台</title>
+  </head>
+  <body>
+    <main id="app">
+      <canvas id="scene" aria-label="水运仪象台的三维实时物理演示"></canvas>
+      <div class="vignette"></div>
+      <header>
+        <a class="brand" href="./index.html" aria-label="器物志首页"><span class="seal">器</span><span>器物志 <small>THE INGENUITY ARCHIVE</small></span></a>
+        <div class="edition"><span class="live-dot"></span>实时 3D 科普短片 <i></i> VOL. 001</div>
+        <button class="sound" id="sound" aria-pressed="false" aria-label="开启程序合成配乐" title="开启声音"><svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9H4m13 0 4 6m0-6-4 6"/></svg><span>声音关闭</span></button>
+      </header>
+      <section class="story" aria-live="polite">
+        <div class="eyebrow" id="eyebrow">北宋 · 苏颂 · 水运仪象台</div>
+        <h1 id="title">把流水<br>变成<span>时间</span></h1>
+        <p class="description" id="description">九百多年前，一座木制高台，<br>让水流驱动星辰，也让木人按时报时。</p>
+        <div class="rule"></div>
+        <p class="mechanism" id="mechanism"><span>32″</span> 看懂一座水力天文钟</p>
+      </section>
+      <div id="annotations" aria-hidden="true"></div>
+      <div class="scene-caption"><span class="cross">＋</span><span id="scene-caption">水运仪象台 · 工作原理剖视</span></div>
+      <div class="physics"><span class="live-dot"></span><span>PHYSICS LIVE</span><b id="pulse">水力输入</b></div>
+      <div class="subtitle"><span id="subtitle">水给动力，机械把它变成有节奏的时间。</span></div>
+      <footer>
+        <div class="transport"><button id="play" aria-label="暂停短片"><svg viewBox="0 0 24 24"><path d="M8 5v14M16 5v14"/></svg></button><span id="time">00:00</span><span class="duration">/ 00:32</span><button id="replay" title="从头播放" aria-label="从头播放"><svg viewBox="0 0 24 24"><path d="M5 8a8 8 0 1 1-1 7M5 3v5h5"/></svg></button></div>
+        <div class="chapters" aria-label="影片章节">
+          <button data-time="3.8"><i><em></em></i><span><b>01</b> 稳定水流</span></button>
+          <button data-time="9"><i><em></em></i><span><b>02</b> 水重驱轮</span></button>
+          <button data-time="15"><i><em></em></i><span><b>03</b> 擒纵定步</span></button>
+          <button data-time="21"><i><em></em></i><span><b>04</b> 齿轮传动</span></button>
+          <button data-time="27"><i><em></em></i><span><b>05</b> 按时报时</span></button>
+        </div>
+        <button id="fullscreen" aria-label="全屏观看" title="全屏观看"><svg viewBox="0 0 24 24"><path d="M4 9V4h5m6 0h5v5m0 6v5h-5M9 20H4v-5"/></svg></button>
+      </footer>
+      <div class="fineprint">结构简化示意 · 时间比例压缩</div>
+      <div class="credit">11世纪末 · 中国开封 <span>水力 × 机械 × 天文</span></div>
+      <div id="loading">正在装配水力天文钟…</div>
+    </main>
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>

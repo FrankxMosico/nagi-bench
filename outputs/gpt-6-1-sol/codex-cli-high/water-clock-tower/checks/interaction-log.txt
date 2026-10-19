@@ -1,0 +1,65 @@
+{
+  "offline": true,
+  "requests": [
+    "file:///workspace/dist/index.html",
+    "file:///workspace/dist/assets/index-BkuLoy_u.js",
+    "file:///workspace/dist/assets/film.css"
+  ],
+  "errors": [],
+  "audio": {
+    "state": "running",
+    "sampleRate": 44100,
+    "peak": 0.06790890544652939,
+    "samples": 74
+  },
+  "pauseVerified": true,
+  "resumeVerified": true,
+  "chapter": {
+    "time": 27.014700000047686,
+    "physicsTime": 27.00833333333244,
+    "drops": 54,
+    "bound": 21,
+    "wheelAngle": -13.675144175534408,
+    "locked": false,
+    "releases": 27,
+    "steps": 26,
+    "strikes": 18,
+    "latchAngle": -0.037131317251206726,
+    "hammerAngle": -0.34953222276165313,
+    "loadTorque": 13.073069468375659,
+    "tripTorque": 1.47524084935616,
+    "bodies": 65,
+    "gears": 5,
+    "renderer": {
+      "frame": 30,
+      "calls": 42,
+      "triangles": 80276,
+      "points": 0,
+      "lines": 0
+    }
+  },
+  "replay": {
+    "time": 0,
+    "physicsTime": 0,
+    "drops": 0,
+    "bound": 0,
+    "wheelAngle": 0,
+    "locked": true,
+    "releases": 0,
+    "steps": 0,
+    "strikes": 0,
+    "latchAngle": 0,
+    "hammerAngle": -0.62,
+    "loadTorque": 0,
+    "tripTorque": 0,
+    "bodies": 11,
+    "gears": 5,
+    "renderer": {
+      "frame": 67,
+      "calls": 41,
+      "triangles": 75956,
+      "points": 0,
+      "lines": 0
+    }
+  }
+}

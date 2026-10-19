@@ -1,0 +1,178 @@
+{
+  "errors": [],
+  "requests": [
+    "file:///workspace/dist/index.html",
+    "file:///workspace/dist/assets/index-DvjuWW8C.js",
+    "file:///workspace/dist/assets/film.css"
+  ],
+  "states": [
+    {
+      "time": 0,
+      "physicsTime": 0,
+      "drops": 0,
+      "bound": 0,
+      "wheelAngle": 0,
+      "locked": true,
+      "releases": 0,
+      "steps": 0,
+      "strikes": 0,
+      "latchAngle": 0,
+      "hammerAngle": -0.62,
+      "loadTorque": 0,
+      "tripTorque": 0,
+      "bodies": 11,
+      "gears": 5,
+      "renderer": {
+        "frame": 5,
+        "calls": 41,
+        "triangles": 75968,
+        "points": 0,
+        "lines": 0
+      }
+    },
+    {
+      "time": 6,
+      "physicsTime": 6.000000000000088,
+      "drops": 45,
+      "bound": 21,
+      "wheelAngle": -2.2207151170281945,
+      "locked": false,
+      "releases": 5,
+      "steps": 4,
+      "strikes": 3,
+      "latchAngle": -0.005044246687028504,
+      "hammerAngle": -0.3464182448677535,
+      "loadTorque": 12.840901128429442,
+      "tripTorque": 1.9199181349122534,
+      "bodies": 56,
+      "gears": 5,
+      "renderer": {
+        "frame": 6,
+        "calls": 42,
+        "triangles": 79568,
+        "points": 0,
+        "lines": 0
+      }
+    },
+    {
+      "time": 11.5,
+      "physicsTime": 11.499999999999988,
+      "drops": 59,
+      "bound": 19,
+      "wheelAngle": -5.248123391548152,
+      "locked": false,
+      "releases": 11,
+      "steps": 10,
+      "strikes": 7,
+      "latchAngle": -0.18357518303472653,
+      "hammerAngle": -0.5182219964968382,
+      "loadTorque": 12.141807159041909,
+      "tripTorque": 1.09988180520999,
+      "bodies": 70,
+      "gears": 5,
+      "renderer": {
+        "frame": 7,
+        "calls": 40,
+        "triangles": 75536,
+        "points": 0,
+        "lines": 0
+      }
+    },
+    {
+      "time": 17.5,
+      "physicsTime": 17.49999999999965,
+      "drops": 61,
+      "bound": 21,
+      "wheelAngle": -8.486030921938148,
+      "locked": false,
+      "releases": 17,
+      "steps": 16,
+      "strikes": 11,
+      "latchAngle": -0.002738532607688939,
+      "hammerAngle": -0.42779194563525713,
+      "loadTorque": 12.917938462244852,
+      "tripTorque": 1.9445214110073397,
+      "bodies": 72,
+      "gears": 5,
+      "renderer": {
+        "frame": 8,
+        "calls": 38,
+        "triangles": 51760,
+        "points": 0,
+        "lines": 0
+      }
+    },
+    {
+      "time": 23.5,
+      "physicsTime": 23.499999999999307,
+      "drops": 62,
+      "bound": 18,
+      "wheelAngle": -11.864973520686686,
+      "locked": false,
+      "releases": 23,
+      "steps": 22,
+      "strikes": 16,
+      "latchAngle": 0.0018946615141490623,
+      "hammerAngle": -0.3044611150904421,
+      "loadTorque": 12.35801164223219,
+      "tripTorque": 1.5185285879240684,
+      "bodies": 73,
+      "gears": 5,
+      "renderer": {
+        "frame": 9,
+        "calls": 42,
+        "triangles": 80928,
+        "points": 0,
+        "lines": 0
+      }
+    },
+    {
+      "time": 29.5,
+      "physicsTime": 29.499999999998966,
+      "drops": 63,
+      "bound": 20,
+      "wheelAngle": -15.188377849849857,
+      "locked": true,
+      "releases": 29,
+      "steps": 29,
+      "strikes": 20,
+      "latchAngle": -0.07871428509405977,
+      "hammerAngle": -0.3045719968698477,
+      "loadTorque": 13.052581946648477,
+      "tripTorque": 0.7623976506705434,
+      "bodies": 74,
+      "gears": 5,
+      "renderer": {
+        "frame": 10,
+        "calls": 42,
+        "triangles": 81008,
+        "points": 0,
+        "lines": 0
+      }
+    },
+    {
+      "time": 32,
+      "physicsTime": 31.999999999998824,
+      "drops": 63,
+      "bound": 20,
+      "wheelAngle": -16.439460141863496,
+      "locked": false,
+      "releases": 32,
+      "steps": 31,
+      "strikes": 22,
+      "latchAngle": 0.004392968481192159,
+      "hammerAngle": -0.30384820834274817,
+      "loadTorque": 12.633472150252254,
+      "tripTorque": 1.7106969628292945,
+      "bodies": 74,
+      "gears": 5,
+      "renderer": {
+        "frame": 11,
+        "calls": 42,
+        "triangles": 81008,
+        "points": 0,
+        "lines": 0
+      }
+    }
+  ]
+}
