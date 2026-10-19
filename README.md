@@ -30,16 +30,52 @@ NAGI STUDIO 的 LLM 测评案例集：把「模型 × Harness × 思考配额」
 
 ## 案例一览
 
-每道题都是一段固定提示词，所有 Agent 逐字使用、一次生成。点案例名直接打开它的盲评页。
+每道题都是一段固定提示词，所有 Agent 逐字使用、一次生成。点图片或案例名直接打开它的盲评页。
 
-| 案例 | 形式 | 考什么 |
-|---|---|---|
-| [**神化 MC**](https://bench.nagi.fun/#mythos-craft)<br><sub>`mythos-craft`</sub> | 单文件 HTML | 一次生成一款《我的世界》式的可玩 3D 体素世界 |
-| [**鹈鹕海边骑行**](https://bench.nagi.fun/#pelican-cycling)<br><sub>`pelican-cycling`</sub> | SVG | 经典 SVG 题：用代码「画」一只骑自行车的鹈鹕 |
-| [**镂空机械表**](https://bench.nagi.fun/#skeleton-watch)<br><sub>`skeleton-watch`</sub> | 单文件 HTML | 可旋转、可爆炸视图的 3D 镂空机械腕表 |
-| [**圈地对决**](https://bench.nagi.fun/#turf-war)<br><sub>`turf-war`</sub> | JS Agent | 写圈地智能体同场对战，按客观胜负排名，不靠投票 |
-| [**CS Dust2 5v5**](https://bench.nagi.fun/#cs-dust2)<br><sub>`cs-dust2`</sub> | React 项目 | React + three.js 从零手写的 3D 第一人称射击 |
-| [**章北海·陨石子弹**](https://bench.nagi.fun/#beihai-meteorite)<br><sub>`beihai-meteorite`</sub> | Three.js 项目 | 把《三体》片段改编成长时程 3D 影片，考叙事与导演 |
+<table>
+<tr>
+<td width="50%" valign="top">
+<a href="https://bench.nagi.fun/#mythos-craft"><img src="https://bench.nagi.fun/readme/cases/mythos-craft.webp" alt="神化 MC 运行截图" width="100%"></a><br>
+<a href="https://bench.nagi.fun/#mythos-craft"><b>神化 MC</b></a> <sub>· 单文件 HTML</sub><br>
+<sub>一次生成一款《我的世界》式的可玩 3D 体素世界</sub><br>
+<sub><code>mythos-craft</code></sub>
+</td>
+<td width="50%" valign="top">
+<a href="https://bench.nagi.fun/#pelican-cycling"><img src="https://bench.nagi.fun/readme/cases/pelican-cycling.webp" alt="鹈鹕海边骑行 运行截图" width="100%"></a><br>
+<a href="https://bench.nagi.fun/#pelican-cycling"><b>鹈鹕海边骑行</b></a> <sub>· SVG</sub><br>
+<sub>经典 SVG 题：用代码「画」一只骑自行车的鹈鹕</sub><br>
+<sub><code>pelican-cycling</code></sub>
+</td>
+</tr>
+<tr>
+<td width="50%" valign="top">
+<a href="https://bench.nagi.fun/#skeleton-watch"><img src="https://bench.nagi.fun/readme/cases/skeleton-watch.webp" alt="镂空机械表 运行截图" width="100%"></a><br>
+<a href="https://bench.nagi.fun/#skeleton-watch"><b>镂空机械表</b></a> <sub>· 单文件 HTML</sub><br>
+<sub>可旋转、可爆炸视图的 3D 镂空机械腕表</sub><br>
+<sub><code>skeleton-watch</code></sub>
+</td>
+<td width="50%" valign="top">
+<a href="https://bench.nagi.fun/#turf-war"><img src="https://bench.nagi.fun/readme/cases/turf-war.webp" alt="圈地对决 运行截图" width="100%"></a><br>
+<a href="https://bench.nagi.fun/#turf-war"><b>圈地对决</b></a> <sub>· JS Agent</sub><br>
+<sub>写圈地智能体同场对战，按客观胜负排名，不靠投票</sub><br>
+<sub><code>turf-war</code></sub>
+</td>
+</tr>
+<tr>
+<td width="50%" valign="top">
+<a href="https://bench.nagi.fun/#cs-dust2"><img src="https://bench.nagi.fun/readme/cases/cs-dust2.webp" alt="CS Dust2 5v5 运行截图" width="100%"></a><br>
+<a href="https://bench.nagi.fun/#cs-dust2"><b>CS Dust2 5v5</b></a> <sub>· React 项目</sub><br>
+<sub>React + three.js 从零手写的 3D 第一人称射击</sub><br>
+<sub><code>cs-dust2</code></sub>
+</td>
+<td width="50%" valign="top">
+<a href="https://bench.nagi.fun/#beihai-meteorite"><img src="https://bench.nagi.fun/readme/cases/beihai-meteorite.webp" alt="章北海·陨石子弹 运行截图" width="100%"></a><br>
+<a href="https://bench.nagi.fun/#beihai-meteorite"><b>章北海·陨石子弹</b></a> <sub>· Three.js 项目</sub><br>
+<sub>把《三体》片段改编成长时程 3D 影片，考叙事与导演</sub><br>
+<sub><code>beihai-meteorite</code></sub>
+</td>
+</tr>
+</table>
 
 > 完整提示词见 [`cases.json`](./cases.json)。
 

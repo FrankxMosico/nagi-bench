@@ -30,16 +30,52 @@ One-shot LLM eval cases by NAGI STUDIO: model x harness x effort combinations ta
 
 ## Cases
 
-Each case is one fixed prompt that every agent uses verbatim, in one shot. Click a case name to open its blind-vote page.
+Each case is one fixed prompt that every agent uses verbatim, in one shot. Click a thumbnail or case name to open its blind-vote page.
 
-| Case | Output | What it tests |
-|---|---|---|
-| [**Mythos Craft**](https://bench.nagi.fun/#mythos-craft)<br><sub>`mythos-craft`</sub> | Single-file HTML | A playable Minecraft-style 3D voxel world |
-| [**Pelican by the Sea**](https://bench.nagi.fun/#pelican-cycling)<br><sub>`pelican-cycling`</sub> | SVG | The classic eval: draw a pelican riding a bicycle, in code |
-| [**Skeleton Watch**](https://bench.nagi.fun/#skeleton-watch)<br><sub>`skeleton-watch`</sub> | Single-file HTML | A rotatable, exploded-view 3D skeleton watch |
-| [**Turf War**](https://bench.nagi.fun/#turf-war)<br><sub>`turf-war`</sub> | JS agent | Territory-grabbing agents battle head-to-head, ranked by wins, not votes |
-| [**CS Dust2 5v5**](https://bench.nagi.fun/#cs-dust2)<br><sub>`cs-dust2`</sub> | React project | A from-scratch 3D FPS in React + three.js |
-| [**Zhang Beihai: Meteorite Bullet**](https://bench.nagi.fun/#beihai-meteorite)<br><sub>`beihai-meteorite`</sub> | Three.js project | A long-horizon 3D film adapted from The Three-Body Problem |
+<table>
+<tr>
+<td width="50%" valign="top">
+<a href="https://bench.nagi.fun/#mythos-craft"><img src="https://bench.nagi.fun/readme/cases/mythos-craft.webp" alt="Mythos Craft screenshot" width="100%"></a><br>
+<a href="https://bench.nagi.fun/#mythos-craft"><b>Mythos Craft</b></a> <sub>· Single-file HTML</sub><br>
+<sub>A playable Minecraft-style 3D voxel world</sub><br>
+<sub><code>mythos-craft</code></sub>
+</td>
+<td width="50%" valign="top">
+<a href="https://bench.nagi.fun/#pelican-cycling"><img src="https://bench.nagi.fun/readme/cases/pelican-cycling.webp" alt="Pelican by the Sea screenshot" width="100%"></a><br>
+<a href="https://bench.nagi.fun/#pelican-cycling"><b>Pelican by the Sea</b></a> <sub>· SVG</sub><br>
+<sub>The classic eval: draw a pelican riding a bicycle, in code</sub><br>
+<sub><code>pelican-cycling</code></sub>
+</td>
+</tr>
+<tr>
+<td width="50%" valign="top">
+<a href="https://bench.nagi.fun/#skeleton-watch"><img src="https://bench.nagi.fun/readme/cases/skeleton-watch.webp" alt="Skeleton Watch screenshot" width="100%"></a><br>
+<a href="https://bench.nagi.fun/#skeleton-watch"><b>Skeleton Watch</b></a> <sub>· Single-file HTML</sub><br>
+<sub>A rotatable, exploded-view 3D skeleton watch</sub><br>
+<sub><code>skeleton-watch</code></sub>
+</td>
+<td width="50%" valign="top">
+<a href="https://bench.nagi.fun/#turf-war"><img src="https://bench.nagi.fun/readme/cases/turf-war.webp" alt="Turf War screenshot" width="100%"></a><br>
+<a href="https://bench.nagi.fun/#turf-war"><b>Turf War</b></a> <sub>· JS agent</sub><br>
+<sub>Territory-grabbing agents battle head-to-head, ranked by wins, not votes</sub><br>
+<sub><code>turf-war</code></sub>
+</td>
+</tr>
+<tr>
+<td width="50%" valign="top">
+<a href="https://bench.nagi.fun/#cs-dust2"><img src="https://bench.nagi.fun/readme/cases/cs-dust2.webp" alt="CS Dust2 5v5 screenshot" width="100%"></a><br>
+<a href="https://bench.nagi.fun/#cs-dust2"><b>CS Dust2 5v5</b></a> <sub>· React project</sub><br>
+<sub>A from-scratch 3D FPS in React + three.js</sub><br>
+<sub><code>cs-dust2</code></sub>
+</td>
+<td width="50%" valign="top">
+<a href="https://bench.nagi.fun/#beihai-meteorite"><img src="https://bench.nagi.fun/readme/cases/beihai-meteorite.webp" alt="Zhang Beihai: Meteorite Bullet screenshot" width="100%"></a><br>
+<a href="https://bench.nagi.fun/#beihai-meteorite"><b>Zhang Beihai: Meteorite Bullet</b></a> <sub>· Three.js project</sub><br>
+<sub>A long-horizon 3D film adapted from The Three-Body Problem</sub><br>
+<sub><code>beihai-meteorite</code></sub>
+</td>
+</tr>
+</table>
 
 > Full prompts live in [`cases.json`](./cases.json).
 
