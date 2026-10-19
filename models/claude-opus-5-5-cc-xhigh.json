@@ -20,6 +20,13 @@
       },
       "contributor": "Nagi-ovo",
       "agentName": "圈地狐"
+    },
+    "cs-dust2": {
+      "note": {
+        "zh": "在本地通过 Claude Code 2.1.302 以 claude-opus-5-5（xhigh）一次生成，未经修改，耗时 76 分 40 秒。跑在 Agent Bench 隔离 runner：空 workspace、无 skill/plugin/MCP、No-Web。此处提交其完整源码工程（未改动任何代码），由站点部署时从源码打包为单文件。模型把项目交在子目录 dust2-fps/ 里；上站时仅把该目录整体上移一层到题目目录根部，以便站点打包，文件内容未改。",
+        "en": "One-shot by claude-opus-5-5 (xhigh) in Claude Code 2.1.302, unmodified, 76 minutes 40 seconds. Run on the Agent Bench isolated runner: empty workspace, no skills/plugins/MCP, No-Web. The complete source project is submitted as produced (no code changes) and bundled into a single file from source at site deploy time. The model delivered the project inside a dust2-fps/ subfolder; for the site build that folder was moved up one level to the case root, with file contents unchanged."
+      },
+      "contributor": "Nagi-ovo"
     }
   }
 }
