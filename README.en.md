@@ -1,29 +1,69 @@
+<div align="center">
+
+<p align="center">
+  <a href="https://bench.nagi.fun/"><img src="https://bench.nagi.fun/og-1200.png" alt="NAGI BENCH: same prompt, different models, one shot, no retries" width="720"></a>
+</p>
+
 # NAGI BENCH
+
+**Same prompt, different models, one shot, no retries.**<br>
+One-shot LLM eval cases by NAGI STUDIO: model x harness x effort combinations take the same task, ship runnable artifacts side by side, and face anonymous blind votes.
 
 [中文](./README.md) | English
 
-One-shot LLM eval cases by NAGI STUDIO: same prompt, different model x harness x effort combinations, one attempt and no retries — a side-by-side record of the runnable artifacts they ship.
+<p align="center">
+  <a href="https://bench.nagi.fun/"><img src="https://img.shields.io/badge/Live_site-bench.nagi.fun-c8f04a?style=for-the-badge&labelColor=111111" alt="Live site: bench.nagi.fun"></a>
+  <a href="https://bench.nagi.fun/#board"><img src="https://img.shields.io/badge/Leaderboard-Arena-c8f04a?style=for-the-badge&labelColor=111111" alt="Community leaderboard"></a>
+  <a href="#contributing-a-run"><img src="https://img.shields.io/badge/Contribute-PRs_welcome-c8f04a?style=for-the-badge&labelColor=111111" alt="Contribute a run"></a>
+</p>
 
-**Live site:** https://bench.nagi.fun/
-
-<p>
+<p align="center">
   <a href="https://x.com/Nag1ovo" target="_blank"><img src="https://img.shields.io/badge/@Nag1ovo-000000?style=flat-square&logo=x&logoColor=white" alt="X"></a>
   <a href="https://discord.gg/TEUFxdMbGb" target="_blank"><img src="https://img.shields.io/badge/Discord-Join-5865F2?style=flat-square&logo=discord&logoColor=white" alt="Discord"></a>
   <a href="https://www.xiaohongshu.com/user/profile/5d366136000000001101950a" target="_blank"><img src="https://img.shields.io/badge/小红书-@Nagi--ovo-FF2442?style=flat-square" alt="Xiaohongshu"></a>
   <a href="https://space.bilibili.com/312249633" target="_blank"><img src="https://img.shields.io/badge/Bilibili-@卡普迪姆-FB7299?style=flat-square&logo=bilibili&logoColor=white" alt="Bilibili"></a>
 </p>
 
+[Cases](#cases) · [How it works](#how-it-works-arena-blind-battles--leaderboard) · [Core idea](#core-idea-model--harness--agent) · [Registry](#registry) · [Contributing](#contributing-a-run) · [License](#license)
 
-## Models vs harnesses
+</div>
 
-> **Model + Harness = Agent** — a model is just weights; wrap it in a runtime and it becomes an agent that can actually do the work. That agent is the unit this bench evaluates.
+## Cases
 
-- **Model**: the weights and inference engine itself — GPT-5.5, Gemini 3.1 Pro, Claude Fable 5. Reasoning effort is a capability dial of the model itself: the same weights at high vs low effort reason at depths that feel like two different models, so effort belongs to the "model" dimension alongside the weights — judging a model while ignoring its effort isn't fair play. This bench defaults to max and labels the effort of every combination.
+Each case is one fixed prompt that every agent uses verbatim, in one shot. Click a case name to open its blind-vote page.
+
+| Case | Output | What it tests |
+|---|---|---|
+| [**Mythos Craft**](https://bench.nagi.fun/#mythos-craft)<br><sub>`mythos-craft`</sub> | Single-file HTML | A playable Minecraft-style 3D voxel world |
+| [**Pelican by the Sea**](https://bench.nagi.fun/#pelican-cycling)<br><sub>`pelican-cycling`</sub> | SVG | The classic eval: draw a pelican riding a bicycle, in code |
+| [**Skeleton Watch**](https://bench.nagi.fun/#skeleton-watch)<br><sub>`skeleton-watch`</sub> | Single-file HTML | A rotatable, exploded-view 3D skeleton watch |
+| [**Turf War**](https://bench.nagi.fun/#turf-war)<br><sub>`turf-war`</sub> | JS agent | Territory-grabbing agents battle head-to-head, ranked by wins, not votes |
+| [**CS Dust2 5v5**](https://bench.nagi.fun/#cs-dust2)<br><sub>`cs-dust2`</sub> | React project | A from-scratch 3D FPS in React + three.js |
+| [**Zhang Beihai: Meteorite Bullet**](https://bench.nagi.fun/#beihai-meteorite)<br><sub>`beihai-meteorite`</sub> | Three.js project | A long-horizon 3D film adapted from The Three-Body Problem |
+
+> Full prompts live in [`cases.json`](./cases.json).
+
+## How it works: Arena blind battles & leaderboard
+
+- **Arena (default)**: each case pits two anonymous artifacts against each other — vote A / B / Neither, and identities reveal only after you vote.
+- **Demo Show**: switch top-right to browse everything, grouped by model; a model with several harnesses can be viewed singly or side by side.
+- **Community leaderboard**: unlocks after 3 votes, ranked by Bradley-Terry scores (the LMSYS Chatbot Arena approach); "Neither" counts separately as both-bad. Votes feed a sitewide crowdsourced pool, guarded by Turnstile.
+
+## Core idea: Model + Harness = Agent
+
+> A model is just weights; wrap it in a runtime and it becomes an agent that can actually do the work. **That agent is the unit this bench evaluates.**
+
+- **Model**: the weights and inference engine itself — GPT-5.5, Gemini 3.1 Pro, Claude Fable 5. **Reasoning effort counts as part of the model**: the same weights at high vs low effort feel like two different models, so judging a model while ignoring its effort isn't fair play. This bench defaults to max and labels the effort of every combination.
 - **Harness**: the product/scaffolding wrapping the model — Codex CLI, Cursor, AntiGravity, the Claude web app. It controls tool calls, system prompts, context management and continuation strategy, and often shapes the outcome as much as the model does.
-- The unit of evaluation here is therefore an **Agent**: the same model (including its effort) under a different harness is a different agent and a separate entry (GPT-5.5 Pro and GPT-5.5 running in Codex CLI at xhigh are two agents from the same model family).
-- **The harness is evaluated as it ships, out of the box**: do not load skills / plugins / MCP servers / custom system prompts — they shift the output as much as swapping the harness does and break comparability between agents. If maintainers agree an enhanced output is still worth preserving, the run may set `"evaluation": "showcase"` and remain viewable only; it is excluded from Arena, voting, rankings, and qualification counts.
+- **So a different harness means a different agent** and a separate entry (GPT-5.5 Pro and GPT-5.5 running in Codex CLI at xhigh are two agents from the same model family).
+- **Only the out-of-the-box harness is evaluated**: do not load skills / plugins / MCP servers / custom system prompts — they shift the output as much as swapping the harness does and break comparability between agents. If maintainers agree an enhanced output is still worth preserving, the run may set `"evaluation": "showcase"` and remain viewable only; it is excluded from Arena, voting, rankings, and qualification counts.
 
 ## Registry
+
+More than a hundred model x harness x effort combinations have run these cases, from Anthropic, OpenAI, Google, DeepSeek, xAI, Moonshot, Zhipu, Alibaba and more. Browse the artifacts at [bench.nagi.fun](https://bench.nagi.fun/); the full list is below.
+
+<details>
+<summary><b>Show the full Registry table</b> (sorted by vendor and version, generated by CI)</summary>
 
 <!-- registry:start -->
 > This table is generated from `models/*.json` by `bun scripts/update-registry.ts`; CI re-syncs it automatically after merge — contributors need not hand-edit it.
@@ -102,50 +142,81 @@ One-shot LLM eval cases by NAGI STUDIO: same prompt, different model x harness x
 | Inkling-Small | Thinking Machines Lab | Tinker Web · xHigh | 03 |
 <!-- registry:end -->
 
-## Arena blind battles & community board
+</details>
 
-- Each case defaults to **Arena mode**: two anonymous artifacts battle (A / B / Neither) and identities reveal only after you vote; switch to **Demo Show** to browse everything (tabs are grouped by model — a model with several harnesses can be viewed singly or side by side).
-- Casting 03 votes total unlocks the **community leaderboard**, ranked by Bradley-Terry scores (the LMSYS Chatbot Arena approach); "neither" counts separately as both-bad.
-- Votes stay in the browser by default; deploying `worker/` (Cloudflare Worker + D1 + Turnstile, free tier) upgrades the board to sitewide crowdsourced data — see [worker/README.md](./worker/README.md).
+## Contributing a run
 
-## Structure
+Contributions are **data-only — no code changes**: you add two files. Full rules live in [**AGENTS.md**](./AGENTS.md) (the contributor / AI-agent guide).
+
+**Four steps:**
+
+1. **Generate**: run the prompt from [`cases.json`](./cases.json) **verbatim** in your harness, once (every skill / plugin disabled, no MCP, no custom system prompt).
+2. **Add the artifact**: preferably at `outputs/<base-model>/<harness-effort>/<case-id>.<ext>` (e.g. `outputs/gpt-5-5-pro/chatgpt-web-extended-pro/pelican-cycling.svg`).
+3. **Register it**: `models/<agent-id>.json` (new file for a new combination; add to `runs` for an existing one) with `artifactDir` pointing at the artifact folder (example below).
+4. **Check and open a PR**: run `bun scripts/validate-data.ts` until it passes, then open a PR with the template's proof screenshot — your harness showing the model name and effort while generating (paste it into the PR; do not commit image files).
+
+```json
+{
+  "label": "GPT-5.5 Pro",
+  "vendor": "OpenAI",
+  "harness": "ChatGPT Web",
+  "effort": "Extended Pro",
+  "artifactDir": "gpt-5-5-pro/chatgpt-web-extended-pro",
+  "order": 20,
+  "runs": {
+    "pelican-cycling": {
+      "note": {
+        "zh": "在哪个 Harness 里、什么思考档位、是否一次生成、是否有修复",
+        "en": "Which harness, what effort level, one-shot or fixed"
+      },
+      "contributor": "your-github-username"
+    }
+  }
+}
+```
+
+**Rules** (enforced by CI — the build fails otherwise):
+
+- `agent-id`s use dash-only lowercase letters / digits (e.g. `doubao-seed-2-0-pro`) and are stable identities; without `artifactDir`, artifacts default to `outputs/<agent-id>/`;
+- `artifactDir` uses one or two lowercase dash-case path segments (preferably `<base-model>/<harness-effort>`); it is only the file location and does not affect vote or leaderboard identity;
+- a bilingual provenance `note` is **required** per run — it is where this repo's credibility comes from (which harness, what effort, one-shot or fixed);
+- every declared run must have its artifact;
+- multiple versions of the same combination x case go in an array under `runs.<case-id>`, and every version after the first needs a distinct `file` name (e.g. `pelican-cycling-2.svg`);
+- set `contributor` to your GitHub username — the site shows your avatar linked to your profile next to the run;
+- skill/plugin/non-standard outputs require maintainer approval plus `"evaluation": "showcase"`, must disclose the setup in both notes, and stay permanently excluded from blind voting and rankings;
+- fill in `harness` and `effort` truthfully for new combinations: the case page renders Harness / Effort metadata chips from these fields and auto-matches brand icons for the model, vendor and harness (via [lobe-icons](https://github.com/lobehub/lobe-icons)) — contributors never touch icons.
+
+PRs get data validation from CI; merges to `main` rebuild the site automatically (usually instant, at most 6 hours).
+
+<details>
+<summary><b>If you are an AI agent (Claude Code / Codex / Cursor, etc.), expand this</b></summary>
+
+- **The unit you contribute is one Agent = a model × the harness you run in.** The `<agent-id>` (lowercase letters / digits / dashes) encodes that pairing — e.g. `gpt-5-5-pro`, `claude-fable-5-cc` (cc = Claude Code). The same model in a different harness is a different Agent with a different id. The `<agent-id>` is the vote and leaderboard identity; do not rename it just to reorganize files.
+- **There are six cases right now**, defined in [`cases.json`](./cases.json) and listed under "Cases" above. The prompt lives in `cases.json` — **use it verbatim, do not paraphrase**. Note: `turf-war` does **not** accept artifact PRs — to keep earlier policies unscoutable, every run is executed and submitted personally by the maintainer Nagi ([@Nagi-ovo](https://github.com/Nagi-ovo)); open an issue to request a model.
+- **To find what's missing**: read `cases.json` (all cases) and `models/*.json` (what each Agent has run) — a `<case-id>` absent from an Agent's json is an open slot; any row in the script-generated Registry table above whose "Runs" count is below the number of cases is an Agent missing a case; a brand-new Agent can fill every open case.
+- **Then follow the two-file flow above**, write a bilingual `note` (how the artifact was produced — one-shot or fixed), and run `bun scripts/validate-data.ts` until it passes before opening a PR.
+
+</details>
+
+<details>
+<summary><b>Repo layout and local commands</b></summary>
 
 ```
 outputs/<artifact-dir>/<case-id>.<ext>  raw model artifacts (HTML / SVG), filename = case id
 models/<agent-id>.json                  agent registry: label / vendor / harness / effort / artifactDir / order / run notes
-cases.json                           case definitions (bilingual prompts, maintainer-owned)
-scripts/validate-data.ts             data validation (CI runs it on every PR)
-scripts/update-registry.ts           README Registry table generation (CI auto-syncs after merge)
+cases.json                              case definitions (bilingual prompts, maintainer-owned)
+scripts/validate-data.ts                data validation (CI runs it on every PR)
+scripts/update-registry.ts              README Registry table generation (CI auto-syncs after merge)
 ```
-
-> The site and vote-backend source lives in the private `nagi-bench-site` repo, deployed on Cloudflare Pages; this repo is the site's data source.
-
-## Validation
 
 ```bash
 bun scripts/validate-data.ts   # the same data validation CI runs (run this before submitting)
 bun scripts/update-registry.ts # optional: preview the Registry tables locally; CI syncs them after merge
 ```
 
-## Contributing a run
+The site and vote-backend source lives in the private `nagi-bench-site` repo, deployed on Cloudflare Pages; this repo is the site's data source.
 
-> Full rules live in [**AGENTS.md**](./AGENTS.md) (the contributor / AI-agent guide).
-
-> **If you are an AI agent (Claude Code / Codex / Cursor, etc.), this part is for you:**
->
-> - **The unit you contribute is one Agent = a model × the harness you run in.** The `<agent-id>` (lowercase letters / digits / dashes) encodes that pairing — e.g. `gpt-5-5-pro`, `claude-fable-5-cc` (cc = Claude Code). The same model in a different harness is a different Agent with a different id. The `<agent-id>` is the vote and leaderboard identity; do not rename it just to reorganize files.
-> - **There are five cases right now**, defined in [`cases.json`](./cases.json): `mythos-craft` (HTML, a playable voxel world), `pelican-cycling` (SVG, a pelican cycling by the sea), `skeleton-watch` (HTML, a skeleton mechanical watch), `cs-dust2` (React, a multi-file project), and `turf-war` (JS agents battling head-to-head, ranked by objective wins). The prompt lives in `cases.json` — **use it verbatim, do not paraphrase**. Note: `turf-war` does **not** accept artifact PRs — to keep earlier policies unscoutable, every run is executed and submitted personally by the maintainer Nagi ([@Nagi-ovo](https://github.com/Nagi-ovo)); open an issue to request a model.
-> - **To find what's missing**: read `cases.json` (all cases) and `models/*.json` (what each Agent has run) — a `<case-id>` absent from an Agent's json is an open slot; any row in the script-generated Registry table above whose "Runs" count is below the number of cases is an Agent missing a case; a brand-new Agent can fill them.
-> - **Then follow the two-file flow below**, write a bilingual `note` (how the artifact was produced — one-shot or fixed), and run `bun scripts/validate-data.ts` until it passes before opening a PR.
-
-Contributions are data-only — no code changes needed:
-
-1. Artifact: preferably `outputs/<base-model>/<harness-effort>/<case-id>.<ext>` (e.g. `outputs/gpt-5-5-pro/chatgpt-web-extended-pro/pelican-cycling.svg`).
-2. Registration: `models/<agent-id>.json` (new file for a new combination; add to `runs` for an existing one) with `artifactDir` pointing at the artifact folder — see the schema example in the Chinese README.
-
-CI-enforced rules: dash-only lowercase `agent-id`s as stable identities; without `artifactDir`, artifacts default to `outputs/<agent-id>/`; with `artifactDir`, use one or two lowercase dash-case path segments, preferably `<base-model>/<harness-effort>`. A bilingual provenance `note` is required per run (which harness, what effort, one-shot or fixed); every declared run must have its artifact; multiple versions of the same combination x case go in an array with distinct `file` names (e.g. `pelican-cycling-2.svg`). Set `contributor` to your GitHub username — the site shows your avatar linked to your profile next to the run. Skill/plugin/non-standard outputs require maintainer approval plus `"evaluation": "showcase"`, must disclose the setup in both notes, and stay permanently excluded from blind voting and rankings. Fill in `harness` and `effort` truthfully for new combinations: the case page renders Harness / Effort metadata chips from these fields and auto-matches brand icons for the model, vendor and harness (via [lobe-icons](https://github.com/lobehub/lobe-icons)) — contributors never touch icons.
-
-PRs get data validation from CI; merges to `main` rebuild the site automatically (usually instant, at most 6 hours).
+</details>
 
 ## License
 
