@@ -1,7 +1,7 @@
 <div align="center">
 
 <p align="center">
-  <a href="https://bench.nagi.fun/"><img src="https://bench.nagi.fun/og-1200.png?v=2026-10-19-2" alt="NAGI BENCH：同一段提示词，不同模型，一次生成、不许返工" width="720"></a>
+  <a href="https://bench.nagi.fun/"><img src="https://bench.nagi.fun/og-1200.png?v=2026-10-19-3" alt="NAGI BENCH：同一段提示词，不同模型，一次生成、不许返工" width="720"></a>
 </p>
 
 # NAGI BENCH
@@ -74,6 +74,15 @@ NAGI STUDIO 的 LLM 测评案例集：把「模型 × Harness × 思考配额」
 <sub>把《三体》片段改编成长时程 3D 影片，考叙事与导演</sub><br>
 <sub><code>beihai-meteorite</code></sub>
 </td>
+</tr>
+<tr>
+<td width="50%" valign="top">
+<a href="https://bench.nagi.fun/#water-clock-tower"><img src="https://bench.nagi.fun/readme/cases/water-clock-tower.webp?v=2" alt="水运仪象台 运行截图" width="100%"></a><br>
+<a href="https://bench.nagi.fun/#water-clock-tower"><b>水运仪象台</b></a> <sub>· 3D 项目</sub><br>
+<sub>用实时物理引擎做 30 秒 3D 科普短片，讲清北宋苏颂的水运仪象台怎么靠水报时</sub><br>
+<sub><code>water-clock-tower</code></sub>
+</td>
+<td width="50%" valign="top"></td>
 </tr>
 </table>
 

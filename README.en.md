@@ -1,7 +1,7 @@
 <div align="center">
 
 <p align="center">
-  <a href="https://bench.nagi.fun/"><img src="https://bench.nagi.fun/og-1200.png?v=2026-10-19-2" alt="NAGI BENCH: same prompt, different models, one shot, no retries" width="720"></a>
+  <a href="https://bench.nagi.fun/"><img src="https://bench.nagi.fun/og-1200.png?v=2026-10-19-3" alt="NAGI BENCH: same prompt, different models, one shot, no retries" width="720"></a>
 </p>
 
 # NAGI BENCH
@@ -74,6 +74,15 @@ Each case is one fixed prompt that every agent uses verbatim, in one shot. Click
 <sub>A long-horizon 3D film adapted from The Three-Body Problem</sub><br>
 <sub><code>beihai-meteorite</code></sub>
 </td>
+</tr>
+<tr>
+<td width="50%" valign="top">
+<a href="https://bench.nagi.fun/#water-clock-tower"><img src="https://bench.nagi.fun/readme/cases/water-clock-tower.webp?v=2" alt="Water-Driven Clock Tower screenshot" width="100%"></a><br>
+<a href="https://bench.nagi.fun/#water-clock-tower"><b>Water-Driven Clock Tower</b></a> <sub>· 3D project</sub><br>
+<sub>A 30-second physics-driven 3D explainer of Su Song's water-powered astronomical clock tower</sub><br>
+<sub><code>water-clock-tower</code></sub>
+</td>
+<td width="50%" valign="top"></td>
 </tr>
 </table>
 
