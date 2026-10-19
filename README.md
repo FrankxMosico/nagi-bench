@@ -106,7 +106,7 @@ NAGI STUDIO 的 LLM 测评案例集：把「模型 × Harness × 思考配额」
 
 | 模型 / 厂商 | 产出 | 运行环境 · 思考配额 |
 |---|---|---|
-| Claude Opus 5.5<br><sub>Anthropic</sub> | 10 | Claude Code · Max / High |
+| Claude Opus 5.5<br><sub>Anthropic</sub> | 11 | Claude Code · Max / High |
 | Claude Sonnet 5.5<br><sub>Anthropic</sub> | 17 | Claude Code · High / Max / xhigh |
 | Claude Haiku 5.5<br><sub>Anthropic</sub> | 06 | Claude Code · High |
 | Claude Fable 5.1<br><sub>Anthropic</sub> | 06 | Claude Code · High |
