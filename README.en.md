@@ -1,7 +1,7 @@
 <div align="center">
 
 <p align="center">
-  <a href="https://bench.nagi.fun/"><img src="https://bench.nagi.fun/og-1200.png?v=2026-10-19" alt="NAGI BENCH: same prompt, different models, one shot, no retries" width="720"></a>
+  <a href="https://bench.nagi.fun/"><img src="https://bench.nagi.fun/og-1200.png?v=2026-10-19-2" alt="NAGI BENCH: same prompt, different models, one shot, no retries" width="720"></a>
 </p>
 
 # NAGI BENCH
@@ -35,13 +35,13 @@ Each case is one fixed prompt that every agent uses verbatim, in one shot. Click
 <table>
 <tr>
 <td width="50%" valign="top">
-<a href="https://bench.nagi.fun/#mythos-craft"><img src="https://bench.nagi.fun/readme/cases/mythos-craft.webp" alt="Mythos Craft screenshot" width="100%"></a><br>
+<a href="https://bench.nagi.fun/#mythos-craft"><img src="https://bench.nagi.fun/readme/cases/mythos-craft.webp?v=2" alt="Mythos Craft screenshot" width="100%"></a><br>
 <a href="https://bench.nagi.fun/#mythos-craft"><b>Mythos Craft</b></a> <sub>· Single-file HTML</sub><br>
 <sub>A playable Minecraft-style 3D voxel world</sub><br>
 <sub><code>mythos-craft</code></sub>
 </td>
 <td width="50%" valign="top">
-<a href="https://bench.nagi.fun/#pelican-cycling"><img src="https://bench.nagi.fun/readme/cases/pelican-cycling.webp" alt="Pelican by the Sea screenshot" width="100%"></a><br>
+<a href="https://bench.nagi.fun/#pelican-cycling"><img src="https://bench.nagi.fun/readme/cases/pelican-cycling.webp?v=2" alt="Pelican by the Sea screenshot" width="100%"></a><br>
 <a href="https://bench.nagi.fun/#pelican-cycling"><b>Pelican by the Sea</b></a> <sub>· SVG</sub><br>
 <sub>The classic eval: draw a pelican riding a bicycle, in code</sub><br>
 <sub><code>pelican-cycling</code></sub>
@@ -49,13 +49,13 @@ Each case is one fixed prompt that every agent uses verbatim, in one shot. Click
 </tr>
 <tr>
 <td width="50%" valign="top">
-<a href="https://bench.nagi.fun/#skeleton-watch"><img src="https://bench.nagi.fun/readme/cases/skeleton-watch.webp" alt="Skeleton Watch screenshot" width="100%"></a><br>
+<a href="https://bench.nagi.fun/#skeleton-watch"><img src="https://bench.nagi.fun/readme/cases/skeleton-watch.webp?v=2" alt="Skeleton Watch screenshot" width="100%"></a><br>
 <a href="https://bench.nagi.fun/#skeleton-watch"><b>Skeleton Watch</b></a> <sub>· Single-file HTML</sub><br>
 <sub>A rotatable, exploded-view 3D skeleton watch</sub><br>
 <sub><code>skeleton-watch</code></sub>
 </td>
 <td width="50%" valign="top">
-<a href="https://bench.nagi.fun/#turf-war"><img src="https://bench.nagi.fun/readme/cases/turf-war.webp" alt="Turf War screenshot" width="100%"></a><br>
+<a href="https://bench.nagi.fun/#turf-war"><img src="https://bench.nagi.fun/readme/cases/turf-war.webp?v=2" alt="Turf War screenshot" width="100%"></a><br>
 <a href="https://bench.nagi.fun/#turf-war"><b>Turf War</b></a> <sub>· JS agent</sub><br>
 <sub>Territory-grabbing agents battle head-to-head, ranked by wins, not votes</sub><br>
 <sub><code>turf-war</code></sub>
@@ -63,13 +63,13 @@ Each case is one fixed prompt that every agent uses verbatim, in one shot. Click
 </tr>
 <tr>
 <td width="50%" valign="top">
-<a href="https://bench.nagi.fun/#cs-dust2"><img src="https://bench.nagi.fun/readme/cases/cs-dust2.webp" alt="CS Dust2 5v5 screenshot" width="100%"></a><br>
+<a href="https://bench.nagi.fun/#cs-dust2"><img src="https://bench.nagi.fun/readme/cases/cs-dust2.webp?v=2" alt="CS Dust2 5v5 screenshot" width="100%"></a><br>
 <a href="https://bench.nagi.fun/#cs-dust2"><b>CS Dust2 5v5</b></a> <sub>· React project</sub><br>
 <sub>A from-scratch 3D FPS in React + three.js</sub><br>
 <sub><code>cs-dust2</code></sub>
 </td>
 <td width="50%" valign="top">
-<a href="https://bench.nagi.fun/#beihai-meteorite"><img src="https://bench.nagi.fun/readme/cases/beihai-meteorite.webp" alt="Zhang Beihai: Meteorite Bullet screenshot" width="100%"></a><br>
+<a href="https://bench.nagi.fun/#beihai-meteorite"><img src="https://bench.nagi.fun/readme/cases/beihai-meteorite.webp?v=2" alt="Zhang Beihai: Meteorite Bullet screenshot" width="100%"></a><br>
 <a href="https://bench.nagi.fun/#beihai-meteorite"><b>Zhang Beihai: Meteorite Bullet</b></a> <sub>· Three.js project</sub><br>
 <sub>A long-horizon 3D film adapted from The Three-Body Problem</sub><br>
 <sub><code>beihai-meteorite</code></sub>
