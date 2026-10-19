@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#e9e5db" />
+  <meta name="description" content="30 秒看懂北宋苏颂水运仪象台：从水重驱动、擒纵调速，到天文演示与木人报时。实时物理 3D 科普短片。" />
+  <title>水运仪象台 · 让流水成为时间</title>
+  <script defer src="./assets/film.js"></script>
+  <link rel="stylesheet" href="./assets/style.css">
+</head>
+<body>
+  <div id="app">
+    <header class="masthead">
+      <a class="brand" href="#" aria-label="从头播放"><span class="seal">时</span><span>造物纪<span class="brand-dot"> / </span><small>中国古代科技</small></span></a>
+      <div class="edition"><span class="tiny-dot"></span> 立体微纪录 <span class="edition-line"></span> VOL. 001</div>
+      <div class="header-actions"><button id="sound" class="icon-button" aria-label="开启声音" title="开启程序合成声音"><svg viewBox="0 0 24 24"><path d="M11 5 6 9H3v6h3l5 4z"/><path class="sound-on" d="M15 8c3 2 3 6 0 8m3-11c5 4 5 10 0 14"/><path class="sound-off" d="m16 9 6 6m0-6-6 6"/></svg><span id="sound-text">开启声音</span></button><button id="info" class="icon-button info-button" aria-label="关于这部短片">i</button></div>
+    </header>
+    <main>
+      <div class="left-column">
+        <div class="eyebrow"><span id="chapter-number">序 · 01</span><span class="eyebrow-line"></span><span id="chapter-category">北宋的机械宇宙</span></div>
+        <h1 id="headline">让流水<br>成为<span>时间</span>。</h1>
+        <p id="description">九百多年前，苏颂把观天、演天与报时，装进了同一座水力钟楼。</p>
+        <div id="stage-detail" class="stage-detail"><span class="detail-rule"></span><div><span id="detail-top">水运仪象台</span><small id="detail-bottom">北宋 · 苏颂主持建造 · 1092 年</small></div></div>
+        <button id="replay-main" class="replay-main" hidden>再看一次 <span>↗</span></button>
+      </div>
+      <div id="scene" aria-label="水运仪象台的实时三维机械演示"><div id="annotations"></div><div class="scene-caption"><span class="live-dot"></span><span id="scene-state">水力运转中</span><span class="caption-divider">/</span><span>原理模型 · 周期加速</span></div><div class="orientation"><span>北</span><svg viewBox="0 0 50 50"><path d="M25 6 30 25 25 44 20 25z"/><path d="M6 25h38"/></svg></div></div>
+      <div class="water-meter" id="water-meter"><div class="meter-title"><span>受水壶</span><span id="gate-state">正在蓄水</span></div><div class="meter-track"><i id="fill-level"></i></div><div class="meter-bottom"><span>水重 ↑</span><span id="step-count">水轮 · 第 0 格</span></div></div>
+      <div class="cause-strip" aria-label="动力传递顺序"><span data-cause="0"><i>01</i> 水重</span><b>→</b><span data-cause="1"><i>02</i> 擒纵</span><b>→</b><span data-cause="2"><i>03</i> 传动</span><b>→</b><span data-cause="3"><i>04</i> 报时</span></div>
+      <div class="subtitle" aria-live="off"><span id="subtitle">这座钟楼，用一股流水，同时推动天象与时间。</span></div>
+    </main>
+    <footer class="player">
+      <button id="play" class="play-button" aria-label="暂停"><svg class="pause-shape" viewBox="0 0 24 24"><path d="M8 5v14M16 5v14"/></svg><svg class="play-shape" viewBox="0 0 24 24"><path d="m8 4 12 8-12 8z"/></svg></button>
+      <div class="time"><span id="elapsed">00:00</span><span> / 00:30</span></div>
+      <div class="timeline-wrap"><div class="chapter-labels"><button data-seek="0">全貌</button><button data-seek="4">水力</button><button data-seek="10">擒纵</button><button data-seek="16">传动</button><button data-seek="22">报时</button></div><input id="timeline" type="range" min="0" max="30" value="0" step="0.1" aria-label="短片播放进度" /><div class="timeline-ticks"><i style="left:13.33%"></i><i style="left:33.33%"></i><i style="left:53.33%"></i><i style="left:73.33%"></i></div></div>
+      <button id="replay" class="icon-button" aria-label="重新播放" title="重新播放"><svg viewBox="0 0 24 24"><path d="M4 10a8 8 0 1 1 1 8M4 4v6h6"/></svg></button>
+      <span class="player-divider"></span><button id="explore" class="explore-button">自由观察 <span>↗</span></button>
+    </footer>
+    <div id="explore-panel" hidden><div class="explore-title">让水告诉你答案</div><p>拖动旋转视角 · 滚轮缩放</p><button id="water-toggle" aria-pressed="true"><span class="switch"><i></i></span><span id="water-toggle-text">水流已开启</span></button><small>关水后，余水仍会推动水轮；<br>失去水重，机构便停在下一道止挡。</small><button id="return-film">返回短片 →</button></div>
+    <dialog id="about"><button id="close-info" class="close-dialog" aria-label="关闭">×</button><span class="dialog-kicker">关于这次复原</span><h2>一座由水驱动的<br>天文钟楼。</h2><p>北宋苏颂主持建造的水运仪象台，约于 1092 年完成。上层浑仪用于观测天体，中层浑象演示天球，下层由木人击钟、击鼓和出牌报时。</p><p>恒定水位使供水较稳定。水进入枢轮上的受水壶，水重达到阈值后压动天衡，释放止挡；枢轮转过一格，又被锁住。齿轮与天梯把这一节律传到各层。</p><div class="dialog-note">本片依据《新仪象法要》所述原理进行教学化重构。原枢轮有 36 个受水壶；本模型展示 12 个，并简化复合擒纵、链传动路径与传动比。30 秒展示的是加速后的工作周期，不代表真实计时刻度。</div><p class="technical-note">所有运动机构均由本项目的约束物理引擎实时积分：重力水载荷、转动惯量、齿轮与链约束、止挡碰撞、凸轮接触及钟锤回落。镜头独立编排。声音由 Web Audio API 实时合成，开启后播放。</p><a href="https://zh.wikisource.org/wiki/新儀象法要" target="_blank" rel="noreferrer">文献线索：《新仪象法要》 ↗</a><small class="offline-note">作品运行无需网络；上方文献链接仅供延伸阅读。</small></dialog>
+  </div>
+</body>
+</html>

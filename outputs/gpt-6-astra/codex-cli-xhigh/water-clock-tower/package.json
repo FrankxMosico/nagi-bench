@@ -1,0 +1,19 @@
+{
+  "name": "water-keeps-time",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --configLoader native --host 0.0.0.0",
+    "build": "vite build --configLoader native",
+    "preview": "vite preview --configLoader native --host 0.0.0.0",
+    "check:physics": "bun scripts/check-physics.js"
+  },
+  "dependencies": {
+    "three": "0.180.0"
+  },
+  "devDependencies": {
+    "vite": "8.2.0",
+    "playwright-core": "1.61.1"
+  }
+}

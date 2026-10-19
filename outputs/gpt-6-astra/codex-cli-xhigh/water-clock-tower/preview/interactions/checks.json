@@ -1,0 +1,12 @@
+{
+  "errors": [],
+  "requests": [
+    "file:///workspace/dist/index.html",
+    "file:///workspace/dist/assets/film.js",
+    "file:///workspace/dist/assets/style.css"
+  ],
+  "states": [],
+  "paused": 3.5594000000476838,
+  "still": 3.5594000000476838,
+  "water": false
+}

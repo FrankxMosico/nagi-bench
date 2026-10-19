@@ -1,0 +1,152 @@
+[
+  {
+    "time": 0,
+    "water": true,
+    "steps": 0,
+    "strikes": 0,
+    "latched": true,
+    "bucketMass": 0,
+    "constraintError": 0,
+    "rotors": [
+      {
+        "name": "water wheel",
+        "q": 0,
+        "v": 0
+      },
+      {
+        "name": "idler gear",
+        "q": 0,
+        "v": 0
+      },
+      {
+        "name": "endless chain",
+        "q": 0,
+        "v": 0
+      },
+      {
+        "name": "upper chain sprocket",
+        "q": 0,
+        "v": 0
+      },
+      {
+        "name": "vertical shaft",
+        "q": 0,
+        "v": 0
+      },
+      {
+        "name": "celestial globe",
+        "q": 0,
+        "v": 0
+      },
+      {
+        "name": "armillary sphere",
+        "q": 0,
+        "v": 0
+      },
+      {
+        "name": "time drum",
+        "q": 0,
+        "v": 0
+      },
+      {
+        "name": "striking cam",
+        "q": 0,
+        "v": 0
+      },
+      {
+        "name": "weighted balance and pallet",
+        "q": 0,
+        "v": 0
+      },
+      {
+        "name": "bell hammer",
+        "q": 0,
+        "v": 0
+      },
+      {
+        "name": "bell pendulum",
+        "q": 0,
+        "v": 0
+      }
+    ],
+    "playhead": 0,
+    "playing": false,
+    "exploring": false,
+    "drawCalls": 58
+  },
+  {
+    "time": 29.999999999998618,
+    "water": true,
+    "steps": 21,
+    "strikes": 10,
+    "latched": false,
+    "bucketMass": 0.31383333333333335,
+    "constraintError": 4.7996131513627915e-9,
+    "rotors": [
+      {
+        "name": "water wheel",
+        "q": 11.23008327674465,
+        "v": 1.0012609963565804
+      },
+      {
+        "name": "idler gear",
+        "q": -20.21414989334076,
+        "v": -1.802101000573351
+      },
+      {
+        "name": "endless chain",
+        "q": -7.479235457026531,
+        "v": -0.666653946287767
+      },
+      {
+        "name": "upper chain sprocket",
+        "q": -20.2141498824992,
+        "v": -1.8017197243210856
+      },
+      {
+        "name": "vertical shaft",
+        "q": -9.702791943138394,
+        "v": -0.8648092473833708
+      },
+      {
+        "name": "celestial globe",
+        "q": -4.3662563744918295,
+        "v": -0.38916695902350884
+      },
+      {
+        "name": "armillary sphere",
+        "q": -2.7167817440787507,
+        "v": -0.24214658926734384
+      },
+      {
+        "name": "time drum",
+        "q": 5.390439972827173,
+        "v": 0.4806049174596031
+      },
+      {
+        "name": "striking cam",
+        "q": 16.845124915116976,
+        "v": 1.5018914945348705
+      },
+      {
+        "name": "weighted balance and pallet",
+        "q": 0,
+        "v": 0
+      },
+      {
+        "name": "bell hammer",
+        "q": 0.550130710636742,
+        "v": -1.4139939014757796
+      },
+      {
+        "name": "bell pendulum",
+        "q": -0.015243633457189681,
+        "v": 0.04526762023659543
+      }
+    ],
+    "playhead": 30,
+    "playing": false,
+    "exploring": false,
+    "drawCalls": 62
+  }
+]
