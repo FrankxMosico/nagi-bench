@@ -1,0 +1,23 @@
+{
+  "name": "beyond-the-world",
+  "description": "《尘世之外》—— 程序化体素短片（Three.js）",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --configLoader native",
+    "build": "vite build --configLoader native",
+    "preview": "vite preview --configLoader native",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@agentbench/cinematic-player": "file:/opt/agentbench/cinematic-player",
+    "@agentbench/voxel-kit": "file:/opt/agentbench/voxel-kit",
+    "three": "0.180.0"
+  },
+  "devDependencies": {
+    "@types/three": "0.180.0",
+    "typescript": "5.9.2",
+    "vite": "8.2.0"
+  }
+}

@@ -48,6 +48,13 @@
       },
       "contributor": "Nagi-ovo",
       "agentName": "画地为王"
+    },
+    "beihai-meteorite": {
+      "note": {
+        "zh": "在本地通过 Claude Code 2.1.302 以 claude-opus-5-5（max）一次生成，未经修改，耗时 171 分 51 秒。跑在 Agent Bench 隔离 runner：空 workspace、无 skill/plugin/MCP、No-Web。本页为其构建产物（部署时由源码打包为单文件）。",
+        "en": "One-shot by claude-opus-5-5 (max) in Claude Code 2.1.302, unmodified, 171 minutes 51 seconds. Run on the Agent Bench isolated runner: empty workspace, no skills/plugins/MCP, No-Web. This page is its build output (bundled from source into a single file at deploy time)."
+      },
+      "contributor": "Nagi-ovo"
     }
   }
 }

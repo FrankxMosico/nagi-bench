@@ -1,0 +1,221 @@
+html,
+body {
+  margin: 0;
+  height: 100%;
+  background: #000;
+  overflow: hidden;
+}
+
+#app {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  color: #eee;
+  font-family: "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Source Han Sans SC", "Microsoft YaHei", system-ui, sans-serif;
+}
+
+/* 2.39:1 picture, letterboxed in whatever window it is given */
+#stage {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(100vw, calc(100vh * 2.39));
+  aspect-ratio: 2.39 / 1;
+  transform: translate(-50%, -50%);
+  overflow: hidden;
+  background: #000;
+}
+
+#stage canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.serif {
+  font-family: "Songti SC", "STSong", "Noto Serif CJK SC", "Source Han Serif SC", "SimSun", serif;
+}
+
+/* ------------------------------------------------------------ loading */
+.loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.2em;
+  z-index: 5;
+  background: #000;
+  transition: opacity 0.6s ease;
+}
+.loading-title {
+  font-family: "Songti SC", "STSong", "Noto Serif CJK SC", "Source Han Serif SC", "SimSun", serif;
+  font-size: clamp(28px, 4vw, 60px);
+  letter-spacing: 0.5em;
+  text-indent: 0.5em;
+  color: #e9e2d4;
+}
+.loading-text {
+  font-size: clamp(11px, 1vw, 14px);
+  letter-spacing: 0.3em;
+  color: #8a8478;
+}
+
+/* ------------------------------------------------------------ poster */
+.poster {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-size: cover;
+  background-position: center;
+  cursor: pointer;
+  transition: opacity 0.9s ease;
+}
+.poster::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.75) 75%);
+}
+.poster > * {
+  position: relative;
+}
+.poster-title {
+  font-family: "Songti SC", "STSong", "Noto Serif CJK SC", "Source Han Serif SC", "SimSun", serif;
+  font-size: clamp(34px, 6vw, 96px);
+  letter-spacing: 0.55em;
+  text-indent: 0.55em;
+  color: #f1eadc;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.8);
+}
+.poster-sub {
+  margin-top: 1em;
+  font-size: clamp(11px, 1.1vw, 16px);
+  letter-spacing: 0.3em;
+  color: #c9c0ae;
+}
+.poster-play {
+  margin-top: 2.2em;
+  width: clamp(54px, 5vw, 76px);
+  height: clamp(54px, 5vw, 76px);
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  background: rgba(0, 0, 0, 0.35);
+  color: #fff;
+  font-size: clamp(18px, 1.8vw, 26px);
+  cursor: pointer;
+}
+.poster-hint {
+  margin-top: 1em;
+  font-size: clamp(10px, 0.9vw, 13px);
+  letter-spacing: 0.2em;
+  color: #9a9284;
+}
+
+/* ------------------------------------------------------------ in-picture typography */
+.ov {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+.ov-caption {
+  position: absolute;
+  left: 4.5%;
+  top: 8%;
+  opacity: 0;
+  color: #ece4d4;
+  font-size: clamp(11px, 1.25vw, 19px);
+  letter-spacing: 0.32em;
+  text-shadow: 0 1px 4px #000, 0 0 10px #000;
+}
+.ov-title {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+}
+.ov-title-main {
+  font-family: "Songti SC", "STSong", "Noto Serif CJK SC", "Source Han Serif SC", "SimSun", serif;
+  font-size: clamp(34px, 5.6vw, 92px);
+  letter-spacing: 0.55em;
+  text-indent: 0.55em;
+  color: #f2ecdf;
+  text-shadow: 0 0 24px rgba(0, 0, 0, 0.9);
+}
+.ov-title-sub {
+  margin-top: 1.4em;
+  font-size: clamp(10px, 1vw, 15px);
+  letter-spacing: 0.32em;
+  color: #b9b1a2;
+}
+.ov-hud {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  font-family: "SF Mono", "Menlo", "Consolas", "Noto Sans Mono CJK SC", monospace;
+}
+.ov-hud-lines {
+  position: absolute;
+  left: 7%;
+  top: 11%;
+  white-space: pre;
+  line-height: 1.7;
+  font-size: clamp(9px, 0.95vw, 14px);
+  letter-spacing: 0.12em;
+  color: #9ff0de;
+  text-shadow: 0 0 6px rgba(80, 255, 200, 0.6);
+}
+.ov-hud-alert {
+  position: absolute;
+  right: 7%;
+  top: 11%;
+  font-size: clamp(10px, 1.05vw, 16px);
+  letter-spacing: 0.12em;
+  color: #ff6a52;
+  text-shadow: 0 0 8px rgba(255, 60, 40, 0.8);
+}
+.ov-scope {
+  position: absolute;
+  left: 65.5%;
+  bottom: 13%;
+  opacity: 0;
+  font-family: "SF Mono", "Menlo", "Consolas", monospace;
+  font-size: clamp(9px, 0.9vw, 13px);
+  letter-spacing: 0.15em;
+  color: #c9e8c0;
+}
+.ov-end {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.9em;
+  opacity: 0;
+}
+.ov-end-title {
+  font-family: "Songti SC", "STSong", "Noto Serif CJK SC", "Source Han Serif SC", "SimSun", serif;
+  font-size: clamp(26px, 3.6vw, 58px);
+  letter-spacing: 0.55em;
+  text-indent: 0.55em;
+  color: #eee6d8;
+  margin-bottom: 0.5em;
+}
+.ov-end-line {
+  font-size: clamp(10px, 1vw, 15px);
+  letter-spacing: 0.28em;
+  color: #b4ab9b;
+}
+.ov-end-line.dim {
+  color: #7d7669;
+}
